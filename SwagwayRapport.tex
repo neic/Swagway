@@ -1,0 +1,71 @@
+\documentclass[a4paper,oneside,article,danish,table,draft]{memoir}
+\XeTeXtracingfonts= 1
+\usepackage{babel,amsmath,unicode-math,url,tikz,microtype,verbatim}
+\microtypesetup{final,verbose=silent}
+\usetikzlibrary{mindmap,arrows,positioning,shapes}
+\setmainfont[Ligatures={TeX}]{Arno Pro}
+\setmathfont{Arno Pro}
+% \setmathfont{[Asana-Math]}
+%\hfuzz=1pt
+\usepackage[margin,draft]{fixme}
+\fxusetheme{color}
+
+\newcommand{\authorvar}{Carl~Emil~Grøn~Christensen and Mathias~Dannesbo}
+\newcommand{\pretitlevar}{0}
+\newcommand{\titlevar}{Stepdance} 
+\newcommand{\subtitlevar}{0} 
+\newcommand{\datevar}{\today} 
+\newcommand{\subjectvar}{Teknikfag~A:~El}
+\newcommand{\classvar}{}  
+\newcommand{\teachervar}{}
+
+\makepagestyle{articlehead}
+\makeevenhead{articlehead}{}{\titlevar}{}
+\makeevenfoot{articlehead}{}{}{\thepage}
+\makeoddhead{articlehead}{}{\titlevar}{}
+\makeoddfoot{articlehead}{}{}{\thepage}
+
+
+\begin{document}
+% \includepdf{forside.pdf} \clearpage%------------------------ Forside
+
+\begin{center}
+  \if\pretitlevar 0
+  \else{\Large\pretitlevar\\} \fi
+  \textsc{\HUGE\titlevar\\}
+  \if\subtitlevar 0
+  \else {\Large\subtitlevar\\} \fi
+  %\vspace{1em}
+  {\LARGE 
+  af\\
+   \authorvar}\\
+ \datevar\\
+\end{center}
+
+\vfill
+\begin{abstract} %------------------------------ Abstract
+\end{abstract}\vfill
+\noindent
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} ll}
+
+\end{tabular*}
+
+\thispagestyle{empty}
+\clearpage
+\setcounter{tocdepth}{2} \tableofcontents \clearpage
+
+
+\chapter{Indledning}\label{chap:ind}
+\section{Problemformulering}
+\begin{itemize}
+\end{itemize}
+
+\chapter{Konklusion} \label{chap:kon}
+\clearpage
+\listoftables
+\listoffigures
+% \nocite{*}
+\bibliographystyle{dk-apali} \bibliography{bib}
+%\clearpage \appendix
+
+\end{document}
