@@ -4,14 +4,15 @@ int xa, ya, za, xg, yg, zg;
 byte buffa[6];
 byte buffg[6];
 
-
+// acc I2C
 const int accaddr = 0x53;
 const int accdataregaddr = 0x32;
 
-//gyro
+//gyro I2C
 const int gyroregaddr = 0x68;
 const int gyrodataregaddr = 0x1D;
 
+const float gyroSens = 
 
 void setup() 
 {
@@ -34,17 +35,14 @@ void loop()
 
   xa=(((int)buffa[1])<<8) | buffa[0];
   ya=(((int)buffa[3])<<8) | buffa[2];
-  za=(((int)buffa[5])<<8) | buffa[4]; 
+  za=(((int)buffa[5])<<8) | buffa[4];
   
- readFrom(gyroregaddr, gyrodataregaddr, 6, buffg); //read the acceleration data from the ADXL345
+ readFrom(gyroregaddr, gyrodataregaddr, 6, buffg); //read the gyro data from ITG3200
 
   xg=(((int)buffg[0])<<8) | buffg[1];
   yg=(((int)buffg[2])<<8) | buffg[3];
   zg=(((int)buffg[4])<<8) | buffg[5]; 
-
-  /*readFrom(gyroregaddr, 0x00, 1, buffg);
-  Serial.println(buffg[0]); */ 
-
+  
   Serial.print("xa: ");
   Serial.print(xa);
   Serial.print(" ");
@@ -90,7 +88,3 @@ void readFrom(int device, byte address, int num, byte buff[])
   }
   Wire.endTransmission(); //end transmission
 }
-
-
-
-
