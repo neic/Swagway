@@ -9,10 +9,13 @@ byte buffg[6];
 
 int xa, ya, za, xg, yg, zg;
 
-double gyroAngle = 0;
 double accAngle = 0;
 
+float zgErr = 0;
 double zgDeg = 0;
+double gyroAngle = 0;
+
+const int calibrationSamples = 1000;
 
 // acc I2C
 const int accaddr = 0x53;
@@ -26,7 +29,7 @@ const float gyroSens = 14375; //LSB per deg/sec
 
 void setup() 
 {
-  Serial.begin(9600);
+  Serial.begin(19200);
   Wire.begin();
 
   //Turning on the acc
@@ -37,50 +40,23 @@ void setup()
   //Turning on the gyro
   writeTo(gyroregaddr, 0x16, B00010011); //Set DLPF register to FS_SEL = 3 and DLPF_cfg = 3 (LPF=42Hz, internal sample rate = 1kHz)
   writeTo(gyroregaddr, 0x15, 9); //Sets sample rate to (internal sample rate)/(9 + 1) (1kHz/(9+1)=100Hz <=> 10ms)
+
+  gyroCalibration();
 }
 
 void loop() 
 {
+  timeOld = timeNow;
   timeNow = millis();
 
-  //Accel calculations
-  readFrom(accaddr, accdataregaddr, 6, buffa); // read the data from the acc
+  reciveAndClean(); //Recives xa, ya, za, xg, yg, zg and calulates accAngle
 
-  xa=(((int)buffa[1])<<8) | buffa[0]; // cleanup the data and put it in variables
-  ya=(((int)buffa[3])<<8) | buffa[2];
-  za=(((int)buffa[5])<<8) | buffa[4];
-
-  float xaf=xa; // convert to float to do calculations
-  float yaf=ya;
-
-  accAngle = atan(xaf/yaf)*180/3.14; // calcutalte the X-Y-angle
-
-  if (yaf > 0) // ignore angles ±90 deg
-  {    
-    if (xaf < 0)
-    {
-      accAngle = 90;
-    }
-    else
-    {
-      accAngle = -90;
-    }
-  }
-
-  //Gyro calculations
-  readFrom(gyroregaddr, gyrodataregaddr, 6, buffg); // read the data from gyro
-
-  xg=(((int)buffg[0])<<8) | buffg[1]; // cleanup the data and put it in variables
-  yg=(((int)buffg[2])<<8) | buffg[3];
-  zg=(((int)buffg[4])<<8) | buffg[5];
-
-  zgDeg = zg / gyroSens; // calculate the angle change in this sample
-  gyroAngle = gyroAngle+(zgDeg *(timeNow-timeOld)/2); // Intergrate to get the absolute angle. (Why shoud this be divided by two?)
+  zgDeg = (zg-zgErr)/gyroSens; // Calculate the angle change since last sample
+  gyroAngle = gyroAngle+(zgDeg *(timeNow-timeOld)/2); // Int to the abs angle. (Why, divided by two?)
 
   //SerialDebugRaw();
   SerialDebugAngle();
   delay(10);
-  timeOld = timeNow;
 }
 
 
@@ -111,6 +87,65 @@ void readFrom(int device, byte address, int num, byte buff[])
   
   Wire.endTransmission(); //end transmission
 }
+
+void reciveAndClean()
+{
+  //Accel calculations
+  readFrom(accaddr, accdataregaddr, 6, buffa); // read the data from the acc
+
+  xa=(((int)buffa[1])<<8) | buffa[0]; // cleanup the data and put it in variables
+  ya=(((int)buffa[3])<<8) | buffa[2];
+  za=(((int)buffa[5])<<8) | buffa[4];
+
+  float xaf=xa; // convert to float to do calculations
+  float yaf=ya;
+
+  accAngle = atan(xaf/yaf)*180/3.14; // calcutalte the X-Y-angle
+
+  if (yaf > 0) // ignore angles ±90 deg
+  {    
+    if (xaf < 0)
+    {
+      accAngle = 90;
+    }
+    else
+    {
+      accAngle = -90;
+    }
+  }
+
+  //Gyro calculations
+  readFrom(gyroregaddr, gyrodataregaddr, 6, buffg); // read the data from gyro
+
+  xg=(((int)buffg[0])<<8) | buffg[1]; // cleanup the data and put it in variables
+  yg=(((int)buffg[2])<<8) | buffg[3];
+  zg=(((int)buffg[4])<<8) | buffg[5];
+}
+
+void gyroCalibration()
+{
+  double accAngleBuf = 0;
+  
+  Serial.println("Gyro calibration started");
+  for (int i = 0; i < calibrationSamples; ++i)
+    {
+      reciveAndClean();
+      accAngleBuf +=  accAngle;
+      zgErr += zg;
+      if (0 == i%(calibrationSamples/10))
+        {
+          Serial.print(100*i/calibrationSamples);
+          Serial.println(" %");
+        }
+      delay(10);
+    }
+  gyroAngle = accAngleBuf/calibrationSamples;
+  zgErr = zgErr/calibrationSamples;
+  
+  Serial.print("Done. zgErr=");
+  Serial.println(zgErr, 10);
+}
+
 void SerialDebugRaw()
 {
   Serial.print("xa: ");
@@ -135,10 +170,10 @@ void SerialDebugRaw()
 
 void SerialDebugAngle()
 {
-  Serial.print("gyroAngle= ");
+  Serial.print("Drift ");
+  Serial.print(gyroAngle-accAngle);
+  Serial.print(" gyroAngle= ");
   Serial.print(gyroAngle);
-  Serial.print(" zgDeg= ");
-  Serial.print(zgDeg);
   Serial.print(" accAngle= ");
   Serial.println(accAngle);
 }
