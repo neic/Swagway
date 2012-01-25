@@ -2,24 +2,24 @@ EAGLE AutoRouter Statistics:
 
 Job           : /home/neic/Dokumenter/HTX/El/Swagway/Electronics/Mainboard.brd
 
-Start at      : 23:40:43 (1/16/12)
-End at        : 23:40:56 (1/16/12)
-Elapsed time  : 00:00:13
+Start at      : 12:48:02 (1/24/12)
+End at        : 12:48:03 (1/24/12)
+Elapsed time  : 00:00:01
 
-Signals       :    42   RoutingGrid: 50 mil  Layers: 1
-Connections   :    88   predefined:  73 ( 14 Vias )
+Signals       :    30   RoutingGrid: 50 mil  Layers: 1
+Connections   :    46   predefined:  42 ( 4 Vias )
 
-Router memory :   15486
+Router memory :   6968
 
 Passname          :     Route Optimize1 Optimize2 Optimize3 Optimize4
 
-Time per pass     :  00:00:12  00:00:00  00:00:00  00:00:00  00:00:01
-Number of Ripups  :       105         0         0         0         0
-max. Level        :         3         0         0         0         0
-max. Total        :         5         0         0         0         0
+Time per pass     :  00:00:01  00:00:00  00:00:00  00:00:00  00:00:00
+Number of Ripups  :         0         0         0         0         0
+max. Level        :         1         0         0         0         0
+max. Total        :         0         0         0         0         0
 
-Routed            :         7         7         7         7         7
+Routed            :         1         1         1         1         1
 Vias              :         0         0         0         0         0
-Resolution        :    90.9 %    90.9 %    90.9 %    90.9 %    90.9 %
+Resolution        :    93.5 %    93.5 %    93.5 %    93.5 %    93.5 %
 
-Final             : 90.9% finished
+Final             : 93.5% finished
