@@ -15,7 +15,7 @@ float zgErr = 0;
 double zgDeg = 0;
 double gyroAngle = 0;
 
-const int calibrationSamples = 1000;
+const int calibrationSamples = 10;
 
 // acc I2C
 const int accaddr = 0x53;
@@ -29,7 +29,7 @@ const float gyroSens = 14375; //LSB per deg/sec
 
 void setup() 
 {
-  Serial.begin(19200);
+  Serial.begin(9600);
   Wire.begin();
 
   //Turning on the acc
@@ -174,6 +174,8 @@ void SerialDebugAngle()
 
 void serialGraph()
 {
+  Serial.print(gyroAngle);
+  Serial.print(",");
   Serial.println(accAngle);
 }
 
