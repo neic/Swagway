@@ -46,17 +46,21 @@ void setup()
 
 void loop() 
 {
-  timeOld = timeNow;
   timeNow = millis();
+  if (timeNow-timeOld >= 10)
+    {
+      reciveAndClean(); //Recives xa, ya, za, xg, yg, zg and calulates accAngle
 
-  reciveAndClean(); //Recives xa, ya, za, xg, yg, zg and calulates accAngle
+      zgDeg = (zg-zgErr)/gyroSens; // Calculate the angle change since last sample
+      gyroAngle = gyroAngle+(zgDeg *(timeNow-timeOld)/2); // Int to the abs angle. (Why, divided by two?)
 
-  zgDeg = (zg-zgErr)/gyroSens; // Calculate the angle change since last sample
-  gyroAngle = gyroAngle+(zgDeg *(timeNow-timeOld)/2); // Int to the abs angle. (Why, divided by two?)
+      estAngle = (accAngle + gyroAngle * gyroWeight)/(1+gyroWeight);
 
-  //SerialDebugRaw();
-  SerialDebugAngle();
-  delay(10);
+      //SerialDebugRaw();
+      SerialDebugAngle();
+      
+      timeOld = timeNow;
+    }
 }
 
 
@@ -100,19 +104,8 @@ void reciveAndClean()
   float xaf=xa; // convert to float to do calculations
   float yaf=ya;
 
-  accAngle = atan(xaf/yaf)*180/3.14; // calcutalte the X-Y-angle
+  accAngle = atan2(xaf,yaf)*180/3.14159; // calcutalte the X-Y-angle
 
-  if (yaf > 0) // ignore angles ±90 deg
-  {    
-    if (xaf < 0)
-    {
-      accAngle = 90;
-    }
-    else
-    {
-      accAngle = -90;
-    }
-  }
 
   //Gyro calculations
   readFrom(gyroregaddr, gyrodataregaddr, 6, buffg); // read the data from gyro
@@ -170,8 +163,8 @@ void SerialDebugRaw()
 
 void SerialDebugAngle()
 {
-  Serial.print("Drift ");
-  Serial.print(gyroAngle-accAngle);
+  Serial.print("estAngle ");
+  Serial.print(estAngle);
   Serial.print(" gyroAngle= ");
   Serial.print(gyroAngle);
   Serial.print(" accAngle= ");
