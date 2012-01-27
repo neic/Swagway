@@ -54,10 +54,11 @@ void loop()
       zgDeg = (zg-zgErr)/gyroSens; // Calculate the angle change since last sample
       gyroAngle = gyroAngle+(zgDeg *(timeNow-timeOld)/2); // Int to the abs angle. (Why, divided by two?)
 
-      estAngle = (accAngle + gyroAngle * gyroWeight)/(1+gyroWeight);
+      //estAngle = (accAngle + gyroAngle * gyroWeight)/(1+gyroWeight);
 
       //SerialDebugRaw();
-      SerialDebugAngle();
+      //SerialDebugAngle();
+      serialGraph();
       
       timeOld = timeNow;
     }
@@ -119,7 +120,7 @@ void gyroCalibration()
 {
   double accAngleBuf = 0;
   
-  Serial.println("Gyro calibration started");
+  //Serial.println("Gyro calibration started");
   for (int i = 0; i < calibrationSamples; ++i)
     {
       reciveAndClean();
@@ -127,16 +128,16 @@ void gyroCalibration()
       zgErr += zg;
       if (0 == i%(calibrationSamples/10))
         {
-          Serial.print(100*i/calibrationSamples);
-          Serial.println(" %");
+          //Serial.print(100*i/calibrationSamples);
+          //Serial.println(" %");
         }
       delay(10);
     }
   gyroAngle = accAngleBuf/calibrationSamples;
   zgErr = zgErr/calibrationSamples;
   
-  Serial.print("Done. zgErr=");
-  Serial.println(zgErr, 10);
+  //Serial.print("Done. zgErr=");
+  //Serial.println(zgErr, 10);
 }
 
 void SerialDebugRaw()
@@ -164,9 +165,15 @@ void SerialDebugRaw()
 void SerialDebugAngle()
 {
   Serial.print("estAngle ");
-  Serial.print(estAngle);
+  //Serial.print(estAngle);
   Serial.print(" gyroAngle= ");
   Serial.print(gyroAngle);
   Serial.print(" accAngle= ");
   Serial.println(accAngle);
 }
+
+void serialGraph()
+{
+  Serial.println(accAngle);
+}
+
