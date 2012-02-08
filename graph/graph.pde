@@ -1,7 +1,6 @@
 
 /* This will only plot one data point per frame and will dispose all data in between two frames. */
 
-
 import processing.serial.*;
 import org.gwoptics.graphics.graph2D.Graph2D;
 import org.gwoptics.graphics.graph2D.traces.ILine2DEquation;
@@ -10,56 +9,88 @@ import org.gwoptics.graphics.graph2D.traces.RollingLine2DTrace;
 Serial myPort;
 float gyro = 0;
 float acc = 0;
+float est = 0;
+float t1 = 0;
+float t2 = 0;
 
 PFont f; // Font
-
 
 // Color scheme
 color colorBg = #3F3F3F;
 color colorFg = #DCDCCC;
 color colorGyro = #CC9393;
 color colorAcc = #7F9F7F;
+color colorEst = #7F9F00;
+color colorT1 = #7F007F;
+color colorT2 = #7F007F;
 color blue = #8CD0D3;
 
 // Graph equations
 class lineGyro implements ILine2DEquation{
-	public double computePoint(double x,int pos) {
-		return gyro;
-	}		
+  public double computePoint(double x,int pos) {
+    return gyro;
+  }		
 }
 class lineAcc implements ILine2DEquation{
-	public double computePoint(double x,int pos) {
-		return acc;
-	}		
+  public double computePoint(double x,int pos) {
+    return acc;
+  }		
+}
+class lineEst implements ILine2DEquation{
+  public double computePoint(double x,int pos) {
+    return est;
+  }		
+}
+class lineT1 implements ILine2DEquation{
+  public double computePoint(double x,int pos) {
+    return t1;
+  }		
+}
+class lineT2 implements ILine2DEquation{
+  public double computePoint(double x,int pos) {
+    return t2;
+  }		
 }
 
-RollingLine2DTrace rollingGyro,rollingAcc;
+RollingLine2DTrace rollingGyro,rollingAcc,rollingEst,rollingT1,rollingT2;
 Graph2D g;
 
 void setup () {
   // Environment
-  size(300, 400);
+  size(1200, 800);
   frameRate(100);
 
   // Serial
   println(Serial.list());
-  myPort = new Serial(this, Serial.list()[0], 9600);
+  myPort = new Serial(this, Serial.list()[0], 19200);
   myPort.bufferUntil('\n'); // don't generate a serialEvent() unless you get a newline character:
 
   // Font
   f = loadFont("DejaVuSansMono-16.vlw");
 
   // Rolling line traces
-  rollingGyro  = new RollingLine2DTrace(new lineGyro() ,10,0.01f);
+  rollingGyro = new RollingLine2DTrace(new lineGyro() ,10,0.01f);
   rollingGyro.setTraceColour(int(red(colorGyro)),int(green(colorGyro)),int(blue(colorGyro)));
 	
   rollingAcc = new RollingLine2DTrace(new lineAcc(),10,0.01f);
   rollingAcc.setTraceColour(int(red(colorAcc)),int(green(colorAcc)),int(blue(colorAcc)));
 
+  rollingEst = new RollingLine2DTrace(new lineEst(),10,0.01f);
+  rollingEst.setTraceColour(int(red(colorEst)),int(green(colorEst)),int(blue(colorEst)));
+
+  rollingT1 = new RollingLine2DTrace(new lineT1(),10,0.01f);
+  rollingT1.setTraceColour(int(red(colorT1)),int(green(colorT1)),int(blue(colorT1)));
+
+  rollingT2 = new RollingLine2DTrace(new lineT2(),10,0.01f);
+  rollingT2.setTraceColour(int(red(colorT2)),int(green(colorT2)),int(blue(colorT2)));
+
   // Graph
   g = new Graph2D(this, width-150, height-100, false);
   g.addTrace(rollingGyro);
   g.addTrace(rollingAcc);
+  g.addTrace(rollingEst);
+  g.addTrace(rollingT1);
+  g.addTrace(rollingT2);
 
   g.position.y = 50;
   g.position.x = 100;
@@ -67,7 +98,7 @@ void setup () {
   g.setYAxisMin(-90);
   g.setYAxisMax(90);
   g.setYAxisTickSpacing(10);
-  g.setXAxisMax(1f);
+  g.setXAxisMax(10f);
 
   g.setNoBorder();
   g.setAxisColour(int(red(colorFg)),int(green(colorFg)),int(blue(colorFg)));
@@ -85,15 +116,23 @@ void draw () {
   text(gyro,125,15);
   textAlign(LEFT);
   text("gyro",5,15);
+  
   fill(colorAcc);
-  text("acc",5,30);
   textAlign(RIGHT);
   text(acc,125,30);
-
+  textAlign(LEFT);
+  text("acc",5,30);
+  
+  fill(colorEst);
+  textAlign(RIGHT);
+  text(est,125,45);
+  textAlign(LEFT);
+  text("est",5,45);
 
   // Print fps
   textFont(f,10);
   fill(colorFg);
+  textAlign(RIGHT);
   text(frameRate,width-25,15);
   textAlign(LEFT);
   text("fps",width-25,15);
@@ -108,6 +147,9 @@ void serialEvent (Serial myPort) {
     String inList[] = split(inString, ',');
     gyro = float(inList[0]);
     acc = float(inList[1]);
+    est = float(inList[2]);
+    t1 = float(inList[3]);
+    t2 = float(inList[4]);
   }
 }
 
