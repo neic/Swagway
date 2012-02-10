@@ -12,6 +12,9 @@ float acc = 0;
 float est = 0;
 float t1 = 0;
 float t2 = 0;
+float Q_angle = 0;
+float Q_gyro = 0;
+float R_rate = 0;
 
 PFont f; // Font
 
@@ -41,18 +44,8 @@ class lineEst implements ILine2DEquation{
     return est;
   }		
 }
-class lineT1 implements ILine2DEquation{
-  public double computePoint(double x,int pos) {
-    return t1;
-  }		
-}
-class lineT2 implements ILine2DEquation{
-  public double computePoint(double x,int pos) {
-    return t2;
-  }		
-}
 
-RollingLine2DTrace rollingGyro,rollingAcc,rollingEst,rollingT1,rollingT2;
+RollingLine2DTrace rollingGyro,rollingAcc,rollingEst;
 Graph2D g;
 
 void setup () {
@@ -78,19 +71,11 @@ void setup () {
   rollingEst = new RollingLine2DTrace(new lineEst(),10,0.01f);
   rollingEst.setTraceColour(int(red(colorEst)),int(green(colorEst)),int(blue(colorEst)));
 
-  rollingT1 = new RollingLine2DTrace(new lineT1(),10,0.01f);
-  rollingT1.setTraceColour(int(red(colorT1)),int(green(colorT1)),int(blue(colorT1)));
-
-  rollingT2 = new RollingLine2DTrace(new lineT2(),10,0.01f);
-  rollingT2.setTraceColour(int(red(colorT2)),int(green(colorT2)),int(blue(colorT2)));
-
   // Graph
   g = new Graph2D(this, width-150, height-100, false);
   g.addTrace(rollingGyro);
   g.addTrace(rollingAcc);
   g.addTrace(rollingEst);
-  g.addTrace(rollingT1);
-  g.addTrace(rollingT2);
 
   g.position.y = 50;
   g.position.x = 100;
@@ -128,6 +113,17 @@ void draw () {
   text(est,125,45);
   textAlign(LEFT);
   text("est",5,45);
+
+  fill(colorFg);
+  textAlign(RIGHT);
+  text(t1,270,15);
+  textAlign(LEFT);
+  text("t1",150,15);
+
+  textAlign(RIGHT);
+  text(t2,270,30);
+  textAlign(LEFT);
+  text("t2",150,30);
 
   // Print fps
   textFont(f,10);
