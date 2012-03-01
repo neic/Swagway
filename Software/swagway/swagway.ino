@@ -1,7 +1,7 @@
 #include <Wire.h>
 #include <math.h>
 
-unsigned long timeNow = 0;
+unsigned long timeNew = 0;
 unsigned long timeOld = 0;
 
 byte buffa[6];
@@ -13,9 +13,16 @@ double accAngle = 0;
 
 float zgErr = 0;
 double zgDeg = 0;
-double gyroAngle = 0;
+volatile double gyroAngle = 0;
+
+double estAngle = 0;
 
 const int calibrationSamples = 10;
+
+// Kalman filter
+const float Q_angle  =  0.001; //0.001
+const float Q_gyro   =  3;   //0.003
+const float R_angle  =  0.03;  //0.03
 
 // acc I2C
 const int accaddr = 0x53;
@@ -29,7 +36,7 @@ const float gyroSens = 14375; //LSB per deg/sec
 
 void setup() 
 {
-  Serial.begin(9600);
+  Serial.begin(19200);
   Wire.begin();
 
   //Turning on the acc
@@ -46,21 +53,19 @@ void setup()
 
 void loop() 
 {
-  timeNow = millis();
-  if (timeNow-timeOld >= 10)
+  if (micros()-timeNew >= 10000)
     {
+      timeNew = micros();
       reciveAndClean(); //Recives xa, ya, za, xg, yg, zg and calulates accAngle
 
       zgDeg = (zg-zgErr)/gyroSens; // Calculate the angle change since last sample
-      gyroAngle = gyroAngle+(zgDeg *(timeNow-timeOld)/2); // Int to the abs angle. (Why, divided by two?)
-
-      //estAngle = (accAngle + gyroAngle * gyroWeight)/(1+gyroWeight);
-
+      gyroAngle += zgDeg*10; // Int to the abs angle. 
+      estAngle = kalmanCalculate(accAngle, zgDeg, (micros()-timeOld)/1000);
+      //estAngle = (0.98)*(gyroAngle+gyro*dt)+(0.02)*(x_acc);
       //SerialDebugRaw();
       //SerialDebugAngle();
       serialGraph();
-      
-      timeOld = timeNow;
+      timeOld = micros();
     }
 }
 
@@ -140,6 +145,43 @@ void gyroCalibration()
   //Serial.println(zgErr, 10);
 }
 
+
+float x_angle = 0;
+float x_bias = 0;
+float P_00 = 0, P_01 = 0, P_10 = 0, P_11 = 0;
+float dt, y, S;
+float K_0, K_1;
+
+float kalmanCalculate(float newAngle, float newRate,int looptime) {
+  dt = float(looptime)/1000;                                    
+  x_angle += dt * (newRate - x_bias);
+  P_00 +=  - dt * (P_10 + P_01) + Q_angle * dt;
+  P_01 +=  - dt * P_11;
+  P_10 +=  - dt * P_11;
+  P_11 +=  + Q_gyro * dt;
+    
+  y = newAngle - x_angle;
+  S = P_00 + R_angle;
+  K_0 = P_00 / S;
+  K_1 = P_10 / S;
+  
+  x_angle +=  K_0 * y;
+  x_bias  +=  K_1 * y;
+  P_00 -= K_0 * P_00;
+  P_01 -= K_0 * P_01;
+  P_10 -= K_1 * P_00;
+  P_11 -= K_1 * P_01;
+  
+  return x_angle;
+}
+
+float floatmap(float x, float in_min, float in_max, float out_min, float out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+/* Serial communication */
+
 void SerialDebugRaw()
 {
   Serial.print("xa: ");
@@ -174,8 +216,13 @@ void SerialDebugAngle()
 
 void serialGraph()
 {
-  Serial.print(gyroAngle);
+  Serial.print(gyroAngle); //0
   Serial.print(",");
-  Serial.println(accAngle);
+  Serial.print(accAngle); //1
+  Serial.print(",");
+  Serial.print(estAngle); //2
+  Serial.print(",");
+  Serial.print((micros()-timeNew)/1000); //3
+  Serial.print(",");
+  Serial.println((micros()-timeOld)/1000); //4
 }
-
