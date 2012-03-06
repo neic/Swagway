@@ -19,6 +19,8 @@ double estAngle = 0;
 
 const int calibrationSamples = 10;
 
+int packageCount = 0;
+
 // Kalman filter
 const float Q_angle  =  0.001; //0.001
 const float Q_gyro   =  3;   //0.003
@@ -53,19 +55,24 @@ void setup()
 
 void loop() 
 {
-  if (micros()-timeNew >= 10000)
+  if (millis()-timeNew >= 10)
     {
-      timeNew = micros();
+      timeNew = millis();
       reciveAndClean(); //Recives xa, ya, za, xg, yg, zg and calulates accAngle
 
-      zgDeg = (zg-zgErr)/gyroSens; // Calculate the angle change since last sample
-      gyroAngle += zgDeg*10; // Int to the abs angle. 
-      estAngle = kalmanCalculate(accAngle, zgDeg, (micros()-timeOld)/1000);
-      //estAngle = (0.98)*(gyroAngle+gyro*dt)+(0.02)*(x_acc);
+      zgDeg = zg/gyroSens; // Calculate the angle change since last sample
+      gyroAngle += zgDeg; // Int to the abs angle. 
+      estAngle = kalmanCalculate(accAngle, zgDeg, millis()-timeOld);
+      //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*();
       //SerialDebugRaw();
       //SerialDebugAngle();
       serialGraph();
-      timeOld = micros();
+      packageCount++;
+      if (packageCount == 4)
+        {
+          packageCount = 0;
+        }
+      timeOld = millis();
     }
 }
 
@@ -222,7 +229,7 @@ void serialGraph()
   Serial.print(",");
   Serial.print(estAngle); //2
   Serial.print(",");
-  Serial.print((micros()-timeNew)/1000); //3
+  Serial.print((millis()-timeNew)/1000); //3
   Serial.print(",");
-  Serial.println((micros()-timeOld)/1000); //4
+  Serial.println((millis()-timeOld)/1000); //4
 }

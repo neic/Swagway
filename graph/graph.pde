@@ -51,7 +51,7 @@ Graph2D g;
 void setup () {
   // Environment
   size(1200, 800);
-  frameRate(100);
+  //frameRate(100);
 
   // Serial
   println(Serial.list());
@@ -144,8 +144,8 @@ void serialEvent (Serial myPort) {
     gyro = float(inList[0]);
     acc = float(inList[1]);
     est = float(inList[2]);
-    t1 = float(inList[3]);
-    t2 = float(inList[4]);
+   //t1 = float(inList[3]);
+    //t2 = float(inList[4]);
   }
 }
 
