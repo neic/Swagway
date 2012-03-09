@@ -12181,10 +12181,10 @@ Siemens, Hewlett-Packard, Texas Instuments, Sharp, Motorola&lt;p&gt;
 <part name="C1" library="rcl" deviceset="CPOL-EU" device="E5-13" value="2200µF"/>
 <part name="LED2" library="led" deviceset="LED" device="3MM"/>
 <part name="LED3" library="led" deviceset="LED" device="3MM"/>
-<part name="R7" library="rcl" deviceset="R-EU_" device="0207/10" value="2.2k"/>
+<part name="R7" library="rcl" deviceset="R-EU_" device="0207/7" value="2.2k"/>
 <part name="LED4" library="led" deviceset="LED" device="3MM"/>
 <part name="LED5" library="led" deviceset="LED" device="3MM"/>
-<part name="R8" library="rcl" deviceset="R-EU_" device="0207/10" value="2.2k"/>
+<part name="R8" library="rcl" deviceset="R-EU_" device="0207/7" value="2.2k"/>
 </parts>
 <sheets>
 <sheet>
@@ -12313,21 +12313,6 @@ Siemens, Hewlett-Packard, Texas Instuments, Sharp, Motorola&lt;p&gt;
 <wire x1="182.88" y1="93.98" x2="182.88" y2="91.44" width="0.1524" layer="91"/>
 <junction x="182.88" y="91.44"/>
 <pinref part="OK3" gate="G$1" pin="COL"/>
-</segment>
-</net>
-<net name="N$18" class="0">
-<segment>
-<pinref part="Q8" gate="G$1" pin="D"/>
-<pinref part="Q7" gate="G$1" pin="D"/>
-<wire x1="218.44" y1="58.42" x2="218.44" y2="53.34" width="0.1524" layer="91"/>
-<pinref part="X2" gate="-1" pin="KL"/>
-<wire x1="218.44" y1="53.34" x2="218.44" y2="50.8" width="0.1524" layer="91"/>
-<wire x1="241.3" y1="53.34" x2="236.22" y2="53.34" width="0.1524" layer="91"/>
-<junction x="218.44" y="53.34"/>
-<pinref part="R8" gate="G$1" pin="1"/>
-<wire x1="236.22" y1="53.34" x2="218.44" y2="53.34" width="0.1524" layer="91"/>
-<wire x1="236.22" y1="58.42" x2="236.22" y2="53.34" width="0.1524" layer="91"/>
-<junction x="236.22" y="53.34"/>
 </segment>
 </net>
 <net name="N$19" class="0">
@@ -12598,40 +12583,51 @@ Siemens, Hewlett-Packard, Texas Instuments, Sharp, Motorola&lt;p&gt;
 </net>
 <net name="N$25" class="0">
 <segment>
-<pinref part="LED4" gate="G$1" pin="C"/>
-<wire x1="228.6" y1="78.74" x2="228.6" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="238.76" y1="81.28" x2="236.22" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="LED5" gate="G$1" pin="A"/>
-<wire x1="236.22" y1="81.28" x2="228.6" y2="81.28" width="0.1524" layer="91"/>
-<wire x1="236.22" y1="78.74" x2="236.22" y2="81.28" width="0.1524" layer="91"/>
-<junction x="236.22" y="81.28"/>
 <pinref part="Q5" gate="G$1" pin="D"/>
 <pinref part="Q6" gate="G$1" pin="D"/>
 <wire x1="193.04" y1="55.88" x2="193.04" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="X2" gate="-2" pin="KL"/>
-<wire x1="241.3" y1="55.88" x2="238.76" y2="55.88" width="0.1524" layer="91"/>
 <junction x="193.04" y="55.88"/>
-<wire x1="238.76" y1="55.88" x2="193.04" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="238.76" y1="81.28" x2="238.76" y2="55.88" width="0.1524" layer="91"/>
-<junction x="238.76" y="55.88"/>
+<wire x1="241.3" y1="55.88" x2="236.22" y2="55.88" width="0.1524" layer="91"/>
+<pinref part="R8" gate="G$1" pin="1"/>
+<wire x1="236.22" y1="55.88" x2="193.04" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="236.22" y1="58.42" x2="236.22" y2="55.88" width="0.1524" layer="91"/>
+<junction x="236.22" y="55.88"/>
+</segment>
+</net>
+<net name="N$1" class="0">
+<segment>
+<wire x1="238.76" y1="81.28" x2="236.22" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="LED5" gate="G$1" pin="A"/>
+<wire x1="236.22" y1="78.74" x2="236.22" y2="81.28" width="0.1524" layer="91"/>
+<junction x="236.22" y="81.28"/>
+<wire x1="236.22" y1="81.28" x2="228.6" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="LED4" gate="G$1" pin="C"/>
+<wire x1="228.6" y1="78.74" x2="228.6" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="Q8" gate="G$1" pin="D"/>
+<pinref part="Q7" gate="G$1" pin="D"/>
+<wire x1="218.44" y1="58.42" x2="218.44" y2="53.34" width="0.1524" layer="91"/>
+<pinref part="X2" gate="-1" pin="KL"/>
+<wire x1="218.44" y1="53.34" x2="218.44" y2="50.8" width="0.1524" layer="91"/>
+<junction x="218.44" y="53.34"/>
+<wire x1="241.3" y1="53.34" x2="238.76" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="238.76" y1="53.34" x2="218.44" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="238.76" y1="81.28" x2="238.76" y2="53.34" width="0.1524" layer="91"/>
+<junction x="238.76" y="53.34"/>
 </segment>
 </net>
 </nets>
 </sheet>
 </sheets>
 <errors>
-<approved hash="102,1,-5.08,30.48,+5V,VCC,,,,"/>
-<approved hash="102,1,116.84,35.56,+5V,VCC,,,,"/>
-<approved hash="104,1,5.08,40.64,U$1,VIN,N$39,,,"/>
-<approved hash="104,1,2.54,40.64,U$1,GND1,GND,,,"/>
-<approved hash="104,1,0,40.64,U$1,GND2,GND,,,"/>
-<approved hash="104,1,-2.54,40.64,U$1,5V,VCC,,,"/>
-<approved hash="104,1,-5.08,40.64,U$1,3V,+3V3,,,"/>
-<approved hash="104,1,116.84,17.78,IC1P,VSS,GND,,,"/>
-<approved hash="104,1,116.84,33.02,IC1P,VDD,VCC,,,"/>
-<approved hash="115,1,225.238,101.6,X1,,,,,"/>
-<approved hash="115,1,225.238,53.34,X2,,,,,"/>
+<approved hash="115,1,245.558,101.6,X1,,,,,"/>
+<approved hash="115,1,245.558,53.34,X2,,,,,"/>
 <approved hash="115,1,200.982,163.83,LED1,,,,,"/>
+<approved hash="115,1,133.308,85.2212,JP1,,,,,"/>
+<approved hash="115,1,236.542,123.19,LED2,,,,,"/>
+<approved hash="115,1,228.278,123.19,LED3,,,,,"/>
+<approved hash="115,1,228.278,74.93,LED4,,,,,"/>
+<approved hash="115,1,236.542,74.93,LED5,,,,,"/>
 </errors>
 </schematic>
 </drawing>
