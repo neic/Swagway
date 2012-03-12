@@ -1,0 +1,6 @@
+*.b#*
+*.s#*
+*.aux
+*.log
+Rapport/auto/*
+Software/graph/data/*
