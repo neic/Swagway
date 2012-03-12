@@ -4,32 +4,17 @@ The Swagway is a Segway clone.
 It is a school project at HTX Frederikshavn.
 
 ** Mechanical
-   It consists of a welded steel frame with two motors and gearbox assemblies from a powered wheelchair. The motors are 140W each and run on 24V. The batteries are two cheap 12V 18Ah lead batteries.
+It consists of a welded steel frame with two motors and gearbox assemblies from a powered wheelchair. The motors are 140W each and run on 24V. The batteries are two cheap 12V 18Ah lead batteries.
 
 ** Electronics
-The electronics is build around an Arduino. It gets it input from a ADXL345 accelerometer and a ITG-3200 gyro and drives the motors through some HEXFETs.
+The electronics is build around an Arduino. It gets it input from a ADXL345 accelerometer and a ITG-3200 gyro and drives the motors through two HEXFET bridges.
 
+The schematic and board layouts are in Electronics/
 
-** Tasks
-*** DONE Build LEGO-model for small scale test
-*** DONE Design the main electronics
-*** TODO Write the main functionality in software and make the LEGO-model run
-*** TODO Figure out how to measure tuning
-*** TODO Build the main electronic on a PCB
-*** DONE Build the main mechanical structure
-*** TODO Put the electronic on the Swagway
+** Software
+The software for the Arduino onboard the Swagway is located in Software/swagway/
 
-** Additional swag
-*** LCD
-**** Accelerometer and gyro readout, before and after filtering.
-**** Speed
-**** Trip
-*** Lights
-**** Headlight
-**** Turn signals
-**** (Automatic) brake light
-*** Battery monitoring
-*** Speed limitor
-*** Possibility to change parameters without recompilation
-*** (automatic?) parking stand
-*** Compass
+A Processing application with a rolling graph for debugging the angles is located in Software/graph/
+
+** Rapport
+A rapport (in danish) on the complete build process will be located in Rapport/
