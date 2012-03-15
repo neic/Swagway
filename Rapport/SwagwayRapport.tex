@@ -1,18 +1,19 @@
 \documentclass[a4paper,oneside,article,danish,table,draft]{memoir}
 \XeTeXtracingfonts= 1
-\usepackage{babel,amsmath,unicode-math,url,tikz,microtype,verbatim}
+\usepackage{babel,microtype,verbatim,amsmath,amssymb,unicode-math,ulem,url,siunitx,mhchem,tikz,pgfplots}
+\sisetup{per-mode=symbol}
 \microtypesetup{final,verbose=silent}
 \usetikzlibrary{mindmap,arrows,positioning,shapes}
 \setmainfont[Ligatures={TeX}]{Arno Pro}
 \setmathfont{Arno Pro}
-% \setmathfont{[Asana-Math]}
+\setmathfont{[Asana-Math]}
 %\hfuzz=1pt
 \usepackage[margin,draft]{fixme}
 \fxusetheme{color}
 
 \newcommand{\authorvar}{Carl~Emil~Grøn~Christensen and Mathias~Dannesbo}
 \newcommand{\pretitlevar}{0}
-\newcommand{\titlevar}{Stepdance} 
+\newcommand{\titlevar}{Swagway} 
 \newcommand{\subtitlevar}{0} 
 \newcommand{\datevar}{\today} 
 \newcommand{\subjectvar}{Teknikfag~A:~El}
@@ -57,10 +58,6 @@
 
 \chapter{Indledning}\label{chap:ind}
 \section{Problemformulering}
-\begin{itemize}
-\end{itemize}
-
-
 
 \section{Indput}
 
@@ -79,7 +76,23 @@ I2C, Pull-up, Bus capasistance, level shifter,
 \section{Output}
 
 \subsection{Motorstyring}
+\begin{table}[htbp]
+  % \caption[]{}
+  \centering
+  \begin{tabular}{SS|SSSSl}
+      \toprule
+      1 & 2 & 1 & 2 & 3 & 4 & \\
+      \midrule
+      0 & 0 & 0 & 1 & 0 & 1 & Short \\
+      1 & 0 & 1 & 0 & 0 & 1 & $\circlearrowright$ \\
+      0 & 1 & 0 & 1 & 0 & 0 & Off\\
+      1 & 1 & 1 & 0 & 1 & 0 & $\circlearrowleft$ \\
+    \end{tabular}
+    % \label{tab:}
+  \end{table}
+
 H-bro, PWM, PWM-kondensator, beskyttelses dioder, 4000 serie, optocopler
+
 
 
 \chapter{Konklusion} \label{chap:kon}
@@ -100,6 +113,5 @@ Kredsløbet uden om printne er næsten færdig.
 Vi kan læse data fra IMUen og vi har et halvt implementert kalman-filter.
 
 Efter kalmanfilteret fungere skal der implementeres PID med wrapper kode.
-
 
 \end{document}
