@@ -38,7 +38,7 @@ const float gyroSens = 14375; //LSB per deg/sec
 
 void setup() 
 {
-  Serial.begin(19200);
+  Serial.begin(115200);
   Wire.begin();
 
   //Turning on the acc
@@ -61,17 +61,14 @@ void loop()
       reciveAndClean(); //Recives xa, ya, za, xg, yg, zg and calulates accAngle
 
       zgDeg = zg/gyroSens; // Calculate the angle change since last sample
-      gyroAngle += zgDeg; // Int to the abs angle. 
-      estAngle = kalmanCalculate(accAngle, zgDeg, millis()-timeOld);
+      gyroAngle += zgDeg*10; // Int to the abs angle.
+      
+      //estAngle = kalmanCalculate(accAngle, zgDeg, millis()-timeOld);
       //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*();
       //SerialDebugRaw();
       //SerialDebugAngle();
       serialGraph();
-      packageCount++;
-      if (packageCount == 4)
-        {
-          packageCount = 0;
-        }
+
       timeOld = millis();
     }
 }
@@ -208,7 +205,6 @@ void SerialDebugRaw()
   Serial.print(" ");
   Serial.print("zg: ");
   Serial.println(zg); 
-  Serial.println(" ");
 }
 
 void SerialDebugAngle()
@@ -229,7 +225,9 @@ void serialGraph()
   Serial.print(",");
   Serial.print(estAngle); //2
   Serial.print(",");
-  Serial.print((millis()-timeNew)/1000); //3
+  Serial.print((millis()-timeNew)); //3
   Serial.print(",");
-  Serial.println((millis()-timeOld)/1000); //4
+  Serial.print((millis()-timeOld)); //4
+  Serial.print(",");
+  Serial.println(millis()); //4
 }
