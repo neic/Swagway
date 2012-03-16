@@ -2,5 +2,8 @@
 *.s#*
 *.aux
 *.log
+*.toc
+*.lof
+*.lot
 Rapport/auto/*
 Software/graph/data/*
