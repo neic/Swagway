@@ -7,3 +7,7 @@
 *.lot
 Rapport/auto/*
 Software/graph/data/*
+Software/Rolling graph/Rolling graph/bin/*
+Software/Rolling graph/Rolling graph/obj/*
+Software/Rolling graph/Rolling graph/Properties/*
+*.user
