@@ -54,7 +54,7 @@
             this.tabMonitor = new System.Windows.Forms.TabPage();
             this.cAutoScroll = new System.Windows.Forms.CheckBox();
             this.btSendMon = new System.Windows.Forms.Button();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.tbSend = new System.Windows.Forms.TextBox();
             this.tbMonitor = new System.Windows.Forms.TextBox();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -271,7 +271,7 @@
             // 
             this.tabMonitor.Controls.Add(this.cAutoScroll);
             this.tabMonitor.Controls.Add(this.btSendMon);
-            this.tabMonitor.Controls.Add(this.textBox5);
+            this.tabMonitor.Controls.Add(this.tbSend);
             this.tabMonitor.Controls.Add(this.tbMonitor);
             this.tabMonitor.Location = new System.Drawing.Point(4, 22);
             this.tabMonitor.Name = "tabMonitor";
@@ -301,15 +301,16 @@
             this.btSendMon.TabIndex = 2;
             this.btSendMon.Text = "Send";
             this.btSendMon.UseVisualStyleBackColor = true;
+            this.btSendMon.Click += new System.EventHandler(this.btSendMon_Click);
             // 
-            // textBox5
+            // tbSend
             // 
-            this.textBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.tbSend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox5.Location = new System.Drawing.Point(3, 8);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(471, 20);
-            this.textBox5.TabIndex = 1;
+            this.tbSend.Location = new System.Drawing.Point(3, 8);
+            this.tbSend.Name = "tbSend";
+            this.tbSend.Size = new System.Drawing.Size(471, 20);
+            this.tbSend.TabIndex = 1;
             // 
             // tbMonitor
             // 
@@ -399,7 +400,7 @@
         private System.Windows.Forms.Button btReload;
         private System.Windows.Forms.TabPage tabMonitor;
         private System.Windows.Forms.Button btSendMon;
-        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox tbSend;
         private System.Windows.Forms.TextBox tbMonitor;
         private System.Windows.Forms.CheckBox cAutoScroll;
 

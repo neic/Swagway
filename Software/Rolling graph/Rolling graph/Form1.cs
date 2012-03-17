@@ -80,25 +80,31 @@ namespace Rolling_graph
             else
             {
                 serialPort.Close();
+                lbConnectionStatus.Text = "Disconnected";
+                btConnect.Text = "Connect";
 
-                if (!serialPort.IsOpen)
-                {
-                    lbConnectionStatus.Text = "Disconnected";
-                    btConnect.Text = "Connect";
-                }
             }
         }
 
-        /* Serial Port */
+        /* Serial Port & monitor*/
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             RxString = serialPort.ReadExisting();
-            this.Invoke(new EventHandler(ReadToMonitor));
+            this.BeginInvoke(new EventHandler(ReadToMonitor));
         }
 
         private void ReadToMonitor(object sender, EventArgs e)
         {
             tbMonitor.AppendText(RxString);
+        }
+
+        private void btSendMon_Click(object sender, EventArgs e)
+        {
+            if (serialPort.IsOpen)
+            {
+                serialPort.Write(tbSend.Text);
+                tbSend.Text = "";
+            }
         }
 
      
