@@ -1,9 +1,0 @@
-C:\Users\Neic\AppData\Local\Temporary Projects\Rolling graph\bin\Debug\Rolling graph.exe
-C:\Users\Neic\AppData\Local\Temporary Projects\Rolling graph\bin\Debug\Rolling graph.pdb
-C:\Users\Neic\AppData\Local\Temporary Projects\Rolling graph\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\Neic\AppData\Local\Temporary Projects\Rolling graph\obj\x86\Debug\Rolling_graph.Form1.resources
-C:\Users\Neic\AppData\Local\Temporary Projects\Rolling graph\obj\x86\Debug\Rolling_graph.Properties.Resources.resources
-C:\Users\Neic\AppData\Local\Temporary Projects\Rolling graph\obj\x86\Debug\GenerateResource.read.1.tlog
-C:\Users\Neic\AppData\Local\Temporary Projects\Rolling graph\obj\x86\Debug\GenerateResource.write.1.tlog
-C:\Users\Neic\AppData\Local\Temporary Projects\Rolling graph\obj\x86\Debug\Rolling graph.exe
-C:\Users\Neic\AppData\Local\Temporary Projects\Rolling graph\obj\x86\Debug\Rolling graph.pdb
