@@ -23,6 +23,7 @@ namespace Rolling_graph
         {
             /* Serial Port */
             LoadSerialPorts();
+            cbSpeed.SelectedIndex = 4; // 9600 as default
 
         }
 
@@ -36,6 +37,8 @@ namespace Rolling_graph
 
         private void LoadSerialPorts()
         {
+            cbComPort.Items.Clear();
+
             foreach (string s in SerialPort.GetPortNames())
             {
                 cbComPort.Items.Add(s);
@@ -44,11 +47,10 @@ namespace Rolling_graph
             if (cbComPort.Items.Count > 0)
             {
                 cbComPort.SelectedIndex = 0;
-                
             }
             else
             {
-                lbConnectionStatus.Text = "Ingen COM-porte fundet";
+                lbConnectionStatus.Text = "No COM-ports found";
             }
         }
 
@@ -60,17 +62,30 @@ namespace Rolling_graph
 
         private void btConnect_Click(object sender, EventArgs e)
         {
-            serialPort.PortName = cbComPort.SelectedItem.ToString();
-            serialPort.BaudRate = int.Parse(cbSpeed.SelectedItem.ToString());
-
-            if (!serialPort.IsOpen)
+            if (btConnect.Text == "Connect")
             {
-                serialPort.Open();
+                if (!serialPort.IsOpen)
+                {
+                    serialPort.PortName = cbComPort.SelectedItem.ToString();
+                    serialPort.BaudRate = int.Parse(cbSpeed.SelectedItem.ToString());
+                    serialPort.Open();
+                }
+
+                if (serialPort.IsOpen)
+                {
+                    lbConnectionStatus.Text = "Connected to: " + serialPort.PortName;
+                    btConnect.Text = "Disconnect";
+                }
             }
-
-            if (serialPort.IsOpen)
+            else
             {
-                lbConnectionStatus.Text = "Connected to: " + serialPort.PortName;
+                serialPort.Close();
+
+                if (!serialPort.IsOpen)
+                {
+                    lbConnectionStatus.Text = "Disconnected";
+                    btConnect.Text = "Connect";
+                }
             }
         }
 

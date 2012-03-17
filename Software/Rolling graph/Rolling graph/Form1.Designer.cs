@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tab_graph = new System.Windows.Forms.TabPage();
+            this.tabGraph = new System.Windows.Forms.TabPage();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.tabPid = new System.Windows.Forms.TabPage();
             this.btSendPID = new System.Windows.Forms.Button();
@@ -60,7 +60,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbConnectionStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1.SuspendLayout();
-            this.tab_graph.SuspendLayout();
+            this.tabGraph.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.tabPid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -73,10 +73,10 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tab_graph);
-            this.tabControl1.Controls.Add(this.tabPid);
             this.tabControl1.Controls.Add(this.tabSettings);
             this.tabControl1.Controls.Add(this.tabMonitor);
+            this.tabControl1.Controls.Add(this.tabGraph);
+            this.tabControl1.Controls.Add(this.tabPid);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -84,35 +84,35 @@
             this.tabControl1.Size = new System.Drawing.Size(568, 417);
             this.tabControl1.TabIndex = 1;
             // 
-            // tab_graph
+            // tabGraph
             // 
-            this.tab_graph.Controls.Add(this.chart1);
-            this.tab_graph.Location = new System.Drawing.Point(4, 22);
-            this.tab_graph.Name = "tab_graph";
-            this.tab_graph.Padding = new System.Windows.Forms.Padding(3);
-            this.tab_graph.Size = new System.Drawing.Size(560, 391);
-            this.tab_graph.TabIndex = 0;
-            this.tab_graph.Text = "Graph";
-            this.tab_graph.UseVisualStyleBackColor = true;
+            this.tabGraph.Controls.Add(this.chart1);
+            this.tabGraph.Location = new System.Drawing.Point(4, 22);
+            this.tabGraph.Name = "tabGraph";
+            this.tabGraph.Padding = new System.Windows.Forms.Padding(3);
+            this.tabGraph.Size = new System.Drawing.Size(560, 391);
+            this.tabGraph.TabIndex = 0;
+            this.tabGraph.Text = "Graph";
+            this.tabGraph.UseVisualStyleBackColor = true;
             // 
             // chart1
             // 
-            chartArea7.Name = "ChartArea_rolling";
-            chartArea8.Name = "ChartArea_polar";
-            this.chart1.ChartAreas.Add(chartArea7);
-            this.chart1.ChartAreas.Add(chartArea8);
+            chartArea3.Name = "ChartArea_rolling";
+            chartArea4.Name = "ChartArea_polar";
+            this.chart1.ChartAreas.Add(chartArea3);
+            this.chart1.ChartAreas.Add(chartArea4);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart1.Location = new System.Drawing.Point(3, 3);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            series7.ChartArea = "ChartArea_rolling";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series7.Name = "Series_Acc_Rolling";
-            series8.ChartArea = "ChartArea_polar";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Polar;
-            series8.Name = "Series_Acc_Polar";
-            this.chart1.Series.Add(series7);
-            this.chart1.Series.Add(series8);
+            series3.ChartArea = "ChartArea_rolling";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Name = "Series_Acc_Rolling";
+            series4.ChartArea = "ChartArea_polar";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Polar;
+            series4.Name = "Series_Acc_Polar";
+            this.chart1.Series.Add(series3);
+            this.chart1.Series.Add(series4);
             this.chart1.Size = new System.Drawing.Size(554, 385);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -319,8 +319,11 @@
             this.tbMonitor.Location = new System.Drawing.Point(3, 35);
             this.tbMonitor.Multiline = true;
             this.tbMonitor.Name = "tbMonitor";
+            this.tbMonitor.ReadOnly = true;
+            this.tbMonitor.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbMonitor.Size = new System.Drawing.Size(551, 312);
             this.tbMonitor.TabIndex = 0;
+            this.tbMonitor.WordWrap = false;
             // 
             // serialPort
             // 
@@ -353,7 +356,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
-            this.tab_graph.ResumeLayout(false);
+            this.tabGraph.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.tabPid.ResumeLayout(false);
             this.tabPid.PerformLayout();
@@ -374,7 +377,7 @@
         #endregion
 
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tab_graph;
+        private System.Windows.Forms.TabPage tabGraph;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.TabPage tabSettings;
         private System.IO.Ports.SerialPort serialPort;
