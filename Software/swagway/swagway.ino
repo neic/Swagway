@@ -10,11 +10,8 @@ byte buffg[6];
 int xa, ya, za, xg, yg, zg;
 
 double accAngle = 0;
-
-float zgErr = 0;
-double zgDeg = 0;
-volatile double gyroAngle = 0;
-
+double gyroAngle = 0;
+double gyroRate = 0;
 double estAngle = 0;
 
 const int calibrationSamples = 10;
@@ -22,9 +19,15 @@ const int calibrationSamples = 10;
 int packageCount = 0;
 
 // Kalman filter
-const float Q_angle  =  0.001; //0.001
-const float Q_gyro   =  3;   //0.003
-const float R_angle  =  0.03;  //0.03
+const float Q_angle = 0.001; // Process noise covariance for the accelerometer - Sw
+const float Q_gyro = 0.003; // Process noise covariance for the gyro - Sw
+const float R_angle = 0.03; // Measurement noise covariance - Sv
+
+double angle = 180; // It starts at 180 degrees
+double bias = 0;
+double P_00 = 0, P_01 = 0, P_10 = 0, P_11 = 0;
+double dt, y, S;
+double K_0, K_1;
 
 // acc I2C
 const int accaddr = 0x53;
@@ -58,12 +61,14 @@ void loop()
   if (millis()-timeNew >= 10)
     {
       timeNew = millis();
-      reciveAndClean(); //Recives xa, ya, za, xg, yg, zg and calulates accAngle
+      reciveAndClean(); //Recives xa, ya, za, xg, yg, zg.
 
-      zgDeg = zg/gyroSens; // Calculate the angle change since last sample
-      gyroAngle += zgDeg*10; // Int to the abs angle.
+      accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
+      gyroRate = zg*10/2/gyroSens;
+      gyroAngle += gyroRate; // Integral to the abs angle.
       
-      //estAngle = kalmanCalculate(accAngle, zgDeg, millis()-timeOld);
+      estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
+
       //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*();
       //SerialDebugRaw();
       //SerialDebugAngle();
@@ -111,12 +116,6 @@ void reciveAndClean()
   ya=(((int)buffa[3])<<8) | buffa[2];
   za=(((int)buffa[5])<<8) | buffa[4];
 
-  float xaf=xa; // convert to float to do calculations
-  float yaf=ya;
-
-  accAngle = atan2(xaf,yaf)*180/3.14159; // calcutalte the X-Y-angle
-
-
   //Gyro calculations
   readFrom(gyroregaddr, gyrodataregaddr, 6, buffg); // read the data from gyro
 
@@ -134,49 +133,50 @@ void gyroCalibration()
     {
       reciveAndClean();
       accAngleBuf +=  accAngle;
-      zgErr += zg;
-      if (0 == i%(calibrationSamples/10))
-        {
-          //Serial.print(100*i/calibrationSamples);
-          //Serial.println(" %");
-        }
       delay(10);
     }
   gyroAngle = accAngleBuf/calibrationSamples;
-  zgErr = zgErr/calibrationSamples;
   
   //Serial.print("Done. zgErr=");
   //Serial.println(zgErr, 10);
 }
 
 
-float x_angle = 0;
-float x_bias = 0;
-float P_00 = 0, P_01 = 0, P_10 = 0, P_11 = 0;
-float dt, y, S;
-float K_0, K_1;
 
-float kalmanCalculate(float newAngle, float newRate,int looptime) {
-  dt = float(looptime)/1000;                                    
-  x_angle += dt * (newRate - x_bias);
-  P_00 +=  - dt * (P_10 + P_01) + Q_angle * dt;
-  P_01 +=  - dt * P_11;
-  P_10 +=  - dt * P_11;
-  P_11 +=  + Q_gyro * dt;
+double kalman(double newAngle, double newRate, double dtime) {
+    // KasBot V2 - Kalman filter module - http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1284738418 - http://www.x-firm.com/?page_id=145
+    // with slightly modifications by Kristian Lauszus
+    // See http://academic.csuohio.edu/simond/courses/eec644/kalman.pdf and http://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf for more information
+    dt = dtime / 1000; // Convert from milliseconds to seconds
     
-  y = newAngle - x_angle;
-  S = P_00 + R_angle;
-  K_0 = P_00 / S;
-  K_1 = P_10 / S;
-  
-  x_angle +=  K_0 * y;
-  x_bias  +=  K_1 * y;
-  P_00 -= K_0 * P_00;
-  P_01 -= K_0 * P_01;
-  P_10 -= K_1 * P_00;
-  P_11 -= K_1 * P_01;
-  
-  return x_angle;
+    // Discrete Kalman filter time update equations - Time Update ("Predict")
+    // Update xhat - Project the state ahead
+    angle += dt * (newRate - bias);
+    
+    // Update estimation error covariance - Project the error covariance ahead
+    P_00 += -dt * (P_10 + P_01) + Q_angle * dt;
+    P_01 += -dt * P_11;
+    P_10 += -dt * P_11;
+    P_11 += +Q_gyro * dt;
+    
+    // Discrete Kalman filter measurement update equations - Measurement Update ("Correct")
+    // Calculate Kalman gain - Compute the Kalman gain
+    S = P_00 + R_angle;
+    K_0 = P_00 / S;
+    K_1 = P_10 / S;
+    
+    // Calculate angle and resting rate - Update estimate with measurement zk
+    y = newAngle - angle;
+    angle += K_0 * y;
+    bias += K_1 * y;
+    
+    // Calculate estimation error covariance - Update the error covariance
+    P_00 -= K_0 * P_00;
+    P_01 -= K_0 * P_01;
+    P_10 -= K_1 * P_00;
+    P_11 -= K_1 * P_01;
+    
+    return angle;
 }
 
 float floatmap(float x, float in_min, float in_max, float out_min, float out_max)
@@ -223,11 +223,7 @@ void serialGraph()
   Serial.print(",");
   Serial.print(accAngle); //1
   Serial.print(",");
-  Serial.print(estAngle); //2
-  Serial.print(",");
-  Serial.print((millis()-timeNew)); //3
-  Serial.print(",");
-  Serial.print((millis()-timeOld)); //4
-  Serial.print(",");
-  Serial.println(millis()); //4
+  Serial.println(estAngle); //2
 }
+
+
