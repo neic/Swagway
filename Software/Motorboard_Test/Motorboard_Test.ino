@@ -17,30 +17,28 @@ Serial.begin(9600);
 }
 
 void loop() {
-  value = map(analogRead(A0),0,1024,-255,255);
-  
+  value = analogRead(A0);
+ 
   r = digitalRead(7);
-  if(value<
-  0)
-  {
-// R
-digitalWrite(motorpina, HIGH);
-digitalWrite(motorpinb, LOW);
-
-Serial.println(value);
-analogWrite(motorpinc, value);
-
-  }
+  if(value<512)
+    {
+      // R
+      digitalWrite(motorpina, HIGH);
+      digitalWrite(motorpinb, LOW);
+      value = value - 512;
+      value = map(value,-512,0,0,255);
+      Serial.println(value);
+      analogWrite(motorpinc, value);
+    }
   else
-  {
-    // L
-    digitalWrite(motorpinc, HIGH);
-digitalWrite(motorpina, LOW);
-int value2 = map(value,-255,0
-,0,255);
-Serial.println(value2);
-analogWrite(motorpinb, value2);
-  }
+    {
+      // L
+      digitalWrite(motorpinc, HIGH);
+      digitalWrite(motorpina, LOW);
+      value = -map(value,512,0,0,255);
+      Serial.println(value);
+      analogWrite(motorpinb, value);
+    }
 //Serial.println("SHORT: - 1: Both LOW");
 //delay(tm);
 //digitalWrite(motorpina, HIGH);
