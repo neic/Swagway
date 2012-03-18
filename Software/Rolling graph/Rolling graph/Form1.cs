@@ -79,7 +79,10 @@ namespace Rolling_graph
             }
             else
             {
-                serialPort.Close();
+                if (serialPort.IsOpen)
+                {
+                    serialPort.Close();
+                }
                 lbConnectionStatus.Text = "Disconnected";
                 btConnect.Text = "Connect";
 
@@ -95,10 +98,11 @@ namespace Rolling_graph
 
         private void ReadToMonitor(object sender, EventArgs e)
         {
+            int pos = tbMonitor.SelectionStart;
             tbMonitor.AppendText(RxString);
         }
 
-        private void btSendMon_Click(object sender, EventArgs e)
+        private void SendToSerial()
         {
             if (serialPort.IsOpen)
             {
@@ -106,9 +110,23 @@ namespace Rolling_graph
                 tbSend.Text = "";
             }
         }
+        private void btSendMon_Click(object sender, EventArgs e)
+        {
+            SendToSerial();
+        }
 
-     
-        
+        private void tbSend_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SendToSerial();
+            }
+        }
+
+        /* Graph */
+
+        string[] graphData = tbMonitor.Text.Split(',');
+  
 
     }
 }
