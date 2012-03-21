@@ -13,6 +13,10 @@ namespace Rolling_graph
     public partial class Form1 : Form
     {
         string RxString;
+        string RxBuffer;
+        List<float[]> Samples = new List<float[]>();
+        int packageCount = 0;
+        int oldPackageCount = 0;
 
         public Form1()
         {
@@ -33,7 +37,7 @@ namespace Rolling_graph
             {
                 serialPort.Close();
             }
-        }   
+        }
 
         private void LoadSerialPorts()
         {
@@ -98,10 +102,39 @@ namespace Rolling_graph
 
         private void ReadToMonitor(object sender, EventArgs e)
         {
+            
             int pos = tbMonitor.SelectionStart;
             tbMonitor.AppendText(RxString);
+            CleanData(RxString);
         }
 
+        private void CleanData(string input)
+        {
+            RxBuffer += input;
+            if (RxBuffer.Contains('\n'))
+            {
+                if (packageCount > 1)
+                {
+                    RxBuffer = RxBuffer.TrimEnd('\r', '\n');
+
+                    string[] StringSampleSet = RxBuffer.Split(',');
+                    float[] FloatSampleSet = new float[StringSampleSet.Length];
+
+                    for (int i = 0; i < StringSampleSet.Length; i++)
+                    {
+                        bool result = float.TryParse(StringSampleSet[i],out FloatSampleSet[i]);
+                        if (!result)
+                        {
+                            FloatSampleSet[i] = 0;
+                        }
+                    }
+
+                    Samples.Add(FloatSampleSet);
+                }
+                packageCount++;
+                RxBuffer = "";
+            }
+        }
         private void SendToSerial()
         {
             if (serialPort.IsOpen)
@@ -122,11 +155,22 @@ namespace Rolling_graph
                 SendToSerial();
             }
         }
-
         /* Graph */
 
-        string[] graphData = tbMonitor.Text.Split(',');
-  
+        /* Statusbar */
+        private void timerSample_Tick(object sender, EventArgs e)
+        {
+            int diff = packageCount - oldPackageCount;
+            lbSamplesPerSec.Text = diff.ToString() + " Samples/sec";
+            
+            if (diff>pbSamplesPerSec.Maximum)
+            {
+                pbSamplesPerSec.Maximum = diff;
+            }
 
+            pbSamplesPerSec.Value = diff;
+           
+            oldPackageCount = packageCount;
+        }
     }
 }
