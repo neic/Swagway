@@ -79,14 +79,19 @@ I2C, Pull-up, Bus capasistance, level shifter,
 \begin{table}[htbp]
   % \caption[]{}
   \centering
-  \begin{tabular}{SS|SSSSl}
+  \begin{tabular}{ccc|cccc|ccccl}
       \toprule
-      1 & 2 & 1 & 2 & 3 & 4 & \\
+     P2&P3&P5 &Q1&Q2&Q3&Q4 &Q1&Q2&Q3&Q4\\
+     P4&P6&P9 &Q8&Q7&Q5&Q6 &Q1&Q2&Q3&Q4\\
       \midrule
-      0 & 0 & 0 & 1 & 0 & 1 & Short \\
-      1 & 0 & 1 & 0 & 0 & 1 & $\circlearrowright$ \\
-      0 & 1 & 0 & 1 & 0 & 0 & Off\\
-      1 & 1 & 1 & 0 & 1 & 0 & $\circlearrowleft$ \\
+     0&0&0 &0&0&0&0 &1&0&1&0 & Brake\\
+     1&0&0 &1&1&0&0 &0&1&1&0 & $\circlearrowleft$\\
+     0&1&0 &0&0&0&1 &1&0&1&1 & Short\\
+     1&1&0 &1&1&0&1 &0&1&1&1 & Short\\
+     0&0&1 &0&0&1&0 &1&0&0&0 & Off ($\circlearrowright$)\\
+     1&0&1 &1&1&1&0 &1&1&0&0 & Off ($\circlearrowleft$)\\
+     0&1&1 &0&0&1&0 &1&0&0&1 & $\circlearrowright$\\
+     1&1&1 &1&1&1&1 &0&1&0&1 & Brake\\
     \end{tabular}
     % \label{tab:}
   \end{table}
