@@ -29,18 +29,20 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea13 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea14 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabSettings = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btReload = new System.Windows.Forms.Button();
+            this.cbComPort = new System.Windows.Forms.ComboBox();
             this.btConnect = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.cbSpeed = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cbComPort = new System.Windows.Forms.ComboBox();
             this.tabMonitor = new System.Windows.Forms.TabPage();
             this.cAutoScroll = new System.Windows.Forms.CheckBox();
             this.btSendMon = new System.Windows.Forms.Button();
@@ -59,8 +61,13 @@
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbConnectionStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lbSamplesPerSec = new System.Windows.Forms.ToolStripStatusLabel();
+            this.pbSamplesPerSec = new System.Windows.Forms.ToolStripProgressBar();
+            this.lbFiller = new System.Windows.Forms.ToolStripStatusLabel();
+            this.timerSample = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabSettings.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.tabMonitor.SuspendLayout();
             this.tabGraph.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -86,12 +93,8 @@
             // 
             // tabSettings
             // 
-            this.tabSettings.Controls.Add(this.btReload);
-            this.tabSettings.Controls.Add(this.btConnect);
-            this.tabSettings.Controls.Add(this.cbSpeed);
-            this.tabSettings.Controls.Add(this.label2);
-            this.tabSettings.Controls.Add(this.label1);
-            this.tabSettings.Controls.Add(this.cbComPort);
+            this.tabSettings.Controls.Add(this.groupBox2);
+            this.tabSettings.Controls.Add(this.groupBox1);
             this.tabSettings.Location = new System.Drawing.Point(4, 22);
             this.tabSettings.Name = "tabSettings";
             this.tabSettings.Padding = new System.Windows.Forms.Padding(3);
@@ -100,25 +103,66 @@
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(153, 6);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(141, 161);
+            this.groupBox2.TabIndex = 9;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Graph";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btReload);
+            this.groupBox1.Controls.Add(this.cbComPort);
+            this.groupBox1.Controls.Add(this.btConnect);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.cbSpeed);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Location = new System.Drawing.Point(8, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(139, 161);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Serial";
+            // 
             // btReload
             // 
-            this.btReload.Location = new System.Drawing.Point(139, 16);
+            this.btReload.Location = new System.Drawing.Point(9, 59);
             this.btReload.Name = "btReload";
-            this.btReload.Size = new System.Drawing.Size(105, 23);
+            this.btReload.Size = new System.Drawing.Size(121, 23);
             this.btReload.TabIndex = 5;
             this.btReload.Text = "Reload COM Ports";
             this.btReload.UseVisualStyleBackColor = true;
             this.btReload.Click += new System.EventHandler(this.btReload_Click);
             // 
+            // cbComPort
+            // 
+            this.cbComPort.FormattingEnabled = true;
+            this.cbComPort.Location = new System.Drawing.Point(9, 32);
+            this.cbComPort.Name = "cbComPort";
+            this.cbComPort.Size = new System.Drawing.Size(121, 21);
+            this.cbComPort.TabIndex = 0;
+            // 
             // btConnect
             // 
-            this.btConnect.Location = new System.Drawing.Point(11, 86);
+            this.btConnect.Location = new System.Drawing.Point(9, 128);
             this.btConnect.Name = "btConnect";
             this.btConnect.Size = new System.Drawing.Size(121, 23);
             this.btConnect.TabIndex = 4;
             this.btConnect.Text = "Connect";
             this.btConnect.UseVisualStyleBackColor = true;
             this.btConnect.Click += new System.EventHandler(this.btConnect_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "COM Port";
             // 
             // cbSpeed
             // 
@@ -135,7 +179,7 @@
             "38400",
             "57600",
             "115200"});
-            this.cbSpeed.Location = new System.Drawing.Point(11, 59);
+            this.cbSpeed.Location = new System.Drawing.Point(9, 101);
             this.cbSpeed.Name = "cbSpeed";
             this.cbSpeed.Size = new System.Drawing.Size(121, 21);
             this.cbSpeed.TabIndex = 3;
@@ -143,28 +187,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 43);
+            this.label2.Location = new System.Drawing.Point(6, 85);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 2;
             this.label2.Text = "Speed";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(53, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "COM Port";
-            // 
-            // cbComPort
-            // 
-            this.cbComPort.FormattingEnabled = true;
-            this.cbComPort.Location = new System.Drawing.Point(11, 19);
-            this.cbComPort.Name = "cbComPort";
-            this.cbComPort.Size = new System.Drawing.Size(121, 21);
-            this.cbComPort.TabIndex = 0;
             // 
             // tabMonitor
             // 
@@ -204,8 +231,8 @@
             // 
             // tbSend
             // 
-            this.tbSend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSend.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tbSend.Location = new System.Drawing.Point(3, 8);
             this.tbSend.Name = "tbSend";
             this.tbSend.Size = new System.Drawing.Size(471, 20);
@@ -214,9 +241,9 @@
             // 
             // tbMonitor
             // 
-            this.tbMonitor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbMonitor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tbMonitor.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbMonitor.Location = new System.Drawing.Point(3, 35);
             this.tbMonitor.Multiline = true;
@@ -240,26 +267,25 @@
             // 
             // chart1
             // 
-            chartArea1.Name = "ChartArea_rolling";
-            chartArea2.Name = "ChartArea_polar";
-            this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.ChartAreas.Add(chartArea2);
+            chartArea13.Name = "ChartArea_rolling";
+            chartArea14.Name = "ChartArea_polar";
+            this.chart1.ChartAreas.Add(chartArea13);
+            this.chart1.ChartAreas.Add(chartArea14);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart1.Location = new System.Drawing.Point(3, 3);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            series1.ChartArea = "ChartArea_rolling";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Name = "Series_Acc_Rolling";
-            series2.ChartArea = "ChartArea_polar";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Polar;
-            series2.Name = "Series_Acc_Polar";
-            this.chart1.Series.Add(series1);
-            this.chart1.Series.Add(series2);
+            series13.ChartArea = "ChartArea_rolling";
+            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series13.Name = "Series_Acc_Rolling";
+            series14.ChartArea = "ChartArea_polar";
+            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Polar;
+            series14.Name = "Series_Acc_Polar";
+            this.chart1.Series.Add(series13);
+            this.chart1.Series.Add(series14);
             this.chart1.Size = new System.Drawing.Size(554, 385);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
-            this.chart1.Click += new System.EventHandler(this.chart1_Click);
             // 
             // tabPid
             // 
@@ -336,7 +362,10 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lbConnectionStatus});
+            this.lbConnectionStatus,
+            this.lbFiller,
+            this.pbSamplesPerSec,
+            this.lbSamplesPerSec});
             this.statusStrip1.Location = new System.Drawing.Point(0, 395);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(568, 22);
@@ -346,7 +375,35 @@
             // lbConnectionStatus
             // 
             this.lbConnectionStatus.Name = "lbConnectionStatus";
-            this.lbConnectionStatus.Size = new System.Drawing.Size(0, 17);
+            this.lbConnectionStatus.Size = new System.Drawing.Size(104, 17);
+            this.lbConnectionStatus.Text = "Connection Status";
+            // 
+            // lbSamplesPerSec
+            // 
+            this.lbSamplesPerSec.AutoSize = false;
+            this.lbSamplesPerSec.Name = "lbSamplesPerSec";
+            this.lbSamplesPerSec.Size = new System.Drawing.Size(100, 17);
+            this.lbSamplesPerSec.Text = "Samples/sec";
+            this.lbSamplesPerSec.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // pbSamplesPerSec
+            // 
+            this.pbSamplesPerSec.Maximum = 110;
+            this.pbSamplesPerSec.Name = "pbSamplesPerSec";
+            this.pbSamplesPerSec.Size = new System.Drawing.Size(110, 16);
+            this.pbSamplesPerSec.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            // 
+            // lbFiller
+            // 
+            this.lbFiller.Name = "lbFiller";
+            this.lbFiller.Size = new System.Drawing.Size(247, 17);
+            this.lbFiller.Spring = true;
+            // 
+            // timerSample
+            // 
+            this.timerSample.Enabled = true;
+            this.timerSample.Interval = 1000;
+            this.timerSample.Tick += new System.EventHandler(this.timerSample_Tick);
             // 
             // Form1
             // 
@@ -356,12 +413,13 @@
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Swagway Debugger";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabSettings.ResumeLayout(false);
-            this.tabSettings.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.tabMonitor.ResumeLayout(false);
             this.tabMonitor.PerformLayout();
             this.tabGraph.ResumeLayout(false);
@@ -406,6 +464,12 @@
         private System.Windows.Forms.TextBox tbSend;
         private System.Windows.Forms.TextBox tbMonitor;
         private System.Windows.Forms.CheckBox cAutoScroll;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.ToolStripStatusLabel lbFiller;
+        private System.Windows.Forms.ToolStripProgressBar pbSamplesPerSec;
+        private System.Windows.Forms.ToolStripStatusLabel lbSamplesPerSec;
+        private System.Windows.Forms.Timer timerSample;
 
     }
 }
