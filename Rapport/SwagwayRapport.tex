@@ -61,6 +61,37 @@
 
 \section{Indput}
 
+\begin{table}[htbp]
+  \caption[]{Pin forbindelser på Arduino}
+  \centering
+  \begin{tabular}{rll}
+      \toprule
+      Pin & Forbindelse & Egenskaber\\
+      \midrule
+      0 & USB Rx & \\
+      1 & USB Tx & \\
+      2 & Radio Rx & Interrupt\\
+      3 & & Interrupt, PWM\\
+      4 & Radio Tx & \\
+      5 & Motorcontroller L3 & PWM\\
+      6 & Motorcontroller L2 & PWM\\
+      7 & Motorcontroller L1 & \\
+      8 & Motorcontroller R1 & \\
+      9 & Motorcontroller R2 & PWM\\
+      10 & Motorcontroller R3 & PWM\\
+      11 & & PWM\\
+      12 & & \\
+      13 & & LED\\
+      A0 & & \\
+      A1 & & \\
+      A2 & Steering & \\
+      A3 & Steering & \\
+      A4 & IMU I²C SDA & SDA\\
+      A5 & IMU I²C SCL & SCL
+    \end{tabular}
+    % \label{tab:}
+  \end{table}
+
 \subsection{Sensor}
 I2C, Pull-up, Bus capasistance, level shifter,
 
@@ -81,8 +112,8 @@ I2C, Pull-up, Bus capasistance, level shifter,
   \centering
   \begin{tabular}{ccc|cccc|ccccl}
       \toprule
-     P2&P3&P5 &Q1&Q2&Q3&Q4 &Q1&Q2&Q3&Q4\\
-     P4&P6&P9 &Q5&Q6&Q7&Q8 &Q5&Q6&Q7&Q8\\
+     P7&P6&P5 &Q1&Q2&Q3&Q4 &Q1&Q2&Q3&Q4\\
+     P8&P9&P10 &Q5&Q6&Q7&Q8 &Q5&Q6&Q7&Q8\\
       \midrule
      0&0&0 &0&0&0&0 &1&0&1&0 & Brake\\
      1&0&0 &1&1&0&0 &0&1&1&0 & $\circlearrowleft$\\
