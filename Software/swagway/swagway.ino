@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include <math.h>
+#include "ITG3200.h"
 
 unsigned long timeNew = 0;
 unsigned long timeOld = 0;
@@ -7,7 +8,8 @@ unsigned long timeOld = 0;
 byte buffa[6];
 byte buffg[6];
 
-int xa, ya, za, xg, yg, zg;
+int xa, ya, za;
+float xg, yg, zg;
 
 double accAngle = 0;
 double gyroAngle = 0;
@@ -34,10 +36,7 @@ const int accaddr = 0x53;
 const int accdataregaddr = 0x32;
 
 //gyro I2C
-const int gyroregaddr = 0x68;
-const int gyrodataregaddr = 0x1D;
-
-const float gyroSens = 14375; //LSB per deg/sec
+ITG3200 gyro = ITG3200();
 
 void setup() 
 {
@@ -49,33 +48,62 @@ void setup()
   writeTo(accaddr, 0x2D, B00010000); //Puts the sensor to standby mode
   writeTo(accaddr, 0x2D, B00001000); //Puts the sensor to measure mode
 
-  //Turning on the gyro
-  writeTo(gyroregaddr, 0x16, B00010011); //Set DLPF register to FS_SEL = 3 and DLPF_cfg = 3 (LPF=42Hz, internal sample rate = 1kHz)
-  writeTo(gyroregaddr, 0x15, 9); //Sets sample rate to (internal sample rate)/(9 + 1) (1kHz/(9+1)=100Hz <=> 10ms)
-
-  gyroCalibration();
+  gyro.init(ITG3200_ADDR_AD0_LOW);
+  gyro.zeroCalibrate(2500,2);
 }
 
 void loop() 
 {
-  if (millis()-timeNew >= 10)
-    {
-      timeNew = millis();
-      reciveAndClean(); //Recives xa, ya, za, xg, yg, zg.
+  while (gyro.isRawDataReady()) {
+    /* 
+    // Reads uncalibrated raw values from the sensor 
+    gyro.readGyroRaw(&ix,&iy,&iz); 
+    Serial.print("X1:"); 
+    Serial.print(ix); 
+    Serial.print("  Y:"); 
+    Serial.print(iy); 
+    Serial.print("  Z:"); 
+    Serial.println(iz); 
+    */ 
+     
+    /* 
+    // Reads calibrated raw values from the sensor 
+    gyro.readGyroRawCal(&ix,&iy,&iz); 
+    Serial.print("X2:"); 
+    Serial.print(ix); 
+    Serial.print("  Y:"); 
+    Serial.print(iy); 
+    Serial.print("  Z:"); 
+    Serial.println(iz); 
+    */ 
+     
+    // Reads calibrated values in deg/sec    
+    gyro.readGyro(&xg,&yg,&zg); 
+    Serial.print("X3:"); 
+    Serial.print(xg); 
+    Serial.print("  Y:"); 
+    Serial.print(yg); 
+    Serial.print("  Z:"); 
+    Serial.println(zg);
+  } 
+  /* if (millis()-timeNew >= 10) */
+  /*   { */
+  /*     timeNew = millis(); */
+  /*     reciveAndClean(); //Recives xa, ya, za, xg, yg, zg. */
 
-      accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
-      gyroRate = zg*10/2/gyroSens;
-      gyroAngle += gyroRate; // Integral to the abs angle.
+  /*     accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle */
+  /*     gyroRate = zg*10/2/gyroSens; */
+  /*     gyroAngle += gyroRate; // Integral to the abs angle. */
       
-      estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
+  /*     estAngle = kalman(accAngle, gyroRate, millis()-timeOld); */
 
-      //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*();
-      //SerialDebugRaw();
-      //SerialDebugAngle();
-      serialGraph();
+  /*     //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*(); */
+  /*     //SerialDebugRaw(); */
+  /*     //SerialDebugAngle(); */
+  /*     serialGraph(); */
 
-      timeOld = millis();
-    }
+  /*     timeOld = millis(); */
+  /*   } */
 }
 
 
@@ -115,13 +143,6 @@ void reciveAndClean()
   xa=(((int)buffa[1])<<8) | buffa[0]; // cleanup the data and put it in variables
   ya=(((int)buffa[3])<<8) | buffa[2];
   za=(((int)buffa[5])<<8) | buffa[4];
-
-  //Gyro calculations
-  readFrom(gyroregaddr, gyrodataregaddr, 6, buffg); // read the data from gyro
-
-  xg=(((int)buffg[0])<<8) | buffg[1]; // cleanup the data and put it in variables
-  yg=(((int)buffg[2])<<8) | buffg[3];
-  zg=(((int)buffg[4])<<8) | buffg[5];
 }
 
 void gyroCalibration()
