@@ -1,6 +1,8 @@
 #include <Wire.h>
 #include <math.h>
 #include "ITG3200.h"
+#include "ADXL345.h"
+
 
 unsigned long timeOld = 0;
 
@@ -27,8 +29,8 @@ double dt, y, S;
 double K_0, K_1;
 
 // acc I2C
-const int accaddr = 0x53;
-const int accdataregaddr = 0x32;
+ADXL345 acc = ADXL345();
+float accSampleRate;
 
 //gyro I2C
 ITG3200 gyro = ITG3200();
@@ -38,11 +40,12 @@ void setup()
 {
   Serial.begin(115200);
   Wire.begin();
-
+  
   //Init the acc
-  writeTo(accaddr, 0x2D, B00000000); //Resets POWER_CTL
-  writeTo(accaddr, 0x2D, B00010000); //Puts the sensor to standby mode
-  writeTo(accaddr, 0x2D, B00001000); //Puts the sensor to measure mode
+  acc.init(ADXL345_ADDR_SD0_LOW);
+
+  //Calculate the accSampleRate
+  accSampleRate = 100/(pow(2,(10-acc.getOutputRate())));
 
   //Init the gyro
   gyro.init(ITG3200_ADDR_AD0_LOW);
@@ -72,6 +75,7 @@ void loop()
 
       gyroAngle += zg/gyroSampleRate; // Integral to the abs angle.
       timeOld = micros();
+      Serial.println(gyroAngle);
   }
   
   //reciveAndClean(); //Recives xa, ya, za
@@ -79,45 +83,6 @@ void loop()
   //estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
 
   //serialGraph();
-}
-
-
-void writeTo(int device, byte address, byte val)
-{
-  Wire.beginTransmission(device);
-  Wire.write(address);
-  Wire.write(val);
-  Wire.endTransmission();
-}
-
-void readFrom(int device, byte address, int num, byte buff[])
-{
-  Wire.beginTransmission(device); //start transmission to device
-  Wire.write(address); //sends address to read from
-  Wire.endTransmission(); //ends transmission
-
-  Wire.beginTransmission(device); //start transmission to device (initiate again)
-  Wire.requestFrom(device, num); //request 6 num bytes from device
-
-  int i=0;
-
-  while(Wire.available()) //device may send less than requested (abnormal)
-  {
-    buff[i]=Wire.read(); //receive a num byte
-    i++;
-  }
-  
-  Wire.endTransmission(); //end transmission
-}
-
-void reciveAndClean()
-{
-  //Accel calculations
-  readFrom(accaddr, accdataregaddr, 6, buffa); // read the data from the acc
-
-  xa=(((int)buffa[1])<<8) | buffa[0]; // cleanup the data and put it in variables
-  ya=(((int)buffa[3])<<8) | buffa[2];
-  za=(((int)buffa[5])<<8) | buffa[4];
 }
 
 double kalman(double newAngle, double newRate, double dtime) {
@@ -176,6 +141,10 @@ void dumpIMUsettings()
   Serial.println("              ---Gyro---                ");
   Serial.print("Sample rate divider (Hz)        = ");
   Serial.println(gyroSampleRate);
+  Serial.println();
+  Serial.println("               ---Acc---                ");
+  Serial.print("Sample rate divider (Hz)        = ");
+  Serial.println(accSampleRate);
   Serial.println();
   Serial.println("============end IMU Settings============");
   Serial.println("========================================");
