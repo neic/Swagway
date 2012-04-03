@@ -1,22 +1,21 @@
 #include <Wire.h>
 #include <math.h>
+#include "ITG3200.h"
+#include "ADXL345.h"
 
-unsigned long timeNew = 0;
+
 unsigned long timeOld = 0;
 
 byte buffa[6];
-byte buffg[6];
 
-int xa, ya, za, xg, yg, zg;
+int xa, ya, za;
+float xg, yg, zg;
 
 double accAngle = 0;
 double gyroAngle = 0;
-double gyroRate = 0;
 double estAngle = 0;
 
 const int calibrationSamples = 10;
-
-int packageCount = 0;
 
 // Kalman filter
 const float Q_angle = 0.001; // Process noise covariance for the accelerometer - Sw
@@ -30,118 +29,61 @@ double dt, y, S;
 double K_0, K_1;
 
 // acc I2C
-const int accaddr = 0x53;
-const int accdataregaddr = 0x32;
+ADXL345 acc = ADXL345();
+float accSampleRate;
 
 //gyro I2C
-const int gyroregaddr = 0x68;
-const int gyrodataregaddr = 0x1D;
-
-const float gyroSens = 14375; //LSB per deg/sec
+ITG3200 gyro = ITG3200();
+float gyroSampleRate;
 
 void setup() 
 {
   Serial.begin(115200);
   Wire.begin();
+  
+  //Init the acc
+  acc.init(ADXL345_ADDR_SD0_LOW);
 
-  //Turning on the acc
-  writeTo(accaddr, 0x2D, B00000000); //Resets POWER_CTL
-  writeTo(accaddr, 0x2D, B00010000); //Puts the sensor to standby mode
-  writeTo(accaddr, 0x2D, B00001000); //Puts the sensor to measure mode
+  //Calculate the accSampleRate
+  accSampleRate = 100/(pow(2,(10-acc.getOutputRate())));
 
-  //Turning on the gyro
-  writeTo(gyroregaddr, 0x16, B00010011); //Set DLPF register to FS_SEL = 3 and DLPF_cfg = 3 (LPF=42Hz, internal sample rate = 1kHz)
-  writeTo(gyroregaddr, 0x15, 9); //Sets sample rate to (internal sample rate)/(9 + 1) (1kHz/(9+1)=100Hz <=> 10ms)
+  //Init the gyro
+  gyro.init(ITG3200_ADDR_AD0_LOW);
+  gyro.setSampleRateDiv(79); //Set the sample rate to 8000Hz/(79+1)= 100Hz
 
-  gyroCalibration();
+  //Calculate the gyroSampleRate
+  if (gyro.getFilterBW() == BW256_SR8)
+    {
+      gyroSampleRate = 8000 / (gyro.getSampleRateDiv()+1);
+    }
+  else
+    {
+      gyroSampleRate = 1000 / (gyro.getSampleRateDiv()+1);
+    }
+
+  //Calibration
+  gyro.zeroCalibrate(250,2);
+
+  //Dump settings
+  dumpIMUsettings();
 }
 
 void loop() 
 {
-  if (millis()-timeNew >= 10)
-    {
-      timeNew = millis();
-      reciveAndClean(); //Recives xa, ya, za, xg, yg, zg.
+  if(gyro.isRawDataReady()) {
+      gyro.readGyro(&xg,&yg,&zg); 
 
-      accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
-      gyroRate = zg*10/2/gyroSens;
-      gyroAngle += gyroRate; // Integral to the abs angle.
-      
-      estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
-
-      //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*();
-      //SerialDebugRaw();
-      //SerialDebugAngle();
-      serialGraph();
-
-      timeOld = millis();
-    }
-}
-
-
-void writeTo(int device, byte address, byte val)
-{
-  Wire.beginTransmission(device);
-  Wire.write(address);
-  Wire.write(val);
-  Wire.endTransmission();
-}
-
-void readFrom(int device, byte address, int num, byte buff[])
-{
-  Wire.beginTransmission(device); //start transmission to device
-  Wire.write(address); //sends address to read from
-  Wire.endTransmission(); //ends transmission
-
-  Wire.beginTransmission(device); //start transmission to device (initiate again)
-  Wire.requestFrom(device, num); //request 6 num bytes from device
-
-  int i=0;
-
-  while(Wire.available()) //device may send less than requested (abnormal)
-  {
-    buff[i]=Wire.read(); //receive a num byte
-    i++;
+      gyroAngle += zg/gyroSampleRate; // Integral to the abs angle.
+      timeOld = micros();
+      Serial.println(gyroAngle);
   }
   
-  Wire.endTransmission(); //end transmission
+  //reciveAndClean(); //Recives xa, ya, za
+  //accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
+  //estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
+
+  //serialGraph();
 }
-
-void reciveAndClean()
-{
-  //Accel calculations
-  readFrom(accaddr, accdataregaddr, 6, buffa); // read the data from the acc
-
-  xa=(((int)buffa[1])<<8) | buffa[0]; // cleanup the data and put it in variables
-  ya=(((int)buffa[3])<<8) | buffa[2];
-  za=(((int)buffa[5])<<8) | buffa[4];
-
-  //Gyro calculations
-  readFrom(gyroregaddr, gyrodataregaddr, 6, buffg); // read the data from gyro
-
-  xg=(((int)buffg[0])<<8) | buffg[1]; // cleanup the data and put it in variables
-  yg=(((int)buffg[2])<<8) | buffg[3];
-  zg=(((int)buffg[4])<<8) | buffg[5];
-}
-
-void gyroCalibration()
-{
-  double accAngleBuf = 0;
-  
-  //Serial.println("Gyro calibration started");
-  for (int i = 0; i < calibrationSamples; ++i)
-    {
-      reciveAndClean();
-      accAngleBuf +=  accAngle;
-      delay(10);
-    }
-  gyroAngle = accAngleBuf/calibrationSamples;
-  
-  //Serial.print("Done. zgErr=");
-  //Serial.println(zgErr, 10);
-}
-
-
 
 double kalman(double newAngle, double newRate, double dtime) {
     // KasBot V2 - Kalman filter module - http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1284738418 - http://www.x-firm.com/?page_id=145
@@ -179,43 +121,7 @@ double kalman(double newAngle, double newRate, double dtime) {
     return angle;
 }
 
-float floatmap(float x, float in_min, float in_max, float out_min, float out_max)
-{
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
 /* Serial communication */
-
-void SerialDebugRaw()
-{
-  Serial.print("xa: ");
-  Serial.print(xa);
-  Serial.print(" ");
-  Serial.print("ya: ");
-  Serial.print(ya);
-  Serial.print(" ");
-  Serial.print("za: ");
-  Serial.print(za);
-  Serial.print(" ");
-  Serial.print("xg: ");
-  Serial.print(xg);
-  Serial.print(" ");
-  Serial.print("yg: ");
-  Serial.print(yg);
-  Serial.print(" ");
-  Serial.print("zg: ");
-  Serial.println(zg); 
-}
-
-void SerialDebugAngle()
-{
-  Serial.print("estAngle ");
-  //Serial.print(estAngle);
-  Serial.print(" gyroAngle= ");
-  Serial.print(gyroAngle);
-  Serial.print(" accAngle= ");
-  Serial.println(accAngle);
-}
 
 void serialGraph()
 {
@@ -226,4 +132,21 @@ void serialGraph()
   Serial.println(estAngle); //2
 }
 
-
+void dumpIMUsettings()
+{
+  Serial.println();
+  Serial.println("========================================");
+  Serial.println("==============IMU Settings==============");
+  Serial.println();
+  Serial.println("              ---Gyro---                ");
+  Serial.print("Sample rate divider (Hz)        = ");
+  Serial.println(gyroSampleRate);
+  Serial.println();
+  Serial.println("               ---Acc---                ");
+  Serial.print("Sample rate divider (Hz)        = ");
+  Serial.println(accSampleRate);
+  Serial.println();
+  Serial.println("============end IMU Settings============");
+  Serial.println("========================================");
+  Serial.println();
+}
