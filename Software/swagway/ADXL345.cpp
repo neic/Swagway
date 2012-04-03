@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-03 19:55:22 (neic)>      */
+/* Time-stamp: <2012-04-03 20:43:45 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -13,6 +13,11 @@
 
 #include "ADXL345.h"
 #include <Wire.h>
+
+ADXL345::ADXL345()
+{
+}
+
 
 void ADXL345::init(unsigned int address)
 {
