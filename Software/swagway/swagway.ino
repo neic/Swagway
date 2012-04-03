@@ -81,7 +81,7 @@ void loop()
       
       //accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
       
-      gyroAngle += zg/GyroSampleRate; // Integral to the abs angle.
+      gyroAngle += zg/gyroSampleRate; // Integral to the abs angle.
       Serial.print("A:"); 
       Serial.print(gyroAngle);
       
@@ -218,13 +218,15 @@ void serialGraph()
 
 void dumpIMUsettings()
 {
+  Serial.println();
   Serial.println("========================================");
   Serial.println("==============IMU Settings==============");
-  Serial.println("========================================");
-  Serial.print("---Gyro---");
+  Serial.println();
+  Serial.println("              ---Gyro---                ");
   Serial.print("Sample rate divider (Hz)        = ");
-  Serial.println(gyroSampleRate, DEC);
-  Serial.println("========================================");
+  Serial.println(gyroSampleRate);
+  Serial.println();
   Serial.println("============end IMU Settings============");
   Serial.println("========================================");
+  Serial.println();
 }
