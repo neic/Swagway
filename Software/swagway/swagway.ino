@@ -2,23 +2,18 @@
 #include <math.h>
 #include "ITG3200.h"
 
-unsigned long timeNew = 0;
 unsigned long timeOld = 0;
 
 byte buffa[6];
-byte buffg[6];
 
 int xa, ya, za;
 float xg, yg, zg;
 
 double accAngle = 0;
 double gyroAngle = 0;
-double gyroRate = 0;
 double estAngle = 0;
 
 const int calibrationSamples = 10;
-
-int packageCount = 0;
 
 // Kalman filter
 const float Q_angle = 0.001; // Process noise covariance for the accelerometer - Sw
@@ -53,7 +48,7 @@ void setup()
   gyro.init(ITG3200_ADDR_AD0_LOW);
   gyro.setSampleRateDiv(79); //Set the sample rate to 8000Hz/(79+1)= 100Hz
 
-  //Calculate the sample rate
+  //Calculate the gyroSampleRate
   if (gyro.getFilterBW() == BW256_SR8)
     {
       gyroSampleRate = 8000 / (gyro.getSampleRateDiv()+1);
@@ -74,26 +69,16 @@ void loop()
 {
   if(gyro.isRawDataReady()) {
       gyro.readGyro(&xg,&yg,&zg); 
-      Serial.print("Z:"); 
-      Serial.print(zg);
-      
-      //reciveAndClean(); //Recives xa, ya, za, xg, yg, zg.
-      
-      //accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
-      
-      gyroAngle += zg/gyroSampleRate; // Integral to the abs angle.
-      Serial.print("A:"); 
-      Serial.print(gyroAngle);
-      
-      //estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
 
-      //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*();
-      //SerialDebugAngle();
-      //serialGraph();
-      Serial.print("L:");       
-      Serial.println(micros()-timeOld);
+      gyroAngle += zg/gyroSampleRate; // Integral to the abs angle.
       timeOld = micros();
   }
+  
+  //reciveAndClean(); //Recives xa, ya, za
+  //accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
+  //estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
+
+  //serialGraph();
 }
 
 
@@ -135,25 +120,6 @@ void reciveAndClean()
   za=(((int)buffa[5])<<8) | buffa[4];
 }
 
-void gyroCalibration()
-{
-  double accAngleBuf = 0;
-  
-  //Serial.println("Gyro calibration started");
-  for (int i = 0; i < calibrationSamples; ++i)
-    {
-      reciveAndClean();
-      accAngleBuf +=  accAngle;
-      delay(10);
-    }
-  gyroAngle = accAngleBuf/calibrationSamples;
-  
-  //Serial.print("Done. zgErr=");
-  //Serial.println(zgErr, 10);
-}
-
-
-
 double kalman(double newAngle, double newRate, double dtime) {
     // KasBot V2 - Kalman filter module - http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1284738418 - http://www.x-firm.com/?page_id=145
     // with slightly modifications by Kristian Lauszus
@@ -190,22 +156,7 @@ double kalman(double newAngle, double newRate, double dtime) {
     return angle;
 }
 
-float floatmap(float x, float in_min, float in_max, float out_min, float out_max)
-{
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-
 /* Serial communication */
-
-void SerialDebugAngle()
-{
-  Serial.print("estAngle ");
-  //Serial.print(estAngle);
-  Serial.print(" gyroAngle= ");
-  Serial.print(gyroAngle);
-  Serial.print(" accAngle= ");
-  Serial.println(accAngle);
-}
 
 void serialGraph()
 {
