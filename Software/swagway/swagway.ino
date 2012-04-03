@@ -43,67 +43,47 @@ void setup()
   Serial.begin(115200);
   Wire.begin();
 
-  //Turning on the acc
+  //Init the acc
   writeTo(accaddr, 0x2D, B00000000); //Resets POWER_CTL
   writeTo(accaddr, 0x2D, B00010000); //Puts the sensor to standby mode
   writeTo(accaddr, 0x2D, B00001000); //Puts the sensor to measure mode
 
+  //Init the gyro
   gyro.init(ITG3200_ADDR_AD0_LOW);
-  gyro.zeroCalibrate(2500,2);
+  gyro.setSampleRateDiv(79); //Set the sample rate to 8000Hz/(79+1)= 100Hz
+
+  //Calibration
+  gyro.zeroCalibrate(250,2);
+
+  //Dump settings
+  dumpIMUsettings();
 }
 
 void loop() 
 {
-  while (gyro.isRawDataReady()) {
-    /* 
-    // Reads uncalibrated raw values from the sensor 
-    gyro.readGyroRaw(&ix,&iy,&iz); 
-    Serial.print("X1:"); 
-    Serial.print(ix); 
-    Serial.print("  Y:"); 
-    Serial.print(iy); 
-    Serial.print("  Z:"); 
-    Serial.println(iz); 
-    */ 
-     
-    /* 
-    // Reads calibrated raw values from the sensor 
-    gyro.readGyroRawCal(&ix,&iy,&iz); 
-    Serial.print("X2:"); 
-    Serial.print(ix); 
-    Serial.print("  Y:"); 
-    Serial.print(iy); 
-    Serial.print("  Z:"); 
-    Serial.println(iz); 
-    */ 
-     
-    // Reads calibrated values in deg/sec    
-    gyro.readGyro(&xg,&yg,&zg); 
-    Serial.print("X3:"); 
-    Serial.print(xg); 
-    Serial.print("  Y:"); 
-    Serial.print(yg); 
-    Serial.print("  Z:"); 
-    Serial.println(zg);
-  } 
-  /* if (millis()-timeNew >= 10) */
-  /*   { */
-  /*     timeNew = millis(); */
-  /*     reciveAndClean(); //Recives xa, ya, za, xg, yg, zg. */
-
-  /*     accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle */
-  /*     gyroRate = zg*10/2/gyroSens; */
-  /*     gyroAngle += gyroRate; // Integral to the abs angle. */
+  if(gyro.isRawDataReady()) {
+      gyro.readGyro(&xg,&yg,&zg); 
+      Serial.print("Z:"); 
+      Serial.print(zg);
       
-  /*     estAngle = kalman(accAngle, gyroRate, millis()-timeOld); */
+      //reciveAndClean(); //Recives xa, ya, za, xg, yg, zg.
+      
+      //accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
+      
+      gyroAngle += zg/100; // Integral to the abs angle.
+      Serial.print("A:"); 
+      Serial.print(gyroAngle);
+      
+      //estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
 
-  /*     //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*(); */
-  /*     //SerialDebugRaw(); */
-  /*     //SerialDebugAngle(); */
-  /*     serialGraph(); */
-
-  /*     timeOld = millis(); */
-  /*   } */
+      //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*();
+      //SerialDebugRaw();
+      //SerialDebugAngle();
+      //serialGraph();
+      Serial.print("L:");       
+      Serial.println(micros()-timeOld);
+      timeOld = micros();
+  }
 }
 
 
@@ -207,27 +187,6 @@ float floatmap(float x, float in_min, float in_max, float out_min, float out_max
 
 /* Serial communication */
 
-void SerialDebugRaw()
-{
-  Serial.print("xa: ");
-  Serial.print(xa);
-  Serial.print(" ");
-  Serial.print("ya: ");
-  Serial.print(ya);
-  Serial.print(" ");
-  Serial.print("za: ");
-  Serial.print(za);
-  Serial.print(" ");
-  Serial.print("xg: ");
-  Serial.print(xg);
-  Serial.print(" ");
-  Serial.print("yg: ");
-  Serial.print(yg);
-  Serial.print(" ");
-  Serial.print("zg: ");
-  Serial.println(zg); 
-}
-
 void SerialDebugAngle()
 {
   Serial.print("estAngle ");
@@ -247,4 +206,18 @@ void serialGraph()
   Serial.println(estAngle); //2
 }
 
-
+void dumpIMUsettings()
+{
+  Serial.println("========================================");
+  Serial.println("==============IMU Settings==============");
+  Serial.println("========================================");
+  Serial.print("---Gyro---");
+  Serial.print("Sample rate divider (Hz)        = ");
+  if (gyro.getFilterBW() == BW256_SR8)
+    Serial.println(8000 / (gyro.getSampleRateDiv()+1), DEC);
+  else
+    Serial.println(1000 / (gyro.getSampleRateDiv()+1), DEC);
+  Serial.println("========================================");
+  Serial.println("============end IMU Settings============");
+  Serial.println("========================================");
+}
