@@ -37,6 +37,7 @@ const int accdataregaddr = 0x32;
 
 //gyro I2C
 ITG3200 gyro = ITG3200();
+float gyroSampleRate;
 
 void setup() 
 {
@@ -51,6 +52,16 @@ void setup()
   //Init the gyro
   gyro.init(ITG3200_ADDR_AD0_LOW);
   gyro.setSampleRateDiv(79); //Set the sample rate to 8000Hz/(79+1)= 100Hz
+
+  //Calculate the sample rate
+  if (gyro.getFilterBW() == BW256_SR8)
+    {
+      gyroSampleRate = 8000 / (gyro.getSampleRateDiv()+1);
+    }
+  else
+    {
+      gyroSampleRate = 1000 / (gyro.getSampleRateDiv()+1);
+    }
 
   //Calibration
   gyro.zeroCalibrate(250,2);
@@ -70,14 +81,13 @@ void loop()
       
       //accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
       
-      gyroAngle += zg/100; // Integral to the abs angle.
+      gyroAngle += zg/GyroSampleRate; // Integral to the abs angle.
       Serial.print("A:"); 
       Serial.print(gyroAngle);
       
       //estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
 
       //estAngle = (0.98)*(estAngle+gyroAngle)+(0.02)*();
-      //SerialDebugRaw();
       //SerialDebugAngle();
       //serialGraph();
       Serial.print("L:");       
@@ -213,10 +223,7 @@ void dumpIMUsettings()
   Serial.println("========================================");
   Serial.print("---Gyro---");
   Serial.print("Sample rate divider (Hz)        = ");
-  if (gyro.getFilterBW() == BW256_SR8)
-    Serial.println(8000 / (gyro.getSampleRateDiv()+1), DEC);
-  else
-    Serial.println(1000 / (gyro.getSampleRateDiv()+1), DEC);
+  Serial.println(gyroSampleRate, DEC);
   Serial.println("========================================");
   Serial.println("============end IMU Settings============");
   Serial.println("========================================");
