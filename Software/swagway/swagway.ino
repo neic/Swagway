@@ -3,10 +3,7 @@
 #include "ITG3200.h"
 #include "ADXL345.h"
 
-
 unsigned long timeOld = 0;
-
-byte buffa[6];
 
 float xa, ya, za;
 float xg, yg, zg;
@@ -14,8 +11,6 @@ float xg, yg, zg;
 double accAngle = 0;
 double gyroAngle = 0;
 double estAngle = 0;
-
-const int calibrationSamples = 10;
 
 // Kalman filter
 const float Q_angle = 0.001; // Process noise covariance for the accelerometer - Sw
@@ -84,19 +79,10 @@ void loop()
   if (acc.isRawDataReady())
     {
       acc.readAcc(&xa,&ya,&za);
-      Serial.print("xa");
-      Serial.print(xa);
-      Serial.print(" ya");
-      Serial.print(ya);
-      Serial.print(" za");
-      Serial.println(za);
-      
     }
   
-  //reciveAndClean(); //Recives xa, ya, za
   //accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
   //estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
-
   //serialGraph();
 }
 
@@ -164,8 +150,12 @@ void dumpIMUsettings()
   Serial.println(acc.getFullRes());
   Serial.print("Range                         (g) = ");
   Serial.println(pow(2,(1+acc.getRange())),0);
-  Serial.print("Scale factor              (LBS/g) = ");
-  Serial.println(acc.scaleFactor[0]);
+  Serial.print("Scale factor X            (LBS/g) = ");
+  Serial.println(acc.scaleFactor[0],0);
+  Serial.print("Scale factor Y            (LBS/g) = ");
+  Serial.println(acc.scaleFactor[1],0);
+  Serial.print("Scale factor Z            (LBS/g) = ");
+  Serial.println(acc.scaleFactor[2],0);
   Serial.println();
   Serial.println("============end IMU Settings============");
   Serial.println("========================================");
