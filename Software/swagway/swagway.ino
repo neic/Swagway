@@ -43,13 +43,14 @@ void setup()
   
   //Init the acc
   acc.init(ADXL345_ADDR_SD0_LOW);
+  acc.setOutputRate(10); //25Hz*2^(10-8)=100Hz. See table 7 in ADXL345 datasheet
 
   //Calculate the accSampleRate
-  accSampleRate = 100/(pow(2,(10-acc.getOutputRate())));
+  accSampleRate = 25*pow(2,(acc.getOutputRate()-8)); //See table 7 in ADXL345 datasheet
 
   //Init the gyro
   gyro.init(ITG3200_ADDR_AD0_LOW);
-  gyro.setSampleRateDiv(79); //Set the sample rate to 8000Hz/(79+1)= 100Hz
+  gyro.setSampleRateDiv(79); //Set the sample rate to 8000Hz/(79+1)=100Hz
 
   //Calculate the gyroSampleRate
   if (gyro.getFilterBW() == BW256_SR8)
