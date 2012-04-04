@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 15:59:25 (neic)>      */
+/* Time-stamp: <2012-04-04 16:32:44 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -60,6 +60,20 @@ void ADXL345::setFullRes(bool fullRes)
   readmem(DATA_FORMAT, 1, &_buff[0]);
   writemem(DATA_FORMAT, ((_buff[0] & ~(1 << 3)) | (fullRes << 3)));
 }
+
+int ADXL345::getRange()
+{
+  readmem(DATA_FORMAT, 1, &_buff[0]);
+  return(_buff[0] & B00000011);
+}
+
+void ADXL345::setRange(int range)
+{
+  range %= 4; //Prevent overflow
+  readmem(DATA_FORMAT, 1, &_buff[0]);
+  writemem(DATA_FORMAT, ((_buff[0] & ~3) | range));
+}
+
 
 bool ADXL345::isRawDataReady()
 {

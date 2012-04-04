@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 15:59:26 (neic)>      */
+/* Time-stamp: <2012-04-04 16:21:38 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -54,6 +54,8 @@ class ADXL345
   // SETUP: Data format
   bool getFullRes();
   void setFullRes(bool fullRes);
+  int getRange();
+  void setRange(int range);
   
   // INTERRUPT
   bool isRawDataReady();
