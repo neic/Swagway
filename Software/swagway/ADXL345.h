@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-03 20:10:11 (neic)>      */
+/* Time-stamp: <2012-04-04 13:14:33 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -24,8 +24,9 @@
 #define ADXL345_ADDR_SD0_LOW 0x53
 
 // Registers
-#define POWER_CTL      0x2D // RW SETUP: Power control
 #define BW_RATE        0x2C // RW SETUP: Output rate and low power mode
+#define POWER_CTL      0x2D // RW SETUP: Power control
+#define INT_SOURCE     0x30 // R  INTERRUPT: Status
 
 // Bitmaps
 #define STANDBY_MODE   0x00 // 0000 0000
@@ -41,9 +42,12 @@ class ADXL345
   void setStandbyMode();
   void setMeasureMode();
   
-  // Sample Rate Divider
+  // Output Rate
   byte getOutputRate();
   void setOutputRate(byte _SampleRate);
+
+  // Trigger
+  bool isRawDataReady();
 
   void writemem(uint8_t _addr, uint8_t _val);
   void readmem(uint8_t _addr, uint8_t _nbytes, uint8_t __buff[]);

@@ -71,13 +71,17 @@ void setup()
 
 void loop() 
 {
-  if(gyro.isRawDataReady()) {
+  if(gyro.isRawDataReady())
+    {
       gyro.readGyro(&xg,&yg,&zg); 
 
       gyroAngle += zg/gyroSampleRate; // Integral to the abs angle.
       timeOld = micros();
-      Serial.println(gyroAngle);
-  }
+    }
+  if (acc.isRawDataReady())
+    {
+      Serial.println(acc.isRawDataReady());
+    }
   
   //reciveAndClean(); //Recives xa, ya, za
   //accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle

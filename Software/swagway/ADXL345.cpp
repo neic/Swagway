@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-03 20:43:45 (neic)>      */
+/* Time-stamp: <2012-04-04 13:14:31 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -46,6 +46,12 @@ byte ADXL345::getOutputRate()
 void ADXL345::setOutputRate(byte _rate)
 {
   writemem(BW_RATE, _rate);
+}
+
+bool ADXL345::isRawDataReady()
+{
+  readmem(INT_SOURCE, 1, &_buff[0]);
+  return(_buff[0] >> 7);
 }
 
 void ADXL345::writemem(uint8_t _addr, uint8_t _val) {
