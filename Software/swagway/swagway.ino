@@ -80,7 +80,14 @@ void loop()
     }
   if (acc.isRawDataReady())
     {
-      Serial.println(acc.isRawDataReady());
+      acc.readAccRaw(&xa,&ya,&za);
+      Serial.print("xa");
+      Serial.print(xa);
+      Serial.print(" ya");
+      Serial.print(ya);
+      Serial.print(" za");
+      Serial.println(za);
+      
     }
   
   //reciveAndClean(); //Recives xa, ya, za

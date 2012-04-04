@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 13:14:33 (neic)>      */
+/* Time-stamp: <2012-04-04 14:28:47 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -27,6 +27,7 @@
 #define BW_RATE        0x2C // RW SETUP: Output rate and low power mode
 #define POWER_CTL      0x2D // RW SETUP: Power control
 #define INT_SOURCE     0x30 // R  INTERRUPT: Status
+#define DATAX0         0x32 // R  SENSOR
 
 // Bitmaps
 #define STANDBY_MODE   0x00 // 0000 0000
@@ -48,6 +49,9 @@ class ADXL345
 
   // Trigger
   bool isRawDataReady();
+
+  // Read
+  void readAccRaw(int *_AccX, int *_AccY, int *_AccZ);
 
   void writemem(uint8_t _addr, uint8_t _val);
   void readmem(uint8_t _addr, uint8_t _nbytes, uint8_t __buff[]);

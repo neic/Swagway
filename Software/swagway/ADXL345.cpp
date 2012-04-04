@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 13:14:31 (neic)>      */
+/* Time-stamp: <2012-04-04 14:28:53 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -52,6 +52,14 @@ bool ADXL345::isRawDataReady()
 {
   readmem(INT_SOURCE, 1, &_buff[0]);
   return(_buff[0] >> 7);
+}
+
+void ADXL345::readAccRaw(int *_AccX, int *_AccY, int *_AccZ)
+{
+  readmem(DATAX0, 6, &_buff[0]);
+  *_AccX = _buff[1] << 8 | _buff[0];
+  *_AccY = _buff[3] << 8 | _buff[2];
+  *_AccZ = _buff[5] << 8 | _buff[4];
 }
 
 void ADXL345::writemem(uint8_t _addr, uint8_t _val) {
