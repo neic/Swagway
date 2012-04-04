@@ -3,14 +3,21 @@
 #include "ITG3200.h"
 #include "ADXL345.h"
 
-unsigned long timeOld = 0;
+// IMU
+ADXL345 acc = ADXL345();
+float accSampleRate;
+ITG3200 gyro = ITG3200();
+float gyroSampleRate;
 
-float xa, ya, za;
+// General
+int xa, ya, za;
 float xg, yg, zg;
 
-double accAngle = 0;
-double gyroAngle = 0;
-double estAngle = 0;
+unsigned long sinceLastSend;
+
+bool newAccData, newGyroData;
+
+double accAngle, gyroAngle, estAngle;
 
 // Kalman filter
 const float Q_angle = 0.001; // Process noise covariance for the accelerometer - Sw
@@ -22,14 +29,6 @@ double bias = 0;
 double P_00 = 0, P_01 = 0, P_10 = 0, P_11 = 0;
 double dt, y, S;
 double K_0, K_1;
-
-// acc I2C
-ADXL345 acc = ADXL345();
-float accSampleRate;
-
-//gyro I2C
-ITG3200 gyro = ITG3200();
-float gyroSampleRate;
 
 void setup() 
 {
@@ -69,28 +68,34 @@ void setup()
 
 void loop() 
 {
-  if(gyro.isRawDataReady())
-    {
-      gyro.readGyro(&xg,&yg,&zg); 
-
-      gyroAngle += zg/gyroSampleRate; // Integral to the abs angle.
-      timeOld = micros();
-    }
   if (acc.isRawDataReady())
     {
-      acc.readAcc(&xa,&ya,&za);
+      acc.readAccRaw(&xa,&ya,&za);
+      accAngle = atan2(xa,ya)*180/3.1415; // calcutalte the X-Y-angle
+      newAccData = true;
     }
   
-  //accAngle = atan2(float(xa),float(ya))*180/3.1415; // calcutalte the X-Y-angle
-  //estAngle = kalman(accAngle, gyroRate, millis()-timeOld);
-  //serialGraph();
+  if (gyro.isRawDataReady())
+    {
+      gyro.readGyro(&xg,&yg,&zg);
+      gyroAngle += zg/gyroSampleRate;
+      newGyroData = true;
+    }
+  
+  if (newAccData && newGyroData)
+    {
+      estAngle = kalman(accAngle, zg, micros()-sinceLastSend);
+      sendToGraph();
+      newAccData = newGyroData = false;
+      sinceLastSend = micros();
+    }
 }
 
 double kalman(double newAngle, double newRate, double dtime) {
     // KasBot V2 - Kalman filter module - http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1284738418 - http://www.x-firm.com/?page_id=145
     // with slightly modifications by Kristian Lauszus
     // See http://academic.csuohio.edu/simond/courses/eec644/kalman.pdf and http://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf for more information
-    dt = dtime / 1000; // Convert from milliseconds to seconds
+    dt = dtime / 1000000; // Convert from microseconds to seconds
     
     // Discrete Kalman filter time update equations - Time Update ("Predict")
     // Update xhat - Project the state ahead
@@ -124,13 +129,15 @@ double kalman(double newAngle, double newRate, double dtime) {
 
 /* Serial communication */
 
-void serialGraph()
+void sendToGraph()
 {
   Serial.print(gyroAngle); //0
   Serial.print(",");
   Serial.print(accAngle); //1
   Serial.print(",");
-  Serial.println(estAngle); //2
+  Serial.print(estAngle); //2
+  Serial.print(",");
+  Serial.println(micros()-sinceLastSend); //3
 }
 
 void dumpIMUsettings()
