@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 14:28:47 (neic)>      */
+/* Time-stamp: <2012-04-04 14:45:07 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -36,6 +36,8 @@
 class ADXL345
 {
  public:
+  float scaleFactor[3];
+  
   ADXL345();
 
   void init(unsigned int address);
@@ -52,6 +54,8 @@ class ADXL345
 
   // Read
   void readAccRaw(int *_AccX, int *_AccY, int *_AccZ);
+  void setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff);
+  void readAcc(float *_AccX, float *_AccY, float *_AccZ);
 
   void writemem(uint8_t _addr, uint8_t _val);
   void readmem(uint8_t _addr, uint8_t _nbytes, uint8_t __buff[]);

@@ -8,7 +8,7 @@ unsigned long timeOld = 0;
 
 byte buffa[6];
 
-int xa, ya, za;
+float xa, ya, za;
 float xg, yg, zg;
 
 double accAngle = 0;
@@ -80,7 +80,7 @@ void loop()
     }
   if (acc.isRawDataReady())
     {
-      acc.readAccRaw(&xa,&ya,&za);
+      acc.readAcc(&xa,&ya,&za);
       Serial.print("xa");
       Serial.print(xa);
       Serial.print(" ya");

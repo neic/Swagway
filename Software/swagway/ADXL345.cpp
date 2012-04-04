@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 14:28:53 (neic)>      */
+/* Time-stamp: <2012-04-04 14:46:00 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -16,6 +16,7 @@
 
 ADXL345::ADXL345()
 {
+  setScaleFactor(1,1,1);
 }
 
 
@@ -61,6 +62,25 @@ void ADXL345::readAccRaw(int *_AccX, int *_AccY, int *_AccZ)
   *_AccY = _buff[3] << 8 | _buff[2];
   *_AccZ = _buff[5] << 8 | _buff[4];
 }
+
+void ADXL345::setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff)
+{
+  scaleFactor[0] = 256 * _Xcoeff;
+  scaleFactor[1] = 256 * _Ycoeff;
+  scaleFactor[2] = 256 * _Zcoeff;
+  
+}
+void ADXL345::readAcc(float *_AccX, float *_AccY, float *_AccZ)
+{
+  int x, y, z;
+  readAccRaw(&x,&y,&z);
+  *_AccX = x / scaleFactor[0];
+  *_AccY = y / scaleFactor[1];
+  *_AccZ = z / scaleFactor[2];
+}
+
+
+
 
 void ADXL345::writemem(uint8_t _addr, uint8_t _val) {
   Wire.beginTransmission(_dev_address);   // start transmission to device 
