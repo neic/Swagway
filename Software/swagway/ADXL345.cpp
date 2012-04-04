@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 14:46:00 (neic)>      */
+/* Time-stamp: <2012-04-04 15:59:25 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -49,10 +49,29 @@ void ADXL345::setOutputRate(byte _rate)
   writemem(BW_RATE, _rate);
 }
 
+bool ADXL345::getFullRes()
+{
+  readmem(DATA_FORMAT, 1, &_buff[0]);
+  return(_buff[0] >> 3);
+}
+
+void ADXL345::setFullRes(bool fullRes)
+{
+  readmem(DATA_FORMAT, 1, &_buff[0]);
+  writemem(DATA_FORMAT, ((_buff[0] & ~(1 << 3)) | (fullRes << 3)));
+}
+
 bool ADXL345::isRawDataReady()
 {
   readmem(INT_SOURCE, 1, &_buff[0]);
   return(_buff[0] >> 7);
+}
+
+void ADXL345::setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff)
+{
+  scaleFactor[0] = 256 * _Xcoeff;
+  scaleFactor[1] = 256 * _Ycoeff;
+  scaleFactor[2] = 256 * _Zcoeff;
 }
 
 void ADXL345::readAccRaw(int *_AccX, int *_AccY, int *_AccZ)
@@ -63,13 +82,6 @@ void ADXL345::readAccRaw(int *_AccX, int *_AccY, int *_AccZ)
   *_AccZ = _buff[5] << 8 | _buff[4];
 }
 
-void ADXL345::setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff)
-{
-  scaleFactor[0] = 256 * _Xcoeff;
-  scaleFactor[1] = 256 * _Ycoeff;
-  scaleFactor[2] = 256 * _Zcoeff;
-  
-}
 void ADXL345::readAcc(float *_AccX, float *_AccY, float *_AccZ)
 {
   int x, y, z;

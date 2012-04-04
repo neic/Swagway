@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 14:45:07 (neic)>      */
+/* Time-stamp: <2012-04-04 15:59:26 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -27,7 +27,8 @@
 #define BW_RATE        0x2C // RW SETUP: Output rate and low power mode
 #define POWER_CTL      0x2D // RW SETUP: Power control
 #define INT_SOURCE     0x30 // R  INTERRUPT: Status
-#define DATAX0         0x32 // R  SENSOR
+#define DATA_FORMAT    0x31 // RW SETUP: Self-test and data format
+#define DATAX0         0x32 // R  SENSOR: Data
 
 // Bitmaps
 #define STANDBY_MODE   0x00 // 0000 0000
@@ -42,19 +43,26 @@ class ADXL345
 
   void init(unsigned int address);
 
+  // SETUP: Mode
   void setStandbyMode();
   void setMeasureMode();
-  
-  // Output Rate
+
+  // SETUP: Output Rate
   byte getOutputRate();
   void setOutputRate(byte _SampleRate);
 
-  // Trigger
+  // SETUP: Data format
+  bool getFullRes();
+  void setFullRes(bool fullRes);
+  
+  // INTERRUPT
   bool isRawDataReady();
 
-  // Read
-  void readAccRaw(int *_AccX, int *_AccY, int *_AccZ);
+  // SETUP: Data processing
   void setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff);
+  
+  // SENSOR: Read
+  void readAccRaw(int *_AccX, int *_AccY, int *_AccZ);
   void readAcc(float *_AccX, float *_AccY, float *_AccZ);
 
   void writemem(uint8_t _addr, uint8_t _val);

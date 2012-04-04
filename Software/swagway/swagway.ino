@@ -43,6 +43,7 @@ void setup()
   
   //Init the acc
   acc.init(ADXL345_ADDR_SD0_LOW);
+  acc.setFullRes(true);
   acc.setOutputRate(10); //25Hz*2^(10-8)=100Hz. See table 7 in ADXL345 datasheet
 
   //Calculate the accSampleRate
