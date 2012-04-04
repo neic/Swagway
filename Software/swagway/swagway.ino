@@ -44,7 +44,8 @@ void setup()
   //Init the acc
   acc.init(ADXL345_ADDR_SD0_LOW);
   acc.setFullRes(true);
-  acc.setRange(5);
+  acc.setRange(3);
+  acc.setVoltage(3.3);
   acc.setOutputRate(10); //25Hz*2^(10-8)=100Hz. See table 7 in ADXL345 datasheet
 
   //Calculate the accSampleRate
@@ -163,6 +164,8 @@ void dumpIMUsettings()
   Serial.println(acc.getFullRes());
   Serial.print("Range                         (g) = ");
   Serial.println(pow(2,(1+acc.getRange())),0);
+  Serial.print("Scale factor              (LBS/g) = ");
+  Serial.println(acc.scaleFactor[0]);
   Serial.println();
   Serial.println("============end IMU Settings============");
   Serial.println("========================================");

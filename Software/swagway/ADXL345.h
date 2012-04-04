@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 16:21:38 (neic)>      */
+/* Time-stamp: <2012-04-04 17:37:05 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -38,6 +38,7 @@ class ADXL345
 {
  public:
   float scaleFactor[3];
+  float voltage;
   
   ADXL345();
 
@@ -61,7 +62,8 @@ class ADXL345
   bool isRawDataReady();
 
   // SETUP: Data processing
-  void setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff);
+  void setVoltage(float _voltage);
+  void updateScaleFactor();
   
   // SENSOR: Read
   void readAccRaw(int *_AccX, int *_AccY, int *_AccZ);

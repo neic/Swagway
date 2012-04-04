@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 16:32:44 (neic)>      */
+/* Time-stamp: <2012-04-04 17:36:44 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -16,7 +16,6 @@
 
 ADXL345::ADXL345()
 {
-  setScaleFactor(1,1,1);
 }
 
 
@@ -46,6 +45,7 @@ byte ADXL345::getOutputRate()
 
 void ADXL345::setOutputRate(byte _rate)
 {
+  _rate %= 16; //Prevent overflow
   writemem(BW_RATE, _rate);
 }
 
@@ -55,10 +55,10 @@ bool ADXL345::getFullRes()
   return(_buff[0] >> 3);
 }
 
-void ADXL345::setFullRes(bool fullRes)
+void ADXL345::setFullRes(bool _fullRes)
 {
   readmem(DATA_FORMAT, 1, &_buff[0]);
-  writemem(DATA_FORMAT, ((_buff[0] & ~(1 << 3)) | (fullRes << 3)));
+  writemem(DATA_FORMAT, ((_buff[0] & ~(1 << 3)) | (_fullRes << 3)));
 }
 
 int ADXL345::getRange()
@@ -80,12 +80,22 @@ bool ADXL345::isRawDataReady()
   readmem(INT_SOURCE, 1, &_buff[0]);
   return(_buff[0] >> 7);
 }
-
-void ADXL345::setScaleFactor(float _Xcoeff, float _Ycoeff, float _Zcoeff)
+void ADXL345::setVoltage(float _voltage)
 {
-  scaleFactor[0] = 256 * _Xcoeff;
-  scaleFactor[1] = 256 * _Ycoeff;
-  scaleFactor[2] = 256 * _Zcoeff;
+  voltage = _voltage;
+  updateScaleFactor();
+}
+
+void ADXL345::updateScaleFactor()
+{
+  int rangeScale=256;
+  if (!getFullRes())
+    {
+      rangeScale = pow(2,(8-getRange()));
+    }
+  scaleFactor[0] = rangeScale*0.89013671875+rangeScale*0.0439453125*voltage;
+  scaleFactor[1] = rangeScale*0.89013671875+rangeScale*0.0439453125*voltage;
+  scaleFactor[2] = rangeScale;
 }
 
 void ADXL345::readAccRaw(int *_AccX, int *_AccY, int *_AccZ)
