@@ -131,13 +131,15 @@ double kalman(double newAngle, double newRate, double dtime) {
 
 void sendToGraph()
 {
+  Serial.print("<");
   Serial.print(gyroAngle); //0
   Serial.print(",");
   Serial.print(accAngle); //1
   Serial.print(",");
   Serial.print(estAngle); //2
   Serial.print(",");
-  Serial.println(micros()-sinceLastSend); //3
+  Serial.print(micros()-sinceLastSend); //3
+  Serial.println(">");
 }
 
 void dumpIMUsettings()
