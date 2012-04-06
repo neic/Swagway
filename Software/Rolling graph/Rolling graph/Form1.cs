@@ -6,14 +6,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.IO.Ports;
+using System.IO.Ports; // Serial port
+using System.Text.RegularExpressions; // Regex
+using System.Globalization; // . and ,
 
 namespace Rolling_graph
 {
     public partial class Form1 : Form
     {
-        string RxString;
-        string RxBuffer;
+        string readFromUART;
+        string rxStringBuffer;
+        List<string> rxListBuffer = new List<string>();
         List<float[]> Samples = new List<float[]>();
         int packageCount = 0;
         int oldPackageCount = 0;
@@ -27,7 +30,8 @@ namespace Rolling_graph
         {
             /* Serial Port */
             LoadSerialPorts();
-            cbSpeed.SelectedIndex = 4; // 9600 as default
+            cbComPort.SelectedIndex = 1;
+            cbSpeed.SelectedIndex = 10; // 115200 as default
 
         }
 
@@ -96,7 +100,7 @@ namespace Rolling_graph
         /* Serial Port & monitor*/
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            RxString = serialPort.ReadExisting();
+            readFromUART = serialPort.ReadExisting();
             this.BeginInvoke(new EventHandler(ReadToMonitor));
         }
 
@@ -104,35 +108,40 @@ namespace Rolling_graph
         {
             
             int pos = tbMonitor.SelectionStart;
-            tbMonitor.AppendText(RxString);
-            CleanData(RxString);
+            tbMonitor.AppendText(readFromUART);
+            CleanData(readFromUART);
         }
 
         private void CleanData(string input)
         {
-            RxBuffer += input;
-            if (RxBuffer.Contains('\n'))
+            rxStringBuffer += input; // Add the input to a buffer
+            rxListBuffer = rxStringBuffer.Split('<').ToList(); // Split everything in that buffer to a list
+            rxStringBuffer = rxListBuffer[rxListBuffer.Count() - 1]; // Take the last bit of text and make put it back to the buffer
+            rxListBuffer.Remove(rxListBuffer.Last()); // Remove it from the list
+
+            for (int i = 0; i < rxListBuffer.Count(); i++)
             {
-                if (packageCount > 1)
+                /* Remove everything after '>' */
+                int j = rxListBuffer[i].IndexOf('>');
+                if (j > 0)
                 {
-                    RxBuffer = RxBuffer.TrimEnd('\r', '\n');
-
-                    string[] StringSampleSet = RxBuffer.Split(',');
-                    float[] FloatSampleSet = new float[StringSampleSet.Length];
-
-                    for (int i = 0; i < StringSampleSet.Length; i++)
-                    {
-                        bool result = float.TryParse(StringSampleSet[i],out FloatSampleSet[i]);
-                        if (!result)
-                        {
-                            FloatSampleSet[i] = 0;
-                        }
-                    }
-
-                    Samples.Add(FloatSampleSet);
+                    rxListBuffer[i] = rxListBuffer[i].Substring(0, j);
                 }
-                packageCount++;
-                RxBuffer = "";
+                /* End remove */
+
+                if (Regex.Match(rxListBuffer[i], @"(-?\d{1,3}.\d\d,){3,3}\d{4,6}").Success)
+                {
+                    string[] stringPackage = rxListBuffer[i].Split(',').ToArray();
+                    float[] floatPackage = new float[4];
+
+                    for (int k = 0; k < stringPackage.Length; k++)
+			        {
+                        floatPackage[k] = float.Parse(stringPackage[k], CultureInfo.InvariantCulture);
+		        	}
+
+                    Samples.Add(floatPackage);
+                }
+
             }
         }
         private void SendToSerial()
