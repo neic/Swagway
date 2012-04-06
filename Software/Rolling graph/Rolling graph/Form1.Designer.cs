@@ -29,13 +29,18 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea13 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea14 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.udPackages = new System.Windows.Forms.NumericUpDown();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btReload = new System.Windows.Forms.Button();
             this.cbComPort = new System.Windows.Forms.ComboBox();
@@ -61,12 +66,14 @@
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbConnectionStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.lbSamplesPerSec = new System.Windows.Forms.ToolStripStatusLabel();
-            this.pbSamplesPerSec = new System.Windows.Forms.ToolStripProgressBar();
             this.lbFiller = new System.Windows.Forms.ToolStripStatusLabel();
+            this.pbSamplesPerSec = new System.Windows.Forms.ToolStripProgressBar();
+            this.lbSamplesPerSec = new System.Windows.Forms.ToolStripStatusLabel();
             this.timerSample = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabSettings.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udPackages)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabMonitor.SuspendLayout();
             this.tabGraph.SuspendLayout();
@@ -105,12 +112,50 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label3);
+            this.groupBox2.Controls.Add(this.udPackages);
             this.groupBox2.Location = new System.Drawing.Point(153, 6);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(141, 161);
             this.groupBox2.TabIndex = 9;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Graph";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(4, 16);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(87, 13);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "Number of points";
+            // 
+            // udPackages
+            // 
+            this.udPackages.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.udPackages.Location = new System.Drawing.Point(7, 32);
+            this.udPackages.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.udPackages.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.udPackages.Name = "udPackages";
+            this.udPackages.Size = new System.Drawing.Size(120, 20);
+            this.udPackages.TabIndex = 0;
+            this.udPackages.Value = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             // 
             // groupBox1
             // 
@@ -267,22 +312,40 @@
             // 
             // chart1
             // 
-            chartArea13.Name = "ChartArea_rolling";
-            chartArea14.Name = "ChartArea_polar";
-            this.chart1.ChartAreas.Add(chartArea13);
-            this.chart1.ChartAreas.Add(chartArea14);
+            chartArea1.AxisX.IsReversed = true;
+            chartArea1.AxisX.Maximum = 500D;
+            chartArea1.AxisX.Minimum = 0D;
+            chartArea1.AxisY.Maximum = 180D;
+            chartArea1.AxisY.Minimum = -180D;
+            chartArea1.Name = "ChartArea_rolling";
+            chartArea2.Name = "ChartArea_polar";
+            this.chart1.ChartAreas.Add(chartArea1);
+            this.chart1.ChartAreas.Add(chartArea2);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart1.Location = new System.Drawing.Point(3, 3);
             this.chart1.Name = "chart1";
             this.chart1.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Bright;
-            series13.ChartArea = "ChartArea_rolling";
-            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series13.Name = "Series_Acc_Rolling";
-            series14.ChartArea = "ChartArea_polar";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Polar;
-            series14.Name = "Series_Acc_Polar";
-            this.chart1.Series.Add(series13);
-            this.chart1.Series.Add(series14);
+            series1.ChartArea = "ChartArea_rolling";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series1.Name = "Gyro_rolling";
+            series2.ChartArea = "ChartArea_rolling";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series2.Name = "Acc_rolling";
+            series3.ChartArea = "ChartArea_rolling";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series3.Name = "Est_rolling";
+            series4.ChartArea = "ChartArea_rolling";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
+            series4.Name = "Looptime_rolling";
+            series4.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            series5.ChartArea = "ChartArea_polar";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Polar;
+            series5.Name = "Acc_Polar";
+            this.chart1.Series.Add(series1);
+            this.chart1.Series.Add(series2);
+            this.chart1.Series.Add(series3);
+            this.chart1.Series.Add(series4);
+            this.chart1.Series.Add(series5);
             this.chart1.Size = new System.Drawing.Size(554, 385);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -378,13 +441,11 @@
             this.lbConnectionStatus.Size = new System.Drawing.Size(104, 17);
             this.lbConnectionStatus.Text = "Connection Status";
             // 
-            // lbSamplesPerSec
+            // lbFiller
             // 
-            this.lbSamplesPerSec.AutoSize = false;
-            this.lbSamplesPerSec.Name = "lbSamplesPerSec";
-            this.lbSamplesPerSec.Size = new System.Drawing.Size(100, 17);
-            this.lbSamplesPerSec.Text = "Samples/sec";
-            this.lbSamplesPerSec.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lbFiller.Name = "lbFiller";
+            this.lbFiller.Size = new System.Drawing.Size(237, 17);
+            this.lbFiller.Spring = true;
             // 
             // pbSamplesPerSec
             // 
@@ -393,11 +454,13 @@
             this.pbSamplesPerSec.Size = new System.Drawing.Size(110, 16);
             this.pbSamplesPerSec.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             // 
-            // lbFiller
+            // lbSamplesPerSec
             // 
-            this.lbFiller.Name = "lbFiller";
-            this.lbFiller.Size = new System.Drawing.Size(247, 17);
-            this.lbFiller.Spring = true;
+            this.lbSamplesPerSec.AutoSize = false;
+            this.lbSamplesPerSec.Name = "lbSamplesPerSec";
+            this.lbSamplesPerSec.Size = new System.Drawing.Size(100, 17);
+            this.lbSamplesPerSec.Text = "Samples/sec";
+            this.lbSamplesPerSec.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // timerSample
             // 
@@ -418,6 +481,9 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabSettings.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.udPackages)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabMonitor.ResumeLayout(false);
@@ -470,6 +536,8 @@
         private System.Windows.Forms.ToolStripProgressBar pbSamplesPerSec;
         private System.Windows.Forms.ToolStripStatusLabel lbSamplesPerSec;
         private System.Windows.Forms.Timer timerSample;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.NumericUpDown udPackages;
 
     }
 }

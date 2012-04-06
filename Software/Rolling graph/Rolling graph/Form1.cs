@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO.Ports; // Serial port
 using System.Text.RegularExpressions; // Regex
 using System.Globalization; // . and ,
+using System.Windows.Forms.DataVisualization; // Chart
 
 namespace Rolling_graph
 {
@@ -17,7 +18,6 @@ namespace Rolling_graph
         string readFromUART;
         string rxStringBuffer;
         List<string> rxListBuffer = new List<string>();
-        List<float[]> Samples = new List<float[]>();
         int packageCount = 0;
         int oldPackageCount = 0;
 
@@ -129,19 +129,19 @@ namespace Rolling_graph
                 }
                 /* End remove */
 
-                if (Regex.Match(rxListBuffer[i], @"(-?\d{1,3}.\d\d,){3,3}\d{4,6}").Success)
+                if (Regex.Match(rxListBuffer[i], @"^((-?\d{1,3}[.]\d\d,){3,3}\d{4,})$").Success)
                 {
                     string[] stringPackage = rxListBuffer[i].Split(',').ToArray();
                     float[] floatPackage = new float[4];
 
                     for (int k = 0; k < stringPackage.Length; k++)
 			        {
-                        floatPackage[k] = float.Parse(stringPackage[k], CultureInfo.InvariantCulture);
+                        float.TryParse(stringPackage[k], NumberStyles.Float, CultureInfo.InvariantCulture, out floatPackage[k]);
 		        	}
+                    packageCount++;
 
-                    Samples.Add(floatPackage);
+                    plotPackage(floatPackage);
                 }
-
             }
         }
         private void SendToSerial()
@@ -165,6 +165,22 @@ namespace Rolling_graph
             }
         }
         /* Graph */
+        private void plotPackage(float[] package)
+        {
+           for (int i = 0; i < package.Length-1; i++)
+			{
+                chart1.Series[i].Points.AddY(package[i]);
+			}
+           if (packageCount > 500)
+           {
+               for (int i = 0; i < package.Length-1; i++)
+               {
+                   chart1.Series[i].Points.RemoveAt(0);
+               }
+               
+           }
+           
+        }
 
         /* Statusbar */
         private void timerSample_Tick(object sender, EventArgs e)
