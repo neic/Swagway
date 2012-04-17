@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.1">
+<eagle version="6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -12210,7 +12210,7 @@ Siemens, Hewlett-Packard, Texas Instuments, Sharp, Motorola&lt;p&gt;
 <part name="Q2" library="transistor-power" deviceset="IRF4905" device="V"/>
 <part name="R1" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
 <part name="R2" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
-<part name="R3" library="rcl" deviceset="R-EU_" device="0207/7" value="10k"/>
+<part name="R3" library="rcl" deviceset="R-EU_" device="0207/10" value="10k"/>
 <part name="Q7" library="transistor-power" deviceset="IRFZ48" device="V"/>
 <part name="Q8" library="transistor-power" deviceset="IRF4905" device="V"/>
 <part name="X2" library="con-wago-508" deviceset="W237-02P" device="">
