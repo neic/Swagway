@@ -1,43 +1,57 @@
 //
-int motorpina = 2;
-int motorpinb = 6; //PWM
-int motorpinc = 5; //PWM
+const int motorpinAa = 5; //PWM
+const int motorpinAb = 6; //PWM
+const int motorpinAc = 7; 
+const int motorpinBa = 10; //PWM
+const int motorpinBb = 9; //PWM
+const int motorpinBc = 8; 
 
 int tm=1000;
 boolean r = true;
-int value = 0;
+int value, valuemap;
 
 void setup() {
-pinMode(motorpina, OUTPUT);
-pinMode(motorpinb, OUTPUT);
-pinMode(motorpinc, OUTPUT);
+pinMode(motorpinAa, OUTPUT);
+pinMode(motorpinAb, OUTPUT);
+pinMode(motorpinAc, OUTPUT);
+pinMode(motorpinBa, OUTPUT);
+pinMode(motorpinBb, OUTPUT);
+pinMode(motorpinBc, OUTPUT);
 pinMode(A0, INPUT);
-pinMode(7, INPUT);
+
 Serial.begin(9600);
 }
 
 void loop() {
   value = analogRead(A0);
- 
-  r = digitalRead(7);
-  if(value<512)
+  
+  
+  
+  if(value>512)
     {
       // R
-      digitalWrite(motorpina, HIGH);
-      digitalWrite(motorpinb, LOW);
-      value = value - 512;
-      value = map(value,-512,0,0,255);
-      Serial.println(value);
-      analogWrite(motorpinc, value);
+      digitalWrite(motorpinAc, HIGH);
+      digitalWrite(motorpinAb, LOW);
+      digitalWrite(motorpinBc, HIGH);
+      digitalWrite(motorpinBb, LOW);
+      valuemap = (value-512)/2;
+      Serial.print("R");
+      Serial.println(valuemap);
+      analogWrite(motorpinAa, valuemap);
+      analogWrite(motorpinBa, valuemap);
     }
   else
     {
       // L
-      digitalWrite(motorpinc, HIGH);
-      digitalWrite(motorpina, LOW);
-      value = -map(value,512,0,0,255);
-      Serial.println(value);
-      analogWrite(motorpinb, value);
+      digitalWrite(motorpinAc, LOW);
+      digitalWrite(motorpinAa, LOW);
+      digitalWrite(motorpinBc, LOW);
+      digitalWrite(motorpinBa, LOW);
+      valuemap = (512-value-1)/2;
+      Serial.print("L");
+      Serial.println(valuemap);
+      analogWrite(motorpinAb, valuemap);
+      analogWrite(motorpinBb, valuemap);
     }
 //Serial.println("SHORT: - 1: Both LOW");
 //delay(tm);
