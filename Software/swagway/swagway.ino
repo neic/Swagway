@@ -24,11 +24,25 @@ const float Q_angle = 0.001; // Process noise covariance for the accelerometer -
 const float Q_gyro = 0.003; // Process noise covariance for the gyro - Sw
 const float R_angle = 0.03; // Measurement noise covariance - Sv
 
-double angle = 180; // It starts at 180 degrees
+double angle = 0; // It starts at 0 degrees
 double bias = 0;
 double P_00 = 0, P_01 = 0, P_10 = 0, P_11 = 0;
 double dt, y, S;
 double K_0, K_1;
+
+// Motor
+
+const int directionPinLeft = 7; //HIGH when forward
+const int forwardPinLeft = 5;
+const int backwardPinLeft = 6;
+
+const int directionPinRight = 8; //HIGH when forward
+const int forwardPinRight = 10;
+const int backwardPinRight = 9;
+
+// PID
+
+const int targetAngle = 0;
 
 void setup() 
 {
@@ -59,6 +73,12 @@ void setup()
       gyroSampleRate = 1000 / (gyro.getSampleRateDiv()+1);
     }
 
+  pinMode(directionPinLeft, OUTPUT);
+  pinMode(forwardPinLeft, OUTPUT);
+  pinMode(backwardPinLeft, OUTPUT);
+  pinMode(directionPinRight, OUTPUT);
+  pinMode(forwardPinRight, OUTPUT);
+  pinMode(backwardPinRight, OUTPUT);
   //Calibration
   gyro.zeroCalibrate(250,2);
 
@@ -88,6 +108,14 @@ void loop()
       sendToGraph();
       newAccData = newGyroData = false;
       sinceLastSend = micros();
+    }
+  if (estAngle > targetAngle)
+    {
+      motorControl(70,0);
+    }
+  else
+    {
+      motorControl(-70,0);
     }
 }
 
@@ -127,6 +155,21 @@ double kalman(double newAngle, double newRate, double dtime) {
     return angle;
 }
 
+void motorControl(int left, int right)
+{
+  if (left > 0)
+    {
+      digitalWrite(directionPinLeft, HIGH);
+      digitalWrite(backwardPinLeft, LOW);
+      analogWrite(forwardPinLeft, left);
+    }
+  else
+    {
+      digitalWrite(directionPinLeft, LOW);
+      digitalWrite(forwardPinLeft, LOW);
+      analogWrite(backwardPinLeft, left);
+    }
+}
 /* Serial communication */
 
 void sendToGraph()
