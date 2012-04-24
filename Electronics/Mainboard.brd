@@ -12,15 +12,15 @@
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
-<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
@@ -126,8 +126,6 @@
 <text x="46.99" y="32.385" size="1.778" layer="16" rot="MR0">Swagway</text>
 <text x="31.75" y="31.115" size="1.4224" layer="16" rot="MR180">Mainboard v4.0</text>
 <text x="34.29" y="28.575" size="1.4224" layer="16" rot="MR180">24 apr 2012</text>
-<text x="30.48" y="8.001" size="1.016" layer="16" rot="MR0">1</text>
-<text x="41.529" y="39.243" size="1.016" layer="16" rot="MR0">1</text>
 <text x="36.703" y="44.196" size="1.016" layer="16" rot="MR270">Motor</text>
 <text x="43.815" y="8.763" size="1.016" layer="16" rot="MR90">IMU</text>
 <text x="24.765" y="19.05" size="1.4224" layer="16" rot="MR180">&amp; Mathias Dannesbo</text>
