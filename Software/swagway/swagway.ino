@@ -111,11 +111,11 @@ void loop()
     }
   if (estAngle > targetAngle)
     {
-      motorControl(70,0);
+      motorControl(70,70);
     }
   else
     {
-      motorControl(-70,0);
+      motorControl(-70,-70);
     }
 }
 
@@ -157,17 +157,29 @@ double kalman(double newAngle, double newRate, double dtime) {
 
 void motorControl(int left, int right)
 {
-  if (left > 0)
+  if (left < 0)
     {
       digitalWrite(directionPinLeft, HIGH);
       digitalWrite(backwardPinLeft, LOW);
-      analogWrite(forwardPinLeft, left);
+      analogWrite(forwardPinLeft, -left);
     }
   else
     {
       digitalWrite(directionPinLeft, LOW);
       digitalWrite(forwardPinLeft, LOW);
       analogWrite(backwardPinLeft, left);
+    }
+  if (right < 0)
+    {
+      digitalWrite(directionPinRight, HIGH);
+      digitalWrite(backwardPinRight, LOW);
+      analogWrite(forwardPinRight, -right);
+    }
+  else
+    {
+      digitalWrite(directionPinRight, LOW);
+      digitalWrite(forwardPinRight, LOW);
+      analogWrite(backwardPinRight, right);
     }
 }
 /* Serial communication */
