@@ -33,12 +33,12 @@ double K_0, K_1;
 // Motor
 
 const int directionPinLeft = 7; //HIGH when forward
-const int forwardPinLeft = 5;
+const int forwardPinLeft = 9;
 const int backwardPinLeft = 6;
 
 const int directionPinRight = 8; //HIGH when forward
 const int forwardPinRight = 10;
-const int backwardPinRight = 9;
+const int backwardPinRight = 5;
 
 // PID
 

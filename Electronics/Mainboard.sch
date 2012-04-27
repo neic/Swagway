@@ -4676,7 +4676,7 @@ Source: http://www.lprs.co.uk/pdf_directory/2386mylprs1132229147er-datasheet-2.3
 <instance part="GND3" gate="1" x="0" y="35.56"/>
 <instance part="GND6" gate="1" x="66.04" y="76.2"/>
 <instance part="+3V1" gate="G$1" x="-7.62" y="35.56"/>
-<instance part="+3V2" gate="G$1" x="43.18" y="68.58"/>
+<instance part="+3V2" gate="G$1" x="43.18" y="71.12"/>
 <instance part="JP2" gate="A" x="53.34" y="88.9"/>
 <instance part="P+5" gate="1" x="-5.08" y="30.48"/>
 <instance part="GND9" gate="1" x="45.72" y="15.24"/>
@@ -4711,8 +4711,8 @@ Source: http://www.lprs.co.uk/pdf_directory/2386mylprs1132229147er-datasheet-2.3
 </segment>
 <segment>
 <pinref part="JP1" gate="A" pin="3"/>
-<wire x1="50.8" y1="60.96" x2="45.72" y2="58.42" width="0.1524" layer="91"/>
-<wire x1="45.72" y1="58.42" x2="45.72" y2="50.8" width="0.1524" layer="91"/>
+<wire x1="50.8" y1="60.96" x2="45.72" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="60.96" x2="45.72" y2="50.8" width="0.1524" layer="91"/>
 <pinref part="GND2" gate="1" pin="GND"/>
 </segment>
 <segment>
@@ -4762,8 +4762,8 @@ Source: http://www.lprs.co.uk/pdf_directory/2386mylprs1132229147er-datasheet-2.3
 <pinref part="U$1" gate="G$1" pin="A5"/>
 <wire x1="22.86" y1="40.64" x2="22.86" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="A" pin="7"/>
-<wire x1="50.8" y1="66.04" x2="33.02" y2="63.5" width="0.1524" layer="91"/>
-<wire x1="33.02" y1="63.5" x2="33.02" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="50.8" y1="66.04" x2="33.02" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="33.02" y1="66.04" x2="33.02" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="38.1" x2="22.86" y2="38.1" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -4788,7 +4788,7 @@ Source: http://www.lprs.co.uk/pdf_directory/2386mylprs1132229147er-datasheet-2.3
 <pinref part="JP1" gate="A" pin="1"/>
 <pinref part="+3V2" gate="G$1" pin="+3V3"/>
 <wire x1="50.8" y1="58.42" x2="43.18" y2="55.88" width="0.1524" layer="91"/>
-<wire x1="43.18" y1="55.88" x2="43.18" y2="66.04" width="0.1524" layer="91"/>
+<wire x1="43.18" y1="55.88" x2="43.18" y2="68.58" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="+5V" class="0">
@@ -4887,22 +4887,22 @@ Source: http://www.lprs.co.uk/pdf_directory/2386mylprs1132229147er-datasheet-2.3
 </net>
 <net name="N$8" class="0">
 <segment>
-<wire x1="40.64" y1="91.44" x2="40.64" y2="104.14" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="D5"/>
-<wire x1="40.64" y1="104.14" x2="7.62" y2="104.14" width="0.1524" layer="91"/>
-<wire x1="7.62" y1="104.14" x2="7.62" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="91.44" x2="40.64" y2="114.3" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="114.3" x2="-5.08" y2="114.3" width="0.1524" layer="91"/>
 <pinref part="JP2" gate="A" pin="3"/>
 <wire x1="40.64" y1="91.44" x2="50.8" y2="91.44" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="D9"/>
+<wire x1="-5.08" y1="114.3" x2="-5.08" y2="101.6" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$16" class="0">
 <segment>
-<pinref part="U$1" gate="G$1" pin="D9"/>
-<wire x1="-5.08" y1="101.6" x2="-5.08" y2="114.3" width="0.1524" layer="91"/>
-<wire x1="-5.08" y1="114.3" x2="38.1" y2="114.3" width="0.1524" layer="91"/>
-<wire x1="38.1" y1="114.3" x2="38.1" y2="86.36" width="0.1524" layer="91"/>
+<wire x1="7.62" y1="104.14" x2="38.1" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="38.1" y1="104.14" x2="38.1" y2="86.36" width="0.1524" layer="91"/>
 <pinref part="JP2" gate="A" pin="7"/>
 <wire x1="38.1" y1="86.36" x2="50.8" y2="86.36" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="D5"/>
+<wire x1="7.62" y1="101.6" x2="7.62" y2="104.14" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$12" class="0">
