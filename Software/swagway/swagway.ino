@@ -105,18 +105,13 @@ void loop()
   if (newAccData && newGyroData)
     {
       estAngle = kalman(accAngle, zg, micros()-sinceLastSend);
-      sendToGraph();
+      //      sendToGraph();
       newAccData = newGyroData = false;
       sinceLastSend = micros();
     }
-  if (estAngle > targetAngle)
-    {
-      motorControl(70,70);
-    }
-  else
-    {
-      motorControl(-70,-70);
-    }
+  int pwm = map(estAngle,90,-90,255,-255);
+  motorControl(pwm,pwm);
+  Serial.println(pwm);
 }
 
 double kalman(double newAngle, double newRate, double dtime) {
