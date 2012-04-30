@@ -43,6 +43,13 @@ const int backwardPinRight = 5;
 // PID
 
 const int targetAngle = 0;
+const float Kp = 8; // 
+const float Ki = 0;
+const float Kd = 5;
+const float integralGuard = 100;
+
+float integratedError = 0;
+float lastError = 0;
 
 void setup() 
 {
@@ -107,11 +114,13 @@ void loop()
       estAngle = kalman(accAngle, zg, micros()-sinceLastSend);
       //      sendToGraph();
       newAccData = newGyroData = false;
+      float pwm = pid(estAngle);
+      motorControl(pwm,pwm);
+      Serial.print(estAngle);
+      Serial.println(pwm);
+      
       sinceLastSend = micros();
     }
-  int pwm = map(estAngle,90,-90,255,-255);
-  motorControl(pwm,pwm);
-  Serial.println(pwm);
 }
 
 double kalman(double newAngle, double newRate, double dtime) {
@@ -148,6 +157,16 @@ double kalman(double newAngle, double newRate, double dtime) {
     P_11 -= K_1 * P_01;
     
     return angle;
+}
+
+float pid(float input)
+{
+  float error = targetAngle - input;
+  integratedError += error;
+  float integral = constrain(integratedError, -integralGuard, integralGuard);
+  float derivative = error - lastError;
+  float output = (Kp*error) + (Ki*integral) + (Kd*derivative);
+  return constrain(output, -255, 255);
 }
 
 void motorControl(int left, int right)
