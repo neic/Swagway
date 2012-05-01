@@ -43,12 +43,10 @@ const int backwardPinRight = 5;
 // PID
 
 const int targetAngle = 0;
-const float Kp = 8; // 
-const float Ki = 0;
-const float Kd = 5;
-const float integralGuard = 100;
+const float Kp = 7; // 
+const float Ti = 0.35;
 
-float integratedError = 0;
+float lastIntegral = 0;
 float lastError = 0;
 
 void setup() 
@@ -161,11 +159,11 @@ double kalman(double newAngle, double newRate, double dtime) {
 
 float pid(float input)
 {
-  float error = targetAngle - input;
-  integratedError += error;
-  float integral = constrain(integratedError, -integralGuard, integralGuard);
-  float derivative = error - lastError;
-  float output = (Kp*error) + (Ki*integral) + (Kd*derivative);
+  float error = targetAngle - input; //X_k
+  float integral = lastIntegral + (1)/2 * (error-lastError)*(Kp/Ti);
+  float output = Kp*error + integral;
+  lastIntegral = integral;
+  lastError = error;
   return constrain(output, -255, 255);
 }
 
