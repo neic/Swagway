@@ -43,8 +43,8 @@ const int backwardPinRight = 5;
 // PID
 
 const int targetAngle = 0;
-const float Kp = 7; // 
-const float Ti = 0.35;
+float Kp = 7; // 
+float Ti = 0.35;
 
 float lastIntegral = 0;
 float lastError = 0;
@@ -53,7 +53,7 @@ void setup()
 {
   Serial.begin(115200);
   Wire.begin();
-  
+
   //Init the acc
   acc.init(ADXL345_ADDR_SD0_LOW);
   acc.setFullRes(true);
@@ -70,13 +70,13 @@ void setup()
 
   //Calculate the gyroSampleRate
   if (gyro.getFilterBW() == BW256_SR8)
-    {
-      gyroSampleRate = 8000 / (gyro.getSampleRateDiv()+1);
-    }
+  {
+    gyroSampleRate = 8000 / (gyro.getSampleRateDiv()+1);
+  }
   else
-    {
-      gyroSampleRate = 1000 / (gyro.getSampleRateDiv()+1);
-    }
+  {
+    gyroSampleRate = 1000 / (gyro.getSampleRateDiv()+1);
+  }
 
   pinMode(directionPinLeft, OUTPUT);
   pinMode(forwardPinLeft, OUTPUT);
@@ -94,68 +94,86 @@ void setup()
 void loop() 
 {
   if (acc.isRawDataReady())
-    {
-      acc.readAccRaw(&xa,&ya,&za);
-      accAngle = atan2(xa,ya)*180/3.1415; // calcutalte the X-Y-angle
-      newAccData = true;
-    }
-  
+  {
+    acc.readAccRaw(&xa,&ya,&za);
+    accAngle = atan2(xa,ya)*180/3.1415; // calcutalte the X-Y-angle
+    newAccData = true;
+  }
+
   if (gyro.isRawDataReady())
-    {
-      gyro.readGyro(&xg,&yg,&zg);
-      gyroAngle += zg/gyroSampleRate;
-      newGyroData = true;
-    }
-  
+  {
+    gyro.readGyro(&xg,&yg,&zg);
+    gyroAngle += zg/gyroSampleRate;
+    newGyroData = true;
+  }
+
   if (newAccData && newGyroData)
+  {
+    estAngle = kalman(accAngle, zg, micros()-sinceLastSend);
+    //      sendToGraph();
+    newAccData = newGyroData = false;
+    float pwm = pid(estAngle);
+    motorControl(pwm,pwm);
+    Serial.print(estAngle);
+    Serial.println(pwm);
+
+    sinceLastSend = micros();
+  }
+  if (targetAngle < 10)
     {
-      estAngle = kalman(accAngle, zg, micros()-sinceLastSend);
-      //      sendToGraph();
-      newAccData = newGyroData = false;
-      float pwm = pid(estAngle);
-      motorControl(pwm,pwm);
-      Serial.print(estAngle);
-      Serial.println(pwm);
-      
-      sinceLastSend = micros();
+    Kp = 2;
+    Ti = 0.05;
+    }
+  else
+    {
+    if (angle > 10)
+      {
+    Kp = 7;
+    Ti = 0.35;
+      }
+      else
+      {
+      Kp = 12;
+      Ti = 0.5;
+      }
     }
 }
 
-double kalman(double newAngle, double newRate, double dtime) {
+  double kalman(double newAngle, double newRate, double dtime) {
     // KasBot V2 - Kalman filter module - http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1284738418 - http://www.x-firm.com/?page_id=145
     // with slightly modifications by Kristian Lauszus
     // See http://academic.csuohio.edu/simond/courses/eec644/kalman.pdf and http://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf for more information
-    dt = dtime / 1000000; // Convert from microseconds to seconds
-    
+      dt = dtime / 1000000; // Convert from microseconds to seconds
+
     // Discrete Kalman filter time update equations - Time Update ("Predict")
     // Update xhat - Project the state ahead
     angle += dt * (newRate - bias);
-    
+
     // Update estimation error covariance - Project the error covariance ahead
     P_00 += -dt * (P_10 + P_01) + Q_angle * dt;
     P_01 += -dt * P_11;
     P_10 += -dt * P_11;
     P_11 += +Q_gyro * dt;
-    
+
     // Discrete Kalman filter measurement update equations - Measurement Update ("Correct")
     // Calculate Kalman gain - Compute the Kalman gain
     S = P_00 + R_angle;
     K_0 = P_00 / S;
     K_1 = P_10 / S;
-    
+
     // Calculate angle and resting rate - Update estimate with measurement zk
     y = newAngle - angle;
     angle += K_0 * y;
     bias += K_1 * y;
-    
+
     // Calculate estimation error covariance - Update the error covariance
     P_00 -= K_0 * P_00;
     P_01 -= K_0 * P_01;
     P_10 -= K_1 * P_00;
     P_11 -= K_1 * P_01;
-    
+
     return angle;
-}
+  }
 
 float pid(float input)
 {
@@ -170,29 +188,29 @@ float pid(float input)
 void motorControl(int left, int right)
 {
   if (left < 0)
-    {
-      digitalWrite(directionPinLeft, HIGH);
-      digitalWrite(backwardPinLeft, LOW);
-      analogWrite(forwardPinLeft, -left);
-    }
+  {
+    digitalWrite(directionPinLeft, HIGH);
+    digitalWrite(backwardPinLeft, LOW);
+    analogWrite(forwardPinLeft, -left);
+  }
   else
-    {
-      digitalWrite(directionPinLeft, LOW);
-      digitalWrite(forwardPinLeft, LOW);
-      analogWrite(backwardPinLeft, left);
-    }
+  {
+    digitalWrite(directionPinLeft, LOW);
+    digitalWrite(forwardPinLeft, LOW);
+    analogWrite(backwardPinLeft, left);
+  }
   if (right < 0)
-    {
-      digitalWrite(directionPinRight, HIGH);
-      digitalWrite(backwardPinRight, LOW);
-      analogWrite(forwardPinRight, -right);
-    }
+  {
+    digitalWrite(directionPinRight, HIGH);
+    digitalWrite(backwardPinRight, LOW);
+    analogWrite(forwardPinRight, -right);
+  }
   else
-    {
-      digitalWrite(directionPinRight, LOW);
-      digitalWrite(forwardPinRight, LOW);
-      analogWrite(backwardPinRight, right);
-    }
+  {
+    digitalWrite(directionPinRight, LOW);
+    digitalWrite(forwardPinRight, LOW);
+    analogWrite(backwardPinRight, right);
+  }
 }
 /* Serial communication */
 
@@ -237,3 +255,4 @@ void dumpIMUsettings()
   Serial.println("========================================");
   Serial.println();
 }
+
