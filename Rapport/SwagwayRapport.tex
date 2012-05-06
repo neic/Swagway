@@ -61,6 +61,8 @@
 \chapter*{Forord}\label{chap:for}
 Gennem teksten vil der være angivet link til “Issues” på GitHub siden for projektet\footnote{\url{https://github.com/neic/Swagway}}. Disse issues har været brugt som projektstyring samt bugtracker gennem projektforløbet. Links er angivet som i enden af denne sætning\issue{1}. Det er ikke nødvendigt for forståelsen af denne rapport at følge linksne.
 
+\fxwarning{Tak til Steffen LC og Kristian}
+
 \clearpage \setcounter{tocdepth}{1} \tableofcontents \clearpage
 
 \chapter{Indledning}\label{chap:ind}
@@ -68,88 +70,44 @@ Gennem teksten vil der være angivet link til “Issues” på GitHub siden for 
 
 \chapter{Indput}
 
-\begin{table}[htbp]
-  \caption{Pin forbindelser på Arduino}
-  \centering
-  \begin{threeparttable}
-    \begin{tabular}{rll}
-      \toprule
-      Pin & Forbindelse & Egenskaber\\
-      \midrule
-      0 & USB Rx & \\
-      1 & USB Tx & \\
-      2 & Radio Rx & Interrupt\\
-      3 & & Interrupt, PWM\\
-      4 & Radio Tx & \\
-      5 & Motorcontroller R2 & PWM\tnote{a}\\
-      6 & Motorcontroller L2 & PWM\tnote{a}\\
-      7 & Motorcontroller L1 & \\
-      8 & Motorcontroller R1 & \\
-      9 & Motorcontroller L3 & PWM\\
-      10 & Motorcontroller R3 & PWM\\
-      11 & & PWM\\
-      12 & & \\
-      13 & & LED\\
-      A0 & & \\
-      A1 & & \\
-      A2 & Steering & \\
-      A3 & Steering & \\
-      A4 & IMU I²C SDA & SDA\\
-      A5 & IMU I²C SCL & SCL
-    \end{tabular}
-    \begin{tablenotes}
-      \item[a]{PWM outputtet fra disse er lidt højere end forventet. De drives af en anden timer\issue{42}. Se under Mainboard 4.0 i sektion \ref{sec:main40}.}
-    \end{tablenotes}
-  \end{threeparttable}
-  % \label{tab:}
-\end{table}
-
-\subsection{Sensor}
+\section{Sensor}
+To sensorere, drift.
+\subsection{Sensor hardware}
+Pull-up, Bus capasistance, level shifter,
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.3\textwidth]{pictures/imu.jpg}
   \caption[IMU breakoutboard fra Sparkfun]{IMU breakoutboard fra Sparkfun. (CC BY-NC-SA 3.0, Sparkfun)}
   \label{fig:imu}
 \end{figure}
-I2C, Pull-up, Bus capasistance, level shifter,
+\subsection{Sensor software}
+I²C, wire.h, libraries
+
+\section{Styring}
+Potentiometer, gaffelsensor, strain-gate
 
 \chapter{Control}
-
-\section{Mainboard}
-
-\subsection{Mainboard v1.0}
-\boarddate{24 jan 2012}
-Loddeøerne var underdimmentioneret\issue{1} og det var ikke til at komme til at trykke på resetknappen på Arduinoen da bordet dækkede overdet\issue{2}. Der blev tilføjet en resetknap på mainboardet samt et stik til at læse data fra styret\issue{12}.
-
-\subsection{Mainboard v2.0}
-\boarddate{1 marts 2012}
-Logik kredsløbet blev opgivet og efterfølgende blev der brugt tre Arduino pins per motor\issue{21}. Displayboardet blev ligeledes opgivet\issue{9}. Pinheaderne til 9V og IMUen var desuden for tæt sammen\issue{13}.
-
-\subsection{Mainboard v3.0}
-\boarddate{26 marts 2012} Dette board blev aldrig lavet færdig.
-Tilføjet pins til radio\issue{29}.
-
-\subsection{Mainboard v3.1}
-\boarddate{29 marts 2012}
-Formodstandene til optocouplerne på motorboardet blev flyttet til motorboardet\issue{37}.
-Pinheaderen til IMUen blev lavet om fra 2×7 til 2×5
-
-\subsection{Mainboard v4.0}\label{sec:main40}
-\boarddate{24 april 2012}
-Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden\issue{43}. Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på kotorcontrolleren kørte langsommere end den anden. Problement blev isoleret til at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlens end baglens, men med samme forskel på begge hjul.
-
-Opbytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board. 
-
-\section{Sensor læsning}
-
 \section{Filter}
+Mål: samle data fra gyro og acc og regne en vinkel ud
 \subsection{Komplimentær filter}
 \subsection{Kalman filter}
 \subsection{Modificeret kalman filter}
 
-\chapter{Output}
+\section{Regulering}
+Mål: omsætte en vinkel til en PWM værdi
+\subsection{Linær}
+\subsection{PID}
+\subsection{Eksponential}
 
-\section{Motorstyring}
+\chapter{Output}
+Mål: Køre motore i begge retninger med variabel hastighed.
+\section{H-broens virkemåde}
+H-bro teori
+\section{PWM}
+PWM teori
+\section{Overvejelser}
+Vores valg: Dobbelt H-bro med mange chip eller bygge selv. Med eller uden PWM “i bunden”.
+\section{Motorcontroller}
 
 \begin{table}[htbp]
   \caption{Motorcontroller sandhedstabel}
@@ -251,8 +209,79 @@ Nogle pins blev flyttet i fladkablet.
 
 Dette board fungere og sidder i Swagwayen.
 
+\chapter{Auxiliary}
+\begin{table}[htbp]
+  \caption{Pin forbindelser på Arduino}
+  \centering
+  \begin{threeparttable}
+    \begin{tabular}{rll}
+      \toprule
+      Pin & Forbindelse & Egenskaber\\
+      \midrule
+      0 & USB Rx & \\
+      1 & USB Tx & \\
+      2 & Radio Rx & Interrupt\\
+      3 & & Interrupt, PWM\\
+      4 & Radio Tx & \\
+      5 & Motorcontroller R2 & PWM\tnote{a}\\
+      6 & Motorcontroller L2 & PWM\tnote{a}\\
+      7 & Motorcontroller L1 & \\
+      8 & Motorcontroller R1 & \\
+      9 & Motorcontroller L3 & PWM\\
+      10 & Motorcontroller R3 & PWM\\
+      11 & & PWM\\
+      12 & & \\
+      13 & & LED\\
+      A0 & & \\
+      A1 & & \\
+      A2 & Steering & \\
+      A3 & Steering & \\
+      A4 & IMU I²C SDA & SDA\\
+      A5 & IMU I²C SCL & SCL
+    \end{tabular}
+    \begin{tablenotes}
+      \item[a]{PWM outputtet fra disse er lidt højere end forventet. De drives af en anden timer\issue{42}. Se under Mainboard 4.0 i sektion \ref{sec:main40}.}
+    \end{tablenotes}
+  \end{threeparttable}
+  % \label{tab:}
+\end{table}
 
+\section{Mainboard}
+
+\subsection{Mainboard v1.0}
+\boarddate{24 jan 2012}
+Loddeøerne var underdimmentioneret\issue{1} og det var ikke til at komme til at trykke på resetknappen på Arduinoen da bordet dækkede overdet\issue{2}. Der blev tilføjet en resetknap på mainboardet samt et stik til at læse data fra styret\issue{12}.
+
+\subsection{Mainboard v2.0}
+\boarddate{1 marts 2012}
+Logik kredsløbet blev opgivet og efterfølgende blev der brugt tre Arduino pins per motor\issue{21}. Displayboardet blev ligeledes opgivet\issue{9}. Pinheaderne til 9V og IMUen var desuden for tæt sammen\issue{13}.
+
+\subsection{Mainboard v3.0}
+\boarddate{26 marts 2012} Dette board blev aldrig lavet færdig.
+Tilføjet pins til radio\issue{29}.
+
+\subsection{Mainboard v3.1}
+\boarddate{29 marts 2012}
+Formodstandene til optocouplerne på motorboardet blev flyttet til motorboardet\issue{37}.
+Pinheaderen til IMUen blev lavet om fra 2×7 til 2×5
+
+\subsection{Mainboard v4.0}\label{sec:main40}
+\boarddate{24 april 2012}
+Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden\issue{42}. Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på kotorcontrolleren kørte langsommere end den anden. Problement blev isoleret til at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlens end baglens, men med samme forskel på begge hjul.
+
+Opbytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
+
+\chapter{Mekanik}
+Motorer, batterier, 
 \chapter{Konklusion} \label{chap:kon}
+Vi satte os de og de mål, vi nåede de og de mål.
+
+\chapter{Perspektivering} \label{chap:per}
+Styring
+Kraftigere motorer med mindre gearkasser.
+Encodere
+
+
 \clearpage
 \listoftables
 \listoffigures
