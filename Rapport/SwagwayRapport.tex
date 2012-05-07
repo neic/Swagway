@@ -84,16 +84,16 @@
 \clearpage
 
 \chapter*{Forord}\label{chap:for}
-Gennem teksten vil der være angivet link til “Issues” på GitHub siden for projektet\footnote{\url{https://github.com/neic/Swagway}}. Disse issues har været brugt som projektstyring samt bugtracker gennem projektforløbet. Links er angivet som i enden af denne sætning\issue{1}. Det er ikke nødvendigt for forståelsen af denne rapport at følge linksne.
+Gennem teksten vil der være angivet link til “Issues” på GitHub siden for projektet.\footnote{\url{https://github.com/neic/Swagway}} Disse Issues har været brugt som projektstyring samt bugtracker igennem projektforløbet. Links er angivet som i enden af denne sætning.\issue{1} Det er ikke nødvendigt for forståelsen af denne rapport at følge linksne.
 
-\fxwarning{Tak til Steffen LC og Kristian}
+Vi vil gerne takke Steffen Linnerup Christiansen for hjælp med mekanikken, samt Kristian Holm Nielsen for hjælp med forståelsen af PID.
 
 \clearpage \setcounter{tocdepth}{1} \tableofcontents \clearpage
 
 \chapter{Indledning}\label{chap:ind}
 \section{Problemformulering}
 
-\chapter{Indput}
+\chapter{Input}
 
 \section{Sensor}
 To sensorere, drift.
@@ -113,19 +113,21 @@ Potentiometer, gaffelsensor, strain-gate
 
 \chapter{Control}
 \section{Filter}
-Mål: samle data fra gyro og acc og regne en vinkel ud
-\subsection{Komplimentær filter}
+Mål: At samle data fra gyroskop og accelerometer og regne en vinkel ud
+
+Målet med filtret er at samle dataen fra gyroskopet, accelerometeret og ud fra disse beregne en vinkel, som vi kan benytte til at regulere PWM efter. Ud fra dette mål, udvalgte vi tre filtre, som har de egenskaber vi leder efter.
+\subsection{Komplementær filter}
 \subsection{Kalman filter}
-\subsection{Modificeret kalman filter}
+\subsection{Modificeret Kalman filter}
 
 \section{Regulering}
-Mål: omsætte en vinkel til en PWM værdi
-\subsection{Linær}
+Mål: At omsætte en vinklen til en PWM værdi.
+\subsection{Lineær}
 \subsection{PID}
-\subsection{Eksponential}
+\subsection{Eksponentiel}
 
 \chapter{Output}
-Mål: Køre motore i begge retninger med variabel hastighed.
+Mål: Køre motorer i begge retninger med variabel hastighed.
 \section{H-broens virkemåde}
 H-bro teori
 \section{PWM}
@@ -164,15 +166,15 @@ Vores valg: Dobbelt H-bro med mange chip eller bygge selv. Med eller uden PWM �
 H-bro, PWM, PWM-kondensator, beskyttelses dioder, 4000 serie, optocopler
 
 \subsection{Samlet board}
-Det var uparktisk at have alle funktioner på samme board. H-broerne og optocouplerne blev flyttet på sit eget board “Motorcontroller v1.0”.
+Det var upraktisk at have alle funktioner på samme board. H-broerne og optocouplerne blev flyttet på sit eget board “Motorcontroller v1.0”.
 
 \subsection{Motorcontroller v1.0}
 \boarddate{24. januar 2012}
-\fxwarning{Indset diagram over Motorcontroller v1.0}
-\fxwarning{Indset figur over Motorcontroller v1.0}
-Boardet virkede ikke. Det opførte sig som det var kortsluttet. Det viste sig, efter at boardet var skilt helt af igen, at det plus tegn der skulle vise polariteten var sat ved den forkerte pol. Printet havde taget skade af at blive loddet på flere gange.
+\fxwarning{Indsæt diagram over Motorcontroller v1.0}
+\fxwarning{Indsæt figur over Motorcontroller v1.0}
+Boardet virkede ikke. Det opførte sig som det var kortsluttet. Det viste sig, at efter boardet var skilt helt af igen, at det plus tegn der skulle vise polariteten var sat ved den forkerte pol. Printet havde taget skade af at blive loddet på flere gange.
 
-Der var desuden nolge ledninger der var for tætsiddene og loddeøerne var lidt underdimmentionerede. Der manglede også en mulighed for at se hvilken vej strømmen løber i H-borerne. Dette blev rettet i v2.0.
+Der var desuden nogle af ledningene for tætsiddene og loddeøerne var lidt underdimensionerede. Der manglede også en mulighed for at se, hvilken vej strømmen løber i H-broerne. Dette blev rettet i v2.0.
 \subsection{Motorcontroller v2.0}
 \boarddate{8. marts 2012} Dette board blev aldrig lavet færdig; Ledningerne omkring pinheaderen var for tæt efter at loddeøeren blev forstørret. Diagram og figur over printet kan findes i bilag. \fxwarning{ref}
 
@@ -187,13 +189,13 @@ Der var desuden nolge ledninger der var for tætsiddene og loddeøerne var lidt 
 
 \fxwarning{ref til fig:mosch2.1}
 
-Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten kunne styres med PWM. Dog startede motoren på ca. 30\% fart i den ene retning. Ved at måle på PWM signalet fra mainboardet og signalet til motoeren kunne problemet indskrenkes til at være på Motorcontrolleren.
+Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten kunne styres med PWM. Dog startede motoren på ca. 30\% fart i den ene retning. Ved at måle på PWM signalet fra mainboardet og signalet til motoren kunne problemet indskrænkes til at være på Motorcontrolleren.
 
-Det viste sig efter meget debugging at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik high ligeså hurtigt som forventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino.
+Det viste sig efter megen debugging, at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik \texttt{HIGH} lige så hurtigt som forventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino.
 
-\fxwarning{Indset diagram over forsøg med optocoupler og HEXFET}
+\fxwarning{Indsæt diagram over forsøg med optocoupler og HEXFET}
 
-Forsøget viste at når optocoupleren sad mellem HEXFETen og Arduinoen var der en kapacitet mellem HEXFETens gate og source. Figur \ref{fig:stigetid} viser nederst PWM signalet fra Arduinoen og øverst signalet på P-kanal HTXFETens gate. Man ser tydeligt at det tager ubelejligt før signalet på gaten stiger.
+Forsøget viste, at når optocoupleren sad mellem HEXFETen og Arduinoen var der en kapacitet mellem HEXFETens gate og source. Figur \ref{fig:stigetid} viser nederst PWM signalet fra Arduinoen og øverst signalet på P-kanal HTXFETens gate. Man ser tydeligt at det tager en ubelejlig tid før signalet på gaten stiger.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{pictures/stigetid.jpg}
@@ -201,7 +203,7 @@ Forsøget viste at når optocoupleren sad mellem HEXFETen og Arduinoen var der e
   \label{fig:stigetid}
 \end{figure}
 
-Ved at sætte en mindre pull-up-modstand på kunne den aflades hurtigere, men det var ikke muligt at få den tilpas langt ned til at kunne styre motoren godt. Ved at fjerne optocoupler og køre HEXFETens gate direkte fra Arduinoen eller ved fjerne HEXFETen og måle direkte på optocoupleren, var stigningstiden $\approx0$. Det var kun i kombination mellem HEXFETen og transistoen i optocoupleren at stigningstiden ikke var $\approx0$.
+Ved at sætte en mindre pull-up-modstand på kunne den aflades hurtigere, men det var ikke muligt at få den tilpas langt ned til at kunne styre motoren godt. Ved at fjerne optocoupler og køre HEXFETens gate direkte fra Arduinoen eller ved fjerne HEXFETen og måle direkte på optocoupleren, var stigningstiden $\approx0$. Det var kun i kombination mellem HEXFETen og transistoren i optocoupleren at stigningstiden ikke var $\approx0$.
 
 Der blev forsøgt med en 4N25 optocoupler istedet for 4N35 og en BC547 istedet for optocoupleren; der var samme stigningstid.
 
@@ -213,26 +215,26 @@ For ikke at tilføje flere optocouplere og bruge flere pins på arduinoen blev d
 \subsection{Motorcontroller v3.0}
 \boarddate{27. marts 2012}
 \fxwarning{Indset diagram over Motorcontroller v3.0 (Figur over printet kan findes i bilag)}
-Efter at der blev tilføjet en inventere på to af gatesne til P-kanal HEXFETerne er denne low når der ikke er spænding på optocouplerne (fx når den ikke er koblet til Mainboardet). Det tænder HEXFETen, det, sammen med N-kanal HEXFETerne som også er tændt uden spænding på optocouplerne, kortslutter H-broen. Motorcontroller v3.0 var fungerede, men det var upraktisk at den var kortsluttet unden at være koblet sammen med Mainboardet.
+Efter at der blev tilføjet en inverter på to af gatesne til P-kanal HEXFETerne er denne low når der ikke er spænding på optocouplerne (fx når den ikke er koblet til Mainboardet). Det tænder HEXFETen, det, sammen med N-kanal HEXFETerne som også er tændt uden spænding på optocouplerne, kortslutter H-broen. Motorcontroller v3.0 var fungerede, men det var upraktisk at den var kortsluttet unden at være koblet sammen med Mainboardet.
 
 Pull-up modstandende blev erstattet af pull-down.
 \subsection{Motorcontroller v4.0}
-\boarddate{12. april 2012} Dette board blev aldrig lavet færdig. En stor del af boardet blev re-routed da der var blevet rodet efter mange versioner. Diagram og Figur over printet kan findes i bilag. \fxwarning{ref}
+\boarddate{12. april 2012} Dette board blev aldrig lavet færdigt. En stor del af boardet blev re-routed da der var blevet rodet efter mange versioner. Diagram og Figur over printet kan findes i bilag. \fxwarning{ref}
 
 \subsection{Motorcontroller v4.1}
 \boarddate{13. april 2012}
-Der var en ledning der ikke var routed og der var nogle mindre re-routing.
+Der var en ledning der ikke var routed og der var noget mindre re-routing.
 
 \subsection{Motorcontroller v4.2}
-\boarddate{17. april 2012} Dette board blev aldrig lavet færdig.
-Formodstandene til optocouplerne blev flyttet fra mainboardet til Motorcontrolleren.
+\boarddate{17. april 2012} Dette board blev aldrig lavet færdigt.
+Formodstandene til optocouplerne blev flyttet fra mainboardet til Motorcontrolleren, for at undgå, at disse blev brændt af.
 
 \subsection{Motorcontroller v5.0}
-\boarddate{24. april 2012} Dette board blev aldrig lavet færdig.
-Der blev tilføjet LEDer til optocouplerne så man kan se hvornår de er tændt.  
+\boarddate{24. april 2012} Dette board blev aldrig lavet færdigt.
+Der blev tilføjet LEDer til optocouplerne så man kan se hvornår de er tændt, og for at lette debugging.  
 
 \subsection{Motorcontroller v5.1}
-\boarddate{24. april 2012} Dette board blev aldrig lavet færdig.
+\boarddate{24. april 2012} Dette board blev aldrig lavet færdigt.
 Nogle pins blev flyttet i fladkablet. 
 
 \subsection{Motorcontroller v5.2}
@@ -246,7 +248,7 @@ Nogle pins blev flyttet i fladkablet.
 \end{figure}
 \fxwarning{ref til fig:mosch5.2}
 
-Dette board fungere og sidder i Swagwayen.
+Dette board fungerer og sidder i Swagwayen.
 
 \subsection{Motorcontroller v6.0}
 \boarddate{24. april 2012}
@@ -282,7 +284,7 @@ Dette board fungere og sidder i Swagwayen.
       A5 & IMU I²C SCL & SCL
     \end{tabular}
     \begin{tablenotes}
-      \item[a]{PWM outputtet fra disse er lidt højere end forventet. De drives af en anden timer\issue{42}. Se under Mainboard 4.0 i sektion.\ref{sec:main40}}
+      \item[a]{PWM outputtet fra disse er lidt højere end forventet. De drives af en anden timer.\issue{42} Se under Mainboard 4.0 i sektion \ref{sec:main40}.}
     \end{tablenotes}
   \end{threeparttable}
   % \label{tab:}
@@ -292,24 +294,24 @@ Dette board fungere og sidder i Swagwayen.
 
 \subsection{Mainboard v1.0}
 \boarddate{24 jan 2012}
-Loddeøerne var underdimmentioneret\issue{1} og det var ikke til at komme til at trykke på resetknappen på Arduinoen da bordet dækkede overdet\issue{2}. Der blev tilføjet en resetknap på mainboardet samt et stik til at læse data fra styret\issue{12}.
+Loddeøerne var underdimmentioneret\issue{1} og det var ikke til at komme til at trykke på resetknappen på Arduinoen da bordet dækkede overdet.\issue{2} Der blev tilføjet en resetknap på mainboardet samt et stik til at læse data fra styret.\issue{12}
 
 \subsection{Mainboard v2.0}
 \boarddate{1 marts 2012}
-Logik kredsløbet blev opgivet og efterfølgende blev der brugt tre Arduino pins per motor\issue{21}. Displayboardet blev ligeledes opgivet\issue{9}. Pinheaderne til 9V og IMUen var desuden for tæt sammen\issue{13}.
+Logik kredsløbet blev opgivet og efterfølgende blev der brugt tre Arduino pins per motor.\issue{21} Displayboardet blev ligeledes opgivet.\issue{9} Pinheaderne til 9V og IMUen var desuden for tæt sammen.\issue{13}
 
 \subsection{Mainboard v3.0}
 \boarddate{26 marts 2012} Dette board blev aldrig lavet færdig.
-Tilføjet pins til radio\issue{29}.
+Tilføjet pins til radio.\issue{29}
 
 \subsection{Mainboard v3.1}
 \boarddate{29 marts 2012}
-Formodstandene til optocouplerne på motorboardet blev flyttet til motorboardet\issue{37}.
+Formodstandene til optocouplerne på motorboardet blev flyttet til motorboardet.\issue{37}
 Pinheaderen til IMUen blev lavet om fra 2×7 til 2×5
 
 \subsection{Mainboard v4.0}\label{sec:main40}
 \boarddate{24 april 2012}
-Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden\issue{42}. Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på kotorcontrolleren kørte langsommere end den anden. Problement blev isoleret til at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlens end baglens, men med samme forskel på begge hjul.
+Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden.\issue{42} Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på kotorcontrolleren kørte langsommere end den anden. Problement blev isoleret til at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlens end baglens, men med samme forskel på begge hjul.
 
 Opbytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
 
