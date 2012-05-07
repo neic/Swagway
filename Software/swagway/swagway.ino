@@ -1,3 +1,14 @@
+/*************************************************/
+/* swagway.ino -- Swagway onboard software       */
+/*                                               */
+/* Author: Mathias Dannesbo <neic@neic.dk> and   */
+/*         Carl-Emil Grøn Christensen            */
+/* Time-stamp: <2012-05-07 18:07:19 (neic)>      */
+/* Part of the Swagway project                   */
+/* https://github.com/neic/Swagway               */
+/*                                               */
+/*************************************************/
+
 #include <Wire.h>
 #include <math.h>
 #include "ITG3200.h"
