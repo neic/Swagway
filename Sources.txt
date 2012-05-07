@@ -1,0 +1,3 @@
+http://wwwdsa.uqac.ca/~rbeguena/Systemes_Asservis/PID.pdf - PID kontrol.
+http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1284738418/30 - Generel guidance.
+
