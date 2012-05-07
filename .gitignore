@@ -6,6 +6,7 @@
 *.lof
 *.lot
 Rapport/auto/*
+Rapport/pictures/unsorted/*
 Software/graph/data/*
 Software/Rolling graph/Rolling graph/bin/*
 Software/Rolling graph/Rolling graph/obj/*
