@@ -43,8 +43,8 @@ const int backwardPinRight = 5;
 // PID
 
 const int targetAngle = 0;
-const float Ex = 2.6;
-const float Kp = 2;
+const float Ex = 2.6; //Exponential value
+const float Kp = 2; //Proportional value
 
 void setup() 
 {
