@@ -43,11 +43,8 @@ const int backwardPinRight = 5;
 // PID
 
 const int targetAngle = 0;
-float Kp = 7; // 
-float Ti = 0.35;
-
-float lastIntegral = 0;
-float lastError = 0;
+const float Ex = 2.6;
+const float Kp = 2;
 
 void setup() 
 {
@@ -119,24 +116,6 @@ void loop()
 
     sinceLastSend = micros();
   }
-  if (targetAngle < 10)
-    {
-    Kp = 2;
-    Ti = 0.05;
-    }
-  else
-    {
-    if (angle > 10)
-      {
-    Kp = 7;
-    Ti = 0.35;
-      }
-      else
-      {
-      Kp = 12;
-      Ti = 0.5;
-      }
-    }
 }
 
   double kalman(double newAngle, double newRate, double dtime) {
@@ -177,11 +156,15 @@ void loop()
 
 float pid(float input)
 {
-  float error = targetAngle - input; //X_k
-  float integral = lastIntegral + (1)/2 * (error-lastError)*(Kp/Ti);
-  float output = Kp*error + integral;
-  lastIntegral = integral;
-  lastError = error;
+  float output;
+  if (input>0)
+  {
+   output = pow(input,Ex) + Kp*input;
+  }
+  else
+  {
+    output = -pow(-input,Ex) + Kp*input;
+  }
   return constrain(output, -255, 255);
 }
 
