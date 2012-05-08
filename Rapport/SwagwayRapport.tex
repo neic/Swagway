@@ -91,8 +91,8 @@ Vi vil gerne takke Steffen Linnerup Christiansen for hjælp med mekanikken, samt
 \clearpage \setcounter{tocdepth}{1} \tableofcontents \clearpage
 
 \chapter{Indledning}\label{chap:ind}
-\section{Problemformulering}
-
+\section{Projektbeskrivelse}
+Formålet er at bygge en balance robot på to hjul, en Segway klon. Minimums målet er at få robotten til at balancere. Derefter få den til at køre og kunne styre den hvis tid og evner rækker til det.
 \chapter{Input}
 
 \section{Sensor}
@@ -108,6 +108,8 @@ Pull-up, Bus capasistance, level shifter,
 \subsection{Sensor software}
 I²C, wire.h, libraries
 
+IMUen kører på I²C bussen som blev skabt af Philips for mange år siden, og bliver brugt mellem en eller flere "masters", som i vores tilfælde er Arduinoen, og en eller flere "slaves", eks. IMUen. I²C bussen består af to fysiske wires, en Serial DAta line (SDA) og en Serial CLock line (SCL). Masteren er den enhed som bestemmer Standard Clock Line, og slaverne er den enhed som lystrer til masteren. Hastigheden på forbindelsen kan være 100KHz, 400KHz eller 3400KHz. Masteren er den eneste som kan starte en forbindelse mellem enhederne, og det gør den ved at starte en sekvens på bussen. Start sekvensen indikerer i en bit, om masteren vil modtage data fra slaven, eller om den vil sende til slaven. Denne bit, også kaldet LSB eller Least Significant Bit placeres foran syv andre bits, som er slavens "adresse". 
+
 \section{Styring}
 Potentiometer, gaffelsensor, strain-gate
 
@@ -122,6 +124,8 @@ Målet med filtret er at samle dataen fra gyroskopet, accelerometeret og ud fra 
 
 \section{Regulering}
 Mål: At omsætte en vinklen til en PWM værdi.
+
+For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold til vinklen, skal vi bestemme et forhold mellem vinklens hældning og PWM. 
 \subsection{Lineær}
 \subsection{PID}
 \subsection{Eksponentiel}
@@ -190,7 +194,7 @@ Boardet virkede ikke. Det opførte sig som det var kortsluttet. Det viste sig, a
 
 Der var desuden nogle af ledningene for tætsiddene og loddeøerne var lidt underdimensionerede. Der manglede også en mulighed for at se, hvilken vej strømmen løber i H-broerne. Dette blev rettet i v2.0.
 \subsection{Motorcontroller v2.0}
-\boarddate{8. marts 2012} Dette board blev aldrig lavet færdig; Ledningerne omkring pinheaderen var for tæt efter at loddeøeren blev forstørret. Diagram og figur over printet kan findes i bilag. \fxwarning{ref}
+\boarddate{8. marts 2012} Dette board blev aldrig lavet færdigt; Ledningerne omkring pinheaderen var for tæt efter at loddeøeren blev forstørret. Diagram og figur over printet kan findes i bilag. \fxwarning{ref}
 
 \subsection{Motorcontroller v2.1}
 \boarddate{8 marts 2012}
