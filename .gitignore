@@ -5,7 +5,11 @@
 *.toc
 *.lof
 *.lot
+*.bbl
+*.blg
+*.out
 Rapport/auto/*
+Rapport/pictures/auto/*
 Rapport/pictures/unsorted/*
 Software/graph/data/*
 Software/Rolling graph/Rolling graph/bin/*
