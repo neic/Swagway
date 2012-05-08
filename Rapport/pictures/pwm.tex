@@ -1,0 +1,23 @@
+\documentclass[oneside,danish]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[papersize={389pt,215pt},top=0pt, bottom=0pt, left=0pt, right=0pt]{geometry}
+\usepackage{amsmath,pgfplots,tikz-timing}
+
+\begin{document}
+\begin{tikztimingtable}[timing/coldist=0,xscale=4.5,yscale=3]
+    & 8{L}\\
+    & G.25H7{.75C.25C}.75C\\
+    & Gh7{cc}c\\
+    & G.75H7{.25C.75C}.25C\\
+    & 8{hh}\\
+\extracode
+\node[anchor=east,align=right] at (0,.5){\texttt{analogWrite(pin,0);}\\0\%};
+\node[anchor=east,align=right] at (0,-1.5){\texttt{analogWrite(pin,63);}\\25\%};
+\node[anchor=east,align=right] at (0,-3.5){\texttt{analogWrite(pin,127);}\\50\%};
+\node[anchor=east,align=right] at (0,-5.5){\texttt{analogWrite(pin,191);}\\75\%};
+\node[anchor=east,align=right] at (0,-7.5){\texttt{analogWrite(pin,255);}\\100\%};
+\begin{background}[help lines]
+\vertlines{}
+\end{background}
+  \end{tikztimingtable}
+\end{document}

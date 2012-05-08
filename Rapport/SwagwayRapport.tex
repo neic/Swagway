@@ -1,12 +1,12 @@
 \documentclass[a4paper,twoside,article,danish,table]{memoir}
 \semiisopage \checkandfixthelayout
 \XeTeXtracingfonts= 1
-\usepackage{babel,microtype,verbatim,threeparttable,amsmath,amssymb,unicode-math,ulem,hyperref,siunitx,mhchem,tikz,pgfplots}
+\usepackage{babel,microtype,verbatim,threeparttable,amsmath,amssymb,unicode-math,ulem,hyperref,siunitx,mhchem,tikz,pgfplots,tikz-timing}
 \sisetup{per-mode=symbol}
 \microtypesetup{final,verbose=silent}
 \usetikzlibrary{mindmap,arrows,positioning,shapes}
-\setmainfont[Ligatures={TeX}]{Arno Pro}
-\setmathfont{Arno Pro}
+%\setmainfont[Ligatures={TeX}]{Arno Pro}
+\setmainfont{Linux Libertine O}
 \setmathfont{[Asana-Math]}
 %\hfuzz=1pt
 \usepackage[margin,draft]{fixme}
@@ -18,7 +18,7 @@
 \newcommand{\subtitlevar}{0} 
 \newcommand{\datevar}{\today} 
 \newcommand{\subjectvar}{Teknikfag~A:~El}
-\newcommand{\classvar}{}  
+\newcommand{\classvar}{}
 \newcommand{\teachervar}{}
 
 \makepagestyle{articlehead}
@@ -131,7 +131,21 @@ Mål: Køre motorer i begge retninger med variabel hastighed.
 \section{H-broens virkemåde}
 H-bro teori
 \section{PWM}
-PWM teori
+Pulsbreddemodulation (Pulse-Width-Modulation): Er en metode til at kontrollere spændingen i elektriske
+apparater. Det er en metode til at levere spænding igennem en række impulser i stedet for der konstant er strøm igennem systemet. Ved at øge eller formindske bredden af impulsen kan man kontrollere en motor.
+
+Man kan altså sige, at PWM er et on/off system hvor man styrer ved hurtigt, at slukke og tænde for
+spændingen. Tiden der går imellem at den er on/off er så kort, at en LED som sådan ikke mærker det. Så
+den vil ikke blinke, men derimod lyse mindre hvis man øger bredden imellem impulserne.
+
+Måden vi styre dette på i en Arduino er via \texttt{analogWrite(pin,\dots);}. Her har vi mulighed for at give en værdi fra 0--255. Dette betyder at \texttt{analogWrite(pin,255);} er 100\% og \texttt{analogWrite(pin,127);} er 50\%. Dette kan også ses på figur \ref{fig:pwm}.\fxwarning{Hele afsnittet skal omskrives}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{pictures/pwm.pdf}
+  \caption{Eksempel på PWM med varierende dutycycle}
+  \label{fig:pwm}
+\end{figure}
+
 \section{Overvejelser}
 Vores valg: Dobbelt H-bro med mange chip eller bygge selv. Med eller uden PWM “i bunden”.
 \section{Motorcontroller}
