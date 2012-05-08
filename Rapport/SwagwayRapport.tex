@@ -1,4 +1,4 @@
-\documentclass[a4paper,twoside,article,danish,table]{memoir}
+\documentclass[a4paper,oneside,article,danish,table]{memoir}
 \semiisopage \checkandfixthelayout
 \XeTeXtracingfonts= 1
 \usepackage{babel,microtype,verbatim,threeparttable,amsmath,amssymb,unicode-math,hyperref,siunitx,mhchem,tikz,pgfplots,tikz-timing}
@@ -12,8 +12,8 @@
 \usepackage[margin,draft]{fixme}
 \fxusetheme{color}
 
-\newcommand{\authorvar}{Carl~Emil~Grøn~Christensen and Mathias~Dannesbo}
-\newcommand{\pretitlevar}{0}
+\newcommand{\authorvar}{Carl~Emil~Grøn~Christensen \& Mathias~Dannesbo}
+\newcommand{\pretitlevar}{Teknikfag A eksamen:}
 \newcommand{\titlevar}{Swagway} 
 \newcommand{\subtitlevar}{0} 
 \newcommand{\datevar}{\today} 
@@ -23,9 +23,10 @@
 
 \makepagestyle{articlehead}
 \makeevenhead{articlehead}{}{\titlevar}{}
-\makeevenfoot{articlehead}{}{}{\thepage}
+\makeevenfoot{articlehead}{}{\thepage}{}
 \makeoddhead{articlehead}{}{\titlevar}{}
 \makeoddfoot{articlehead}{}{}{\thepage}
+\pagestyle{articlehead}
 
 \usepackage{listings,textcomp}
 \lstset{language=[Visual]C++,
@@ -79,7 +80,6 @@
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} ll}
 
 \end{tabular*}
-
 \thispagestyle{empty}
 \clearpage
 
@@ -91,11 +91,27 @@ Vi vil gerne takke Steffen Linnerup Christiansen for hjælp med mekanikken, samt
 \clearpage \setcounter{tocdepth}{1} \tableofcontents \clearpage
 
 \chapter{Indledning}\label{chap:ind}
-\section{Projektbeskrivelse}
-Formålet er at bygge en balance robot på to hjul, en Segway klon. Minimums målet er at få robotten til at balancere. Derefter få den til at køre og kunne styre den hvis tid og evner rækker til det.
+
+Formålet med projektet er at bygge en motoriseret selvbalancrende tohjulet trasportenhed. Det er en klon af en Segway som er et komercielt produkt. Kendetegnet ved den er at de to hjul sidder på samme aksel. Elektronik og motorene sørger for at holde enheden lodret. Når en fører læner sig frem eller tilbage, kompenserer enheden ved køre i samme retning. For at dreje enheden vipper føreren håntaget til den side som man ønsker at dreje til.
+
+Projektoplæget lyder:
+\begin{quote}
+  Formålet er at bygge en balance robot på to hjul, en Segway klon. Minimums målet er at få robotten til at balancere. Derefter få den til at køre og kunne styre den hvis tid og evner rækker til det.
+\end{quote}
+
+Hovedeudfordringen er at holde enheden lodret. For at gøre dette skal man kende enhedens vinkel i forhold til lodret og omsætte denne vinkel til et signal til motorene. Når vinklen stiger driver motorene hjulene som så flytter enheden og brugerens tygdepunk ind over akslen igen.
+Det kan se som tre isolerede problemstillinger som passer ind i I-C-O-modellen:
+\begin{itemize}
+\item[Input] Mål vinklen.i forhold til lodret
+\item[Control] Omsæt vinklen til et signal til motorene.
+\item[Output] Driv to motore baseret på signalet.
+\end{itemize}
+
 \chapter{Input}
 
 \section{Sensor}
+Efter nogen research af andre køretøjer og mindre robotter med der fungere på sammen måde, var det klart at gyroskober og accelerometere kunne måle vinklen så hurtigt og precist som det var krævet.
+
 To sensorere, drift.
 \subsection{Sensor hardware}
 Pull-up, Bus capasistance, level shifter,
@@ -155,7 +171,7 @@ Vores valg: Dobbelt H-bro med mange chip eller bygge selv. Med eller uden PWM �
 \section{Motorcontroller}
 
 \begin{table}[htbp]
-  \caption{Motorcontroller sandhedstabel}
+  \caption{Motorcontroller v5.2 sandhedstabel}
   \centering
   % \begin{threeparttable}
   \begin{tabular}{ccc|cccc|ccccl}
@@ -177,7 +193,7 @@ Vores valg: Dobbelt H-bro med mange chip eller bygge selv. Med eller uden PWM �
   % \begin{tablenotes}
   % \end{tablenotes}
   % \end{threeparttable}
-  \legend{Tabellen viser hvordan motorcontrolleren opføre sig hvis den får inputtet angivet under “Arduino Pin”}
+  \legend{Tabellen viser hvordan den seneste motorcontroller, v5.2, opføre sig hvis den får inputtet angivet under “Arduino Pin”}
   \label{tab:sandhed}
 \end{table}
 
@@ -350,6 +366,13 @@ Encodere
 \nocite{*}
 \bibliographystyle{dk-apali} \bibliography{bib}
 \clearpage \appendix
+
+\chapter{Arbejdsdeling}
+\fxwarning{Tilføj arbejdsdeling}
+
+\section{Udvikling}
+\section{Praktisk}
+\section{Skriftligt}
 
 \chapter{Kildekode}
 
