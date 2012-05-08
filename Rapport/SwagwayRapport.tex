@@ -99,6 +99,10 @@ Formålet er at bygge en balance robot på to hjul, en Segway klon. Minimums må
 To sensorer, drift.
 \subsection{Sensor hardware}
 Pull-up, Bus capasistance, level shifter,
+
+\subsubsection{Gyroskop}
+
+
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.3\textwidth]{pictures/imu.jpg}
@@ -111,6 +115,7 @@ I²C, wire.h, libraries
 IMUen kører på I²C bussen som blev skabt af Philips for mange år siden, og bliver brugt mellem en eller flere "masters", som i vores tilfælde er Arduinoen, og en eller flere "slaves", eks. IMUen. I²C bussen består af to fysiske wires, en serial data line (SDA) og en serial clock line (SCL). 
 Masteren er den enhed som bestemmer Standard Clock Line, og slaverne er den enhed som lystrer til masteren. Hastigheden på forbindelsen kan være 100KHz, 400KHz eller 3400KHz. Masteren er den eneste som kan starte en forbindelse mellem enhederne, og det gør den ved at starte en sekvens på bussen, som ændrer SDA fra høj til lav. Start sekvensen indikerer i en bit, om masteren vil modtage data fra slaven, eller om den vil sende til slaven. Denne bit, også kaldet LSB eller Least Significant Bit placeres efter syv andre bits, som er slavens adresse. Herefter udsendes endnu en bit, som slaven skal besvare ved at trække SDA lav. Denne bit kaldes ACK som står for acknowledgement, som betyder anerkendelse. Herefter sendes der data via. SDA synkront med clock linen, som afsluttes med endnnu en ACK bit. Til slut skiftes SDA til høj igen, mens SCL beholds høj.  
 \section{Styring}
+Mål: En længerevarende og holdbar løsning til at styre Swagwayens retning.
 Potentiometer, gaffelsensor, strain-gate
 
 \chapter{Control}
@@ -125,7 +130,7 @@ Målet med filtret er at samle dataen fra gyroskopet, accelerometeret og ud fra 
 \section{Regulering}
 Mål: At omsætte en vinklen til en PWM værdi.
 
-For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold til vinklen, skal vi bestemme et forhold mellem vinklens hældning og PWM. 
+For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold btil vinklen, skal vi bestemme et forhold mellem vinklens hældning og PWM. 
 \subsection{Lineær}
 \subsection{PID}
 \subsection{Eksponentiel}
