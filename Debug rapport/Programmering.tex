@@ -74,9 +74,39 @@
 \end{center}
 \thispagestyle{empty}
 
-\chapter{\texttt{Form1.cs}}
+\chapter{Indledning}
+Formålet med opgaven er at lave et stykke software der kan bruges sammen med forfatterens eksamenprojekt i Teknikfag~A:~El. Formålet med teknikfags projektet er at bygge en Segway klon, en motoriseret selvbalancrende tohjulet trasportenhed. Nawnet på Segway klonen er Swagway. Under udviklingen af Swagway blev der behov for et stykke software til at teste et filter.
 
-\form{1}{9999}
+\subsubsection{Kort beskrivelse af Swagway funktion}
+For at Swagway kan holde sig lodret skal den kende vinklen den er fra lodret. Det udregner den ved at læse data fra to sensorer: et accelerometer og et gyroskob.
+
+Et gyroskob kan måle vinkelhastigheder. Det vil sige ændringer i vinklen. Hvis denne vinkelhastighed integreres over tid finder man vinklen gyroskobet har flyttet sig. Problemet med at integrer gyroskobdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt.
+
+Et accelerometer kan måle accelerationer. Man kan med hjælp fra tanges og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tygdekræft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnet vinkel forkert.
+
+For at komme begge problemer til livs bliver begge sensorer brugt og data fra begge to bliver samlet i et såkaldt Kalman-filter. Kalman-filtret kan tilnærmelses ses som et high-pass og low-pass filter. Det taget de hurtige ændringer (high-pass) fra gyroskob-dataene og bruger accelerometer-dataene til at holde det målte og det fysiske nulpunkt over ens.
+
+\subsubsection{Swagway Debugger}
+For at teste om Kalman-filtret er implementeret og tunet korrekt er det nødvendig at sammenligne de tre vinkler fra hhv. gyroskobet, accelerometert og kalmanfiltret. En måde at gøre dette på er ved at sende disse data fra elektronikken på Swagwayen til en PC og vise den grafisk. Det er her Swagway~Debugger-softwaren kommer ind i billedet.
+
+Swagway~Debugger modtager data fra en Arduino mikrocontroller på Swagwayen over en seriel-port og skriver dataene på en graf. Som der står i produktbeskrivelsen:
+\begin{quotation}
+  Opgaven er at lave software der kan modtage data fra en Arduino over en serielport og visualiserer det. Softwaren er til test af filtereringen af data fra et gyroskop og accelerometer. Softwaren viser bl.a. et rullende plot, samt nogle viserinstrumenter.
+\end{quotation}
+
+\chapter{Udførelse}
+Swagway~Debugger er skrevet på Windows i C\# som en Windows Form Application. Der er ingen eksterne afhængighedder; det bruger kun Microsoft biblioteker: \fxwarning{Er dette biblioteker?}
+\form{9}{12}
+Der er fem globale variabler:
+\form{18}{23}
+De tre første er buffere der bliver brugt til midlertidig at gemme modtaget data i, de to sidste er tællere over antallet af pakker.
+
+\section{Indstillinger}
+\fxwarning{Indsæt billed af "settings"-tab}
+Ved opstart af applikationen indlæses alle tilgængelige serial-porte og der sættes en standardinstilling for valget af seriel hastighed:
+\form{34}{39}
+Ved afslutning af applikationen lukkes en eventuel åben seriel-port:
+\form{41}{48}
 
 %\chapter{\texttt{Debug\_test.ino}}
 \lstset{language=[Visual]C++,
