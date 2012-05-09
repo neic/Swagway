@@ -6,18 +6,19 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.IO.Ports; // Serial port
-using System.Text.RegularExpressions; // Regex
-using System.Globalization; // . and ,
-using System.Windows.Forms.DataVisualization; // Chart
+using System.IO.Ports; // Seriel-porte
+using System.Text.RegularExpressions; // Regular expressions
+using System.Globalization; // Forskeld på , og .
+using System.Windows.Forms.DataVisualization; // Grafer
 
 namespace Rolling_graph
 {
     public partial class Form1 : Form
     {
-        string readFromUART;
-        string rxStringBuffer;
-        List<string> rxListBuffer = new List<string>();
+        string readFromUART; // Holder data læst direkte fra UART
+        string rxStringBuffer; // Holder rest af sidste pakke
+        List<string> rxListBuffer = new List<string>(); // Holder pakker som liste
+
         int packageCount = 0;
         int oldPackageCount = 0;
 
@@ -26,176 +27,209 @@ namespace Rolling_graph
             InitializeComponent();
         }
 
+                    /*****************/
+                    /* Indstillinger */
+                    /**********'******/
+
+        /* Kaldes ved opstart: finder seriel-porte */
         private void Form1_Load(object sender, EventArgs e)
         {
-            /* Serial Port */
-            LoadSerialPorts();
-            cbComPort.SelectedIndex = 1;
-            cbSpeed.SelectedIndex = 10; // 115200 as default
+            LoadSerialPorts(); // Opdater listen med serialporte
+            cbSpeed.SelectedIndex = 10; // Sætter 115200 baud som standardindstilling
 
         }
 
+        /* Kaldes ved afskutning: lukker seriel-porte */
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (serialPort.IsOpen)
+            if (serialPort.IsOpen) // Luk seriel-porten hvis den er åben
             {
                 serialPort.Close();
             }
         }
 
+        /* Finder systemets seriel-porte */
         private void LoadSerialPorts()
         {
-            cbComPort.Items.Clear();
+            cbComPort.Items.Clear(); // Ryd listen
 
-            foreach (string s in SerialPort.GetPortNames())
+            foreach (string s in SerialPort.GetPortNames() // For alle serielporte i systemet
             {
-                cbComPort.Items.Add(s);
+                cbComPort.Items.Add(s); // Føj til listen
             }
 
-            if (cbComPort.Items.Count > 0)
+            if (cbComPort.Items.Count > 0) // Hvis der er fundet serielporte
             {
-                cbComPort.SelectedIndex = 0;
+                cbComPort.SelectedIndex = 1; // Sætter den første serieltport som standardinstilling
             }
             else
             {
-                lbConnectionStatus.Text = "No COM-ports found";
+                lbConnectionStatus.Text = "No COM-ports found"; // Ellers advar i statuslinjen
             }
         }
 
-        /* Settings */
+        /* Opdater listen med serielporte */
         private void btReload_Click(object sender, EventArgs e)
         {
             LoadSerialPorts();
         }
 
+        /* Forbind og afbryd til serielporten */
         private void btConnect_Click(object sender, EventArgs e)
         {
-            if (btConnect.Text == "Connect")
+            if (btConnect.Text == "Connect") // Hvis der skal forbindes
             {
-                if (!serialPort.IsOpen)
+                if (!serialPort.IsOpen) // Hvis der ikke er forbundet
                 {
-                    serialPort.PortName = cbComPort.SelectedItem.ToString();
-                    serialPort.BaudRate = int.Parse(cbSpeed.SelectedItem.ToString());
-                    serialPort.Open();
+                    serialPort.PortName = cbComPort.SelectedItem.ToString(); // Find navnet på porten
+                    serialPort.BaudRate = int.Parse(cbSpeed.SelectedItem.ToString()); // Find hastigheden
+                    serialPort.Open(); // Forbind
                 }
 
-                if (serialPort.IsOpen)
+                if (serialPort.IsOpen) // Hvis forbindelsen lykkedes
                 {
-                    lbConnectionStatus.Text = "Connected to: " + serialPort.PortName;
-                    btConnect.Text = "Disconnect";
+                    lbConnectionStatus.Text = "Connected to: " + serialPort.PortName; // Skriv i statuslinjen
+                    btConnect.Text = "Disconnect"; // Lav knappen om til afbryd
                 }
             }
-            else
+            else // Hvis der skal afbrydes
             {
-                if (serialPort.IsOpen)
+                if (serialPort.IsOpen) // Hvis der er forbindelse
                 {
-                    serialPort.Close();
+                    serialPort.Close(); // Afbryd
                 }
-                lbConnectionStatus.Text = "Disconnected";
-                btConnect.Text = "Connect";
+
+                lbConnectionStatus.Text = "Disconnected"; // Skriv i status linjen
+                btConnect.Text = "Connect"; // Lav knappen om til forbind
 
             }
         }
 
-        /* Serial Port & monitor*/
+                    /****************************/
+                    /* Seriel: modtag & monitor */
+                    /****************************/
+
+        /* Læs inkommende data til buffer og kald ReadToMonitor() */
         private void serialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             readFromUART = serialPort.ReadExisting();
             this.BeginInvoke(new EventHandler(ReadToMonitor));
         }
 
+        /* Skriver rå data til monitor og kalder CleanData() */
         private void ReadToMonitor(object sender, EventArgs e)
         {
-            
-            int pos = tbMonitor.SelectionStart;
-            tbMonitor.AppendText(readFromUART);
-            CleanData(readFromUART);
+            tbMonitor.AppendText(readFromUART); // Tilføjer til monitor
+            CleanData(readFromUART); // Kalder CleanData()
         }
 
+        /* Tager rå data, rengør det og sender det til graf */
         private void CleanData(string input)
         {
-            rxStringBuffer += input; // Add the input to a buffer
-            rxListBuffer = rxStringBuffer.Split('<').ToList(); // Split everything in that buffer to a list
-            rxStringBuffer = rxListBuffer[rxListBuffer.Count() - 1]; // Take the last bit of text and make put it back to the buffer
-            rxListBuffer.Remove(rxListBuffer.Last()); // Remove it from the list
+            rxStringBuffer += input; // Tilføjer nyt rå data fra UART
+            rxListBuffer = rxStringBuffer.Split('<').ToList(); // Splitter ved hver begyndelse af ny pakke '<'
+            rxStringBuffer = rxListBuffer[rxListBuffer.Count() - 1]; // Ligger den sidste, ikke fuldstændige, pakke tilbage i buffer
+            rxListBuffer.Remove(rxListBuffer.Last()); // Sletter den ikke fuldstendige pakke fra listen
 
+            /* For alle nye pakker */
             for (int i = 0; i < rxListBuffer.Count(); i++)
             {
-                /* Remove everything after '>' */
-                int j = rxListBuffer[i].IndexOf('>');
+                /* Slet alt efter slutningen af pakken '>' */
+                int j = rxListBuffer[i].IndexOf('>'); // Finder indexet af '>'
                 if (j > 0)
                 {
-                    rxListBuffer[i] = rxListBuffer[i].Substring(0, j);
+                    rxListBuffer[i] = rxListBuffer[i].Substring(0, j); // Klipper fra begyndelsen til indexet af '>'
                 }
-                /* End remove */
+                /* End : Selt efter slutning*/
 
-                if (Regex.Match(rxListBuffer[i], @"^((-?\d{1,3}[.]\d\d,){3,3}\d{4,})$").Success)
+                /* God pakke? Så plot den */
+                if (Regex.Match(rxListBuffer[i], @"^((-?\d{1,3}[.]\d\d,){3,3}\d{4,})$").Success) //Pakken undersøges om den passer ind.
                 {
-                    string[] stringPackage = rxListBuffer[i].Split(',').ToArray();
+                    string[] stringPackage = rxListBuffer[i].Split(',').ToArray(); // Pakken splittes til et string-array
                     float[] floatPackage = new float[4];
 
-                    for (int k = 0; k < stringPackage.Length; k++)
+                    for (int k = 0; k < stringPackage.Length; k++) // String-arrayet parses til et float-array
 			        {
                         float.TryParse(stringPackage[k], NumberStyles.Float, CultureInfo.InvariantCulture, out floatPackage[k]);
+                        /* TryParse prøver at parse, hvis det ikke er muligt bliver pakken droppet.
+                         * CultureInfo er nødvendigt for at kunne bruge "." som decimaltegn */
 		        	}
-                    packageCount++;
 
-                    plotPackage(floatPackage);
+                    packageCount++;
+                    plotPackage(floatPackage); // Send float-arrayet til grafen
                 }
+                /* End : God pakke */
             }
+            /* End : For alle nye */
         }
+
+                    /****************/
+                    /* Seriel: send */
+                    /****************/
+
+        /* Sender ud-buffer til seriel-porten */
         private void SendToSerial()
         {
             if (serialPort.IsOpen)
             {
-                serialPort.Write(tbSend.Text);
-                tbSend.Text = "";
+                serialPort.Write(tbSend.Text); // Send ud-bufferen
+                tbSend.Clear(); // Tøm ud-bufferen
             }
         }
+
+        /* Kalder SendToSerial hvis "Send"-knappen trykkes ned */
         private void btSendMon_Click(object sender, EventArgs e)
         {
             SendToSerial();
         }
 
-        private void tbSend_KeyDown(object sender, KeyEventArgs e)
+        /* Kalder SendToSerial hvis der trykkes enter i ud-bufferen */
+        private void tbSend_KeyDown(object sender, KeyEventArgs e) // Kaldes ved hver ny tastetryk
         {
-            if (e.KeyCode == Keys.Enter)
+            if (e.KeyCode == Keys.Enter) // Er tastetrykket Enter?
             {
                 SendToSerial();
             }
         }
-        /* Graph */
+
+                    /********/
+                    /* Graf */
+                    /********/
+        /* Tilføjer pakke til graf og rydder op */
         private void plotPackage(float[] package)
         {
-           for (int i = 0; i < package.Length-1; i++)
+           for (int i = 0; i < package.Length-1; i++) // Plot alle punkterne i pakken til hver sin serie
 			{
                 chart1.Series[i].Points.AddY(package[i]);
 			}
-           if (packageCount > 500)
+
+           if (packageCount > udPackages.Value) // Slet alle pakker over grænseværdi
            {
                for (int i = 0; i < package.Length-1; i++)
                {
                    chart1.Series[i].Points.RemoveAt(0);
                }
-               
            }
-           
         }
 
-        /* Statusbar */
-        private void timerSample_Tick(object sender, EventArgs e)
+                    /*************/
+                    /* Statusbar */
+                    /*************/
+
+        /* Udregn antal pakker per sekund */
+        private void timerSample_Tick(object sender, EventArgs e) // Kaldes hvert sekund
         {
-            int diff = packageCount - oldPackageCount;
-            lbSamplesPerSec.Text = diff.ToString() + " Samples/sec";
+            int diff = packageCount - oldPackageCount; // Forskellen i antallet pakker siden sidste sekund
+            lbSamplesPerSec.Text = diff.ToString() + " Samples/sec"; // Skriv det på status linjen
             
-            if (diff>pbSamplesPerSec.Maximum)
+            if (diff>pbSamplesPerSec.Maximum) // Hvis forskellen er større en maksimum af statusbjælken 
             {
-                pbSamplesPerSec.Maximum = diff;
+                pbSamplesPerSec.Maximum = diff; // Forstør makimum
             }
 
-            pbSamplesPerSec.Value = diff;
+            pbSamplesPerSec.Value = diff; // Set statusbjælken til antallet af pakker per sekund
            
-            oldPackageCount = packageCount;
+            oldPackageCount = packageCount; 
         }
     }
 }
