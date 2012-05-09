@@ -1,0 +1,1 @@
+/home/neic/Dokumenter/HTX/El/Swagway/Software/Rolling graph/Rolling graph/Form1.cs
