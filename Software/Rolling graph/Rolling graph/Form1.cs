@@ -137,10 +137,15 @@ namespace Rolling_graph
             this.BeginInvoke(new EventHandler(ReadToMonitor));
         }
 
-        /* Skriver rå data til monitor og kalder CleanData() */
+        /* Skriver rå data til monitor, ryderop i monitor og kalder CleanData()*/
         private void ReadToMonitor(object sender, EventArgs e)
         {
             tbMonitor.AppendText(readFromUART); // Tilføjer til monitor
+
+            if (tbMonitor.TextLength > 1000000) // Hvis der mere end ca. 40000 pakker
+            {
+                tbMonitor.Lines = tbMonitor.Lines.Skip(20).ToArray(); // Slet 20 linjer
+            }
             CleanData(readFromUART); // Kalder CleanData()
         }
 
