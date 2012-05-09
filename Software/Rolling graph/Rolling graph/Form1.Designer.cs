@@ -55,14 +55,6 @@
             this.tbMonitor = new System.Windows.Forms.TextBox();
             this.tabGraph = new System.Windows.Forms.TabPage();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.tabPid = new System.Windows.Forms.TabPage();
-            this.btSendPID = new System.Windows.Forms.Button();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.serialPort = new System.IO.Ports.SerialPort(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbConnectionStatus = new System.Windows.Forms.ToolStripStatusLabel();
@@ -78,10 +70,6 @@
             this.tabMonitor.SuspendLayout();
             this.tabGraph.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            this.tabPid.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,7 +78,6 @@
             this.tabControl1.Controls.Add(this.tabSettings);
             this.tabControl1.Controls.Add(this.tabMonitor);
             this.tabControl1.Controls.Add(this.tabGraph);
-            this.tabControl1.Controls.Add(this.tabPid);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -350,74 +337,6 @@
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
-            // tabPid
-            // 
-            this.tabPid.Controls.Add(this.btSendPID);
-            this.tabPid.Controls.Add(this.numericUpDown3);
-            this.tabPid.Controls.Add(this.numericUpDown2);
-            this.tabPid.Controls.Add(this.textBox3);
-            this.tabPid.Controls.Add(this.textBox2);
-            this.tabPid.Controls.Add(this.textBox1);
-            this.tabPid.Controls.Add(this.numericUpDown1);
-            this.tabPid.Location = new System.Drawing.Point(4, 22);
-            this.tabPid.Name = "tabPid";
-            this.tabPid.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPid.Size = new System.Drawing.Size(560, 391);
-            this.tabPid.TabIndex = 2;
-            this.tabPid.Text = "PID";
-            this.tabPid.UseVisualStyleBackColor = true;
-            // 
-            // btSendPID
-            // 
-            this.btSendPID.Location = new System.Drawing.Point(326, 140);
-            this.btSendPID.Name = "btSendPID";
-            this.btSendPID.Size = new System.Drawing.Size(75, 23);
-            this.btSendPID.TabIndex = 6;
-            this.btSendPID.Text = "Send";
-            this.btSendPID.UseVisualStyleBackColor = true;
-            // 
-            // numericUpDown3
-            // 
-            this.numericUpDown3.Location = new System.Drawing.Point(220, 143);
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(100, 20);
-            this.numericUpDown3.TabIndex = 5;
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.Location = new System.Drawing.Point(114, 143);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(100, 20);
-            this.numericUpDown2.TabIndex = 4;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(220, 117);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 3;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(114, 117);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 2;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(8, 117);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(8, 143);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(100, 20);
-            this.numericUpDown1.TabIndex = 0;
-            // 
             // serialPort
             // 
             this.serialPort.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort_DataReceived);
@@ -490,11 +409,6 @@
             this.tabMonitor.PerformLayout();
             this.tabGraph.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-            this.tabPid.ResumeLayout(false);
-            this.tabPid.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -510,14 +424,6 @@
         private System.Windows.Forms.TabPage tabSettings;
         private System.IO.Ports.SerialPort serialPort;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.TabPage tabPid;
-        private System.Windows.Forms.Button btSendPID;
-        private System.Windows.Forms.NumericUpDown numericUpDown3;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.ComboBox cbSpeed;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
