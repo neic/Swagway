@@ -8,6 +8,7 @@
 *.bbl
 *.blg
 *.out
+Debug rapport/auto/*
 Rapport/auto/*
 Rapport/pictures/auto/*
 Rapport/pictures/unsorted/*

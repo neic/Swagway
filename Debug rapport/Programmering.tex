@@ -1,0 +1,76 @@
+\documentclass[a4paper,oneside,article,danish,table]{memoir}
+\semiisopage \checkandfixthelayout
+\XeTeXtracingfonts= 1
+\usepackage{babel,microtype,verbatim,threeparttable,amsmath,amssymb,unicode-math,hyperref,siunitx,mhchem,tikz,pgfplots,tikz-timing}
+\sisetup{per-mode=symbol}
+\microtypesetup{final,verbose=silent}
+\usetikzlibrary{mindmap,arrows,positioning,shapes}
+%\setmainfont[Ligatures={TeX}]{Arno Pro}
+\setmainfont{Linux Libertine O}
+\setmathfont{[Asana-Math]}
+%\hfuzz=1pt
+\usepackage[margin,draft]{fixme}
+\fxusetheme{color}
+
+\newcommand{\authorvar}{Mathias~Dannesbo}
+\newcommand{\pretitlevar}{Programmering C eksamen:}
+\newcommand{\titlevar}{Swagway} 
+\newcommand{\subtitlevar}{0} 
+\newcommand{\datevar}{\today} 
+\newcommand{\subjectvar}{Programmering C}
+\newcommand{\classvar}{}
+\newcommand{\teachervar}{}
+
+\makepagestyle{articlehead}
+\makeevenhead{articlehead}{}{\titlevar}{}
+\makeevenfoot{articlehead}{}{\thepage}{}
+\makeoddhead{articlehead}{}{\titlevar}{}
+\makeoddfoot{articlehead}{}{}{\thepage}
+\pagestyle{articlehead}
+
+\usepackage{listings,textcomp}
+\lstset{language=[Visual]C++,
+  morekeywords={[2]abs,acos,asin,atan,atan2,ceil,constrain,cos,degrees,exp,floor,log,map,max,min,radians,random,randomSeed,round,sin,sq,sqrt,tan,bitRead,bitWrite,bitSet,bitClear,bit,highByte,lowByte,analogReference,analogRead,analogWrite,attachInterrupt,detachInterrupt,delay,delayMicroseconds,digitalWrite,digitalRead,interrupts,millis,micros,noInterrupts,noTone,pinMode,pulseIn,shiftIn,shiftOut,tone,Serial,Serial1,Serial2,Serial3,begin,end,peek,read,print,println,available,flush,setTimeout,find,findUntil,parseInt,parseFloat,readBytes,readBytesUntil},
+  keywordstyle={\bfseries\color[rgb]{0,0,1}},
+  keywordstyle={[2]\bfseries\color[rgb]{0.8,0.33,0}},
+  identifierstyle=\ttfamily,
+  commentstyle=\color[rgb]{0.133,0.545,0.133},
+  stringstyle=\color[rgb]{0.627,0.126,0.941},
+  showstringspaces=false,
+  basicstyle=\small\ttfamily,
+  numberstyle=\footnotesize,
+  numbers=left,
+  stepnumber=1,
+  numbersep=10pt,
+  tabsize=2,
+  breaklines=true,
+  breakatwhitespace=false,
+  upquote=true,
+  extendedchars=true,
+  literate={æ}{{\ae}}1
+    {ø}{{\o}}1
+    {å}{{\aa}}1
+}
+
+\newcommand{\boarddate}[1]{\textcolor{blue!80!black}{#1}}
+\newcommand{\issue}[1]{\textsuperscript{\textcolor{blue!80!black}{\href{https://github.com/neic/Swagway/issues/#1}{\##1}}}}
+
+
+\begin{document}
+% \includepdf{forside.pdf} \clearpage%------------------------ Forside
+
+\begin{center}
+  \if\pretitlevar 0
+  \else{\Large\pretitlevar\\} \fi
+  \textsc{\HUGE\titlevar\\}
+  \if\subtitlevar 0
+  \else {\Large\subtitlevar\\} \fi
+  %\vspace{1em}
+  {\LARGE 
+  af\\
+   \authorvar}\\
+ \datevar\\
+\end{center}
+\thispagestyle{empty}
+
+\end{document} 
