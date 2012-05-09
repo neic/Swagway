@@ -139,6 +139,7 @@
             0,
             0,
             0});
+            this.udPackages.ValueChanged += new System.EventHandler(this.udPackages_ValueChanged);
             // 
             // groupBox1
             // 
@@ -283,8 +284,7 @@
             // 
             // chart1
             // 
-            chartArea1.AxisX.IsReversed = true;
-            chartArea1.AxisX.Maximum = 500D;
+            chartArea1.AxisX.Maximum = 10000D;
             chartArea1.AxisX.Minimum = 0D;
             chartArea1.AxisY.Maximum = 180D;
             chartArea1.AxisY.Minimum = -180D;

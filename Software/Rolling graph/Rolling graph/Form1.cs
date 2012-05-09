@@ -53,7 +53,7 @@ namespace Rolling_graph
         {
             cbComPort.Items.Clear(); // Ryd listen
 
-            foreach (string s in SerialPort.GetPortNames() // For alle serielporte i systemet
+            foreach (string s in SerialPort.GetPortNames()) // For alle serielporte i systemet
             {
                 cbComPort.Items.Add(s); // Føj til listen
             }
@@ -103,6 +103,27 @@ namespace Rolling_graph
                 btConnect.Text = "Connect"; // Lav knappen om til forbind
 
             }
+        }
+
+        /* Længden af X-aksen på grafen */
+        private void udPackages_ValueChanged(object sender, EventArgs e) // Bliver kaldt hver gang tallet ændres
+        {
+            if (udPackages.Value <= 1000) // Hvis værdien er under eller ligemed 1000 skal den ændres med 100
+            {
+                udPackages.Increment = 100;
+            }
+
+            if (udPackages.Value > 1000) // Hvis værdien er over 1000 skal den ændres med 1000
+            {
+                udPackages.Increment = 1000;
+            }
+
+            if (udPackages.Value == 1100) // Er værdien 1100 skal den være 2000
+            {
+                udPackages.Value = 2000;
+            }
+
+            chart1.ChartAreas.First().AxisX.Maximum = (double)udPackages.Value; // Set X-aksens maksimum værdi
         }
 
                     /****************************/
@@ -231,5 +252,7 @@ namespace Rolling_graph
            
             oldPackageCount = packageCount; 
         }
+
+
     }
 }
