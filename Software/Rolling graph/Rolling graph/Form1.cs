@@ -60,7 +60,7 @@ namespace Rolling_graph
 
             if (cbComPort.Items.Count > 0) // Hvis der er fundet serielporte
             {
-                cbComPort.SelectedIndex = 1; // Sætter den første serieltport som standardinstilling
+                cbComPort.SelectedIndex = 0; // Sætter den første serielport som standardinstilling
             }
             else
             {
@@ -142,7 +142,7 @@ namespace Rolling_graph
         {
             tbMonitor.AppendText(readFromUART); // Tilføjer til monitor
 
-            if (tbMonitor.TextLength > 1000000) // Hvis der mere end ca. 40000 pakker
+            if (tbMonitor.TextLength > 50000) // Hvis der mere end ca. 2000 pakker
             {
                 tbMonitor.Lines = tbMonitor.Lines.Skip(20).ToArray(); // Slet 20 linjer
             }
