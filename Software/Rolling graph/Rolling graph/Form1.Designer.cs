@@ -30,12 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -49,7 +46,6 @@
             this.cbSpeed = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tabMonitor = new System.Windows.Forms.TabPage();
-            this.cAutoScroll = new System.Windows.Forms.CheckBox();
             this.btSendMon = new System.Windows.Forms.Button();
             this.tbSend = new System.Windows.Forms.TextBox();
             this.tbMonitor = new System.Windows.Forms.TextBox();
@@ -227,7 +223,6 @@
             // 
             // tabMonitor
             // 
-            this.tabMonitor.Controls.Add(this.cAutoScroll);
             this.tabMonitor.Controls.Add(this.btSendMon);
             this.tabMonitor.Controls.Add(this.tbSend);
             this.tabMonitor.Controls.Add(this.tbMonitor);
@@ -238,17 +233,6 @@
             this.tabMonitor.TabIndex = 3;
             this.tabMonitor.Text = "Monitor";
             this.tabMonitor.UseVisualStyleBackColor = true;
-            // 
-            // cAutoScroll
-            // 
-            this.cAutoScroll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cAutoScroll.AutoSize = true;
-            this.cAutoScroll.Location = new System.Drawing.Point(7, 353);
-            this.cAutoScroll.Name = "cAutoScroll";
-            this.cAutoScroll.Size = new System.Drawing.Size(75, 17);
-            this.cAutoScroll.TabIndex = 3;
-            this.cAutoScroll.Text = "Auto scroll";
-            this.cAutoScroll.UseVisualStyleBackColor = true;
             // 
             // btSendMon
             // 
@@ -282,7 +266,7 @@
             this.tbMonitor.Name = "tbMonitor";
             this.tbMonitor.ReadOnly = true;
             this.tbMonitor.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbMonitor.Size = new System.Drawing.Size(551, 312);
+            this.tbMonitor.Size = new System.Drawing.Size(551, 335);
             this.tbMonitor.TabIndex = 0;
             this.tbMonitor.WordWrap = false;
             // 
@@ -305,9 +289,7 @@
             chartArea1.AxisY.Maximum = 180D;
             chartArea1.AxisY.Minimum = -180D;
             chartArea1.Name = "ChartArea_rolling";
-            chartArea2.Name = "ChartArea_polar";
             this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.ChartAreas.Add(chartArea2);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart1.Location = new System.Drawing.Point(3, 3);
             this.chart1.Name = "chart1";
@@ -321,18 +303,9 @@
             series3.ChartArea = "ChartArea_rolling";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             series3.Name = "Est_rolling";
-            series4.ChartArea = "ChartArea_rolling";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series4.Name = "Looptime_rolling";
-            series4.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            series5.ChartArea = "ChartArea_polar";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Polar;
-            series5.Name = "Acc_Polar";
             this.chart1.Series.Add(series1);
             this.chart1.Series.Add(series2);
             this.chart1.Series.Add(series3);
-            this.chart1.Series.Add(series4);
-            this.chart1.Series.Add(series5);
             this.chart1.Size = new System.Drawing.Size(554, 385);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -435,7 +408,6 @@
         private System.Windows.Forms.Button btSendMon;
         private System.Windows.Forms.TextBox tbSend;
         private System.Windows.Forms.TextBox tbMonitor;
-        private System.Windows.Forms.CheckBox cAutoScroll;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.ToolStripStatusLabel lbFiller;
