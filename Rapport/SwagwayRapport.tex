@@ -61,9 +61,9 @@
 \vfill
 \noindent
 {\fontsize{90}{108}\selectfont \color{red!80!black}\titlevar}\\
-\color{blue!90!black}
+{\color{blue!90!black}
 {\LARGE \authorvar}\\
-\datevar
+\datevar}
 
 \begin{center}
   \includegraphics[width=0.3\textheight]{pictures/swagway.jpg}
@@ -132,7 +132,9 @@ Pull-up, Bus capasistance, level shifter,
 Et gyroskop måler vinkelhastigheder, hvor hurtigt noget drejer om en akse. En normal 
 
 . Hvis denne vinkelhastighed integreres over tid finder man vinklen gyroskopet har flyttet sig. Problemet med at integrer gyroskopdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt.
+
 Gyroskopet er et ITG 3200. Det er et mikroelektromekanisk system, også kaldet MEMS. Det betyder, at det både er en mekanisk og elektrisk funktion i et system.
+
 \subsubsection{Accelerometer}
 Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tyngdekræft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnet vinkel forkert.
 
