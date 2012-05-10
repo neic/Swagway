@@ -230,8 +230,8 @@ Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten k
 Det viste sig efter megen debugging, at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik \texttt{HIGH} lige så hurtigt som forventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino.
 
 \fxwarning{Indsæt diagram over forsøg med optocoupler og HEXFET}
+
 Forsøget viste, at når optocoupleren sad mellem HEXFETen og Arduinoen var der en kapacitet mellem HEXFETens gate og source. Figur \ref{fig:stigetid} viser nederst PWM signalet fra Arduinoen og øverst signalet på P-kanal HTXFETens gate. Man ser tydeligt at det tager en ubelejlig tid før signalet på gaten stiger.
-th
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{pictures/stigetid.jpg}
@@ -330,26 +330,27 @@ Dette board fungerer og sidder i Swagwayen.
 
 \subsection{Mainboard v1.0}
 \boarddate{24 jan 2012}
-Loddeøerne var underdimmentioneret\issue{1} og det var ikke til at komme til at trykke på resetknappen på Arduinoen da bordet dækkede overdet.\issue{2} Der blev tilføjet en resetknap på mainboardet samt et stik til at læse data fra styret.\issue{12}
+Mainboardets loddeøer var underdimmentioneret\issue{1}, hvilket betyder, at lodninger blev besværlige.Yderligere var det ikke til at komme til at trykke på resetknappen på Arduinoen, da shieldet dækkede over knappen.\issue{2} Der blev tilføjet en reset knap på mainboardet, i den følgende version. Der blev også tilføjet et stik til datamodtagning fra styringen på mainboardet.\issue{12}
 
 \subsection{Mainboard v2.0}
 \boarddate{1 marts 2012}
-Logik kredsløbet blev opgivet og efterfølgende blev der brugt tre Arduino pins per motor.\issue{21} Displayboardet blev ligeledes opgivet.\issue{9} Pinheaderne til 9V og IMUen var desuden for tæt sammen.\issue{13}
+Logik kredsløbet blev kasseret. Efterfølgende blev der brugt tre Arduino pins per motor.\issue{21} Display-boardet blev ligeledes kasseret.\issue{9} Pinheaderne til 9V og IMUen var desuden for tæt sammen, hvilket blev rettet i den nyeste version.\issue{13}
 
 \subsection{Mainboard v3.0}
 \boarddate{26 marts 2012} Dette board blev aldrig lavet færdig.
-Tilføjet pins til radio.\issue{29}
+På boardet blev der dog tilføjet pins til en radio, hvis formål er at kunne ændre reguleringsværdierne trådløst.\issue{29}
 
 \subsection{Mainboard v3.1}
 \boarddate{29 marts 2012}
-Formodstandene til optocouplerne på motorboardet blev flyttet til motorboardet.\issue{37}
-Pinheaderen til IMUen blev lavet om fra 2×7 til 2×5
+For-modstandene til optocouplerne på mainboardet blev flyttet til motorboardet, for at samle komponenterne på en smartere måde.\issue{37}
+Derudover blev pinheaderen til IMUen lavet om fra 2×7 til 2×5, da dette var tilstrækkeligt og mere minimalistisk.
 
 \subsection{Mainboard v4.0}\label{sec:main40}
 \boarddate{24 april 2012}
-Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden.\issue{42} Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på kotorcontrolleren kørte langsommere end den anden. Problement blev isoleret til at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlens end baglens, men med samme forskel på begge hjul.
+Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden.\issue{42} Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på motorcontrolleren kørte langsommere end den anden. 
+Problement blev isoleret til, at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også, at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns, men med samme forskel på begge hjul.
 
-Opbytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
+Opmytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
 
 \chapter{Mekanik}
 Motorer, batterier, 
