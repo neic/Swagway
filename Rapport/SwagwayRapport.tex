@@ -103,7 +103,7 @@ Vi vil gerne takke Steffen Linnerup Christiansen for hjælp med mekanikken, samt
 
 \clearpage \setcounter{tocdepth}{1} \tableofcontents \clearpage
 
-\chapter{Indledning}\label{chap:ind}
+\chapter{Indledning}\label{chap:ind} \fnnote{indsæt pic af swagway}
 Transport enheder bliver mere og mere avancerede, og der skabes ofte nye enheder. Specielt mobilitet og anvendelighed har været i højsædet i mange nye produkter. Det handler om hurtigt at kunne komme fra punkt a til punkt b, uden at det kræver større besvær. Derudover er løsninger som er intuitive at bruge også fremskreden, og et produkt som opfylder alle disse punkter er Segwayen. Den er hurtig, kræver næsten ingen erfaring at køre på og er lille. Man kan hurtigt suse fra en afdeling til anden. 
 
 Formålet med projektet er at bygge en motoriseret selvbalancrende tohjulet transportenhed. Det er en klon af en Segway som er et kommercielt produkt, der benyttes af en lille skare af befolkningen nutildags. Kendetegnet ved Segwayen er, at de to hjul sidder på samme aksel, hvor elektronik og motorene sørger for at, selv med en fører, holde enheden i balance. Når en fører læner sig frem eller tilbage, kompenserer Segwayen ved køre i samme retning, for atter at balancere den. For at dreje enheden vipper føreren håntaget til den ene eller anden side, som man ønsker at dreje til. Segwayen kan købes for cirka halvfjerdstusinde kroner, hvis man ønsker at eje sådan en.
@@ -166,9 +166,30 @@ Kommunikation med IMUen sker over en I²C-bus. På bussen er der normalt en mast
 \fxnote{3v vs 5v}
 Masteren er den enhed som bestemmer Standard Clock Line, og slaverne er den enhed som lystrer til masteren. Hastigheden på forbindelsen kan være 100KHz, 400KHz eller 3400KHz. Masteren er den eneste som kan starte en forbindelse mellem enhederne, og det gør den ved at starte en sekvens på bussen, som ændrer SDA fra høj til lav. Start sekvensen indikerer i en bit, om masteren vil modtage data fra slaven, eller om den vil sende til slaven. Denne bit, også kaldet LSB eller Least Significant Bit placeres efter syv andre bits, som er slavens adresse. Herefter udsendes endnu en bit, som slaven skal besvare ved at trække SDA lav. Denne bit kaldes ACK som står for acknowledgement, som betyder anerkendelse. Herefter sendes der data via. SDA synkront med clock linen, som afsluttes med endnnu en ACK bit. Til slut skiftes SDA til høj igen, mens SCL beholds høj.  
 \section{Styring}
-Mål: En længerevarende og holdbar løsning til at styre Swagwayens retning.
-Potentiometer, gaffelsensor, strain-gate
+Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det ønskes ikke, at enheden efter forholdsvis kort tid skulle udskiftes eller repareres. Vi overvejede fem forskellige løsninger: En lineær potentiometer, et drejepotentiometer, gaffelsensor, strain-gate og stepper motor.
+\subsection{Lineær potentiometer} \fxnote{billede af linæert potentiometer}
+Et lieært potentiometer fungerer som et normalt potentiometer, dog trækkes "armen" i en sliske som set på HERPADERP NIGGER DICK BILLEDE. 
+Potentiometret skal placeres i bunden af stangen, hvorefter potentiometrets arm trækkes med stangens bevægelse. Herefter vil man kunne ændre på PWM signalet til motorene, og på den måde dreje. Løsningen er simpel at udføre, og vil virke let i praksis.
 
+Ulempen ved denne løsning er dog, at potentiometret hurtigt slides op ved brug, og det er derfor ikke en holdbar løsning.
+\subsection{Dreje potentiometer}
+Samme princip fra det lineæere potentiometer gælder her. Derimod drejes dette potentiometer i stedet for om sin egen akse. Ideen med dette var, at man let kan implementere den i toppen af Swagwayens styr, og så styre PWM signalet til motorerene sådan. 
+
+Lige som det lineæere potentiometer, slides denne løsning hurtigt, og er derfor ikke holdbar. Derudover er denne løsning ikke lige så intuitiv og føles klodset, hvilket ikke er det vi ønsker med produktet.
+\subsection{Gaffelsensor}
+Gaffelsensorer benyttes i gamle kuglemuse, som vi alle nok kender. Gaffelsensorene måler hvor meget noget har flyttet sig ved at analysere bevægelsen i forhold til nogle bånd buede bånd, i to krysende retninger. Ud fra bevægelsen kan gaffelsensoren bestemme, hvordan kuglen har bevæget sig i dens socket. En lignende anordning kunne placeres i bunden af stangen lige som det lineæere potentiometer, og en kugle kunne skubbes rundt lige som i en mus, for at bestemme stangens hældningen. Løsningen er meget præcis hvis den er lavet mekanisk godt.
+
+Gaffelsensoren er derimod ekstremt upræcis hvis mekanikken ikke er rentskåret-næsten perfekt. Yderligere bliver dens præcision påvirket af støv og skidt, hvilket hurtigt vil ophobe sig i bunden af vores Swagway.
+\subsection{Strain-gate}
+En strain-gate løsning er en anordning, som placeres på siden af stangen. Strain-gaten kan mærke tryk i metallet, og kan ud fra dette tryk bestemme en værdi, som man kan bruge til at styre Swagwayen med. Denne løsning er ekstrem præcis, og benyttes ofte i store maskiner.
+
+Problemet er dog, at den ikke virker på vores stang, da den er for stiv, og løsningen hverken er intuitiv eller responsiv for forbrugeren. Den er ikke lige til at finde ud af fra første øjekast, og den er sværere at lære.
+\subsection{Stepper motor}
+Det sidste løsningsforslag: Stepper motor. Planen med denne var at foretage den modsatte funktion af hvad man normalt gør med en stepper motor: I stedet for at få motoren til at bevæge noget, skal styret bevæge motoren, hvorefter det måles hvilket step den er på i Arduinoen. Løsningen er ekstremt robust og præcis, som vi kender stepper motorer for. Derudover vil den ikke være modtagelig for omgivelsernes påvirkninger i form af støv eller andet snavs. Yderligere kan steppene geares, så den bliver endnu mere præcis hvis nødvendigt.
+
+Det sværeste ved denne løsning er, at implementere den. 
+
+Hvis tiden havde rækket til det, havde vi derfor valgt denne som den umiddelbare løsning.
 \chapter{Control}
 \section{Filter}\label{sec:filter}
 Målet med filtret er at samle dataen fra gyroskopet, accelerometeret og ud fra disse beregne en vinkel, som vi kan benytte til at regulere PWM efter. Ud fra dette mål, udvalgte vi tre filtre, som har de egenskaber vi leder efter.
