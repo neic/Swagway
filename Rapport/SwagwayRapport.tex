@@ -104,7 +104,7 @@ Vi vil gerne takke Steffen Linnerup Christiansen for hjælp med mekanikken, samt
 
 \chapter{Indledning}\label{chap:ind}
 
-Formålet med projektet er at bygge en motoriseret selvbalancrende tohjulet trasportenhed. Det er en klon af en Segway som er et komercielt produkt. Kendetegnet ved den er at de to hjul sidder på samme aksel. Elektronik og motorene sørger for at holde enheden lodret. Når en fører læner sig frem eller tilbage, kompenserer enheden ved køre i samme retning. For at dreje enheden vipper føreren håntaget til den side som man ønsker at dreje til.
+Formålet med projektet er at bygge en motoriseret selvbalancrende tohjulet transportenhed. Det er en klon af en Segway som er et kommercielt produkt. Kendetegnet ved Segwayen er, at de to hjul sidder på samme aksel. Elektronik og motorene sørger for at holde enheden lodret. Når en fører læner sig frem eller tilbage, kompenserer enheden ved køre i samme retning. For at dreje enheden vipper føreren håntaget til den side som man ønsker at dreje til.
 
 Projektoplæget lyder:
 \begin{quote}
@@ -114,9 +114,9 @@ Projektoplæget lyder:
 Hovedeudfordringen er at holde enheden lodret. For at gøre dette skal man kende enhedens vinkel i forhold til lodret og omsætte denne vinkel til et signal til motorene. Når vinklen stiger driver motorene hjulene som så flytter enheden og brugerens tygdepunk ind over akslen igen.
 Det kan se som tre isolerede problemstillinger som passer ind i I-C-O-modellen:
 \begin{itemize}
-\item[Input] Mål vinklen.i forhold til lodret
-\item[Control] Omsæt vinklen til et signal til motorene.
-\item[Output] Driv to motore baseret på signalet.
+\item[Input] Måle Swagwayens hældning i forhold til lodret
+\item[Control] Omsætte vinklen til et signal til motorene.
+\item[Output] Drive to motore baseret på signalet.
 \end{itemize}
 
 \chapter{Input}
@@ -148,6 +148,7 @@ Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og dat
 I²C, wire.h, libraries
 
 IMUen kører på I²C bussen som blev skabt af Philips for mange år siden, og bliver brugt mellem en eller flere "masters", som i vores tilfælde er Arduinoen, og en eller flere "slaves", eks. IMUen. I²C bussen består af to fysiske wires, en serial data line (SDA) og en serial clock line (SCL). 
+
 Masteren er den enhed som bestemmer Standard Clock Line, og slaverne er den enhed som lystrer til masteren. Hastigheden på forbindelsen kan være 100KHz, 400KHz eller 3400KHz. Masteren er den eneste som kan starte en forbindelse mellem enhederne, og det gør den ved at starte en sekvens på bussen, som ændrer SDA fra høj til lav. Start sekvensen indikerer i en bit, om masteren vil modtage data fra slaven, eller om den vil sende til slaven. Denne bit, også kaldet LSB eller Least Significant Bit placeres efter syv andre bits, som er slavens adresse. Herefter udsendes endnu en bit, som slaven skal besvare ved at trække SDA lav. Denne bit kaldes ACK som står for acknowledgement, som betyder anerkendelse. Herefter sendes der data via. SDA synkront med clock linen, som afsluttes med endnnu en ACK bit. Til slut skiftes SDA til høj igen, mens SCL beholds høj.  
 \section{Styring}
 Mål: En længerevarende og holdbar løsning til at styre Swagwayens retning.
@@ -155,23 +156,19 @@ Potentiometer, gaffelsensor, strain-gate
 
 \chapter{Control}
 \section{Filter}
-Mål: At samle data fra gyroskop og accelerometer og regne en vinkel ud
-
 Målet med filtret er at samle dataen fra gyroskopet, accelerometeret og ud fra disse beregne en vinkel, som vi kan benytte til at regulere PWM efter. Ud fra dette mål, udvalgte vi tre filtre, som har de egenskaber vi leder efter.
 \subsection{Komplementær filter}
 \subsection{Kalman filter}
 \subsection{Modificeret Kalman filter}
 
 \section{Regulering}
-Mål: At omsætte en vinklen til en PWM værdi.
-
 For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold btil vinklen, skal vi bestemme et forhold mellem vinklens hældning og PWM. 
 \subsection{Lineær}
 \subsection{PID}
 \subsection{Eksponentiel}
 
 \chapter{Output}
-Mål: At køre motorene i begge retninger med variabel hastighed.
+For at holde Swagwayen i balance, ønsker vi, ligesom Segwayen, at motorene skal kunne køre i begge retninger med en variabel hastighed.
 \section{H-broens virkemåde}
 H-bro teori
 \section{PWM}
@@ -352,26 +349,27 @@ Dette board fungerer og sidder i Swagwayen.
 
 \subsection{Mainboard v1.0}
 \boarddate{24 jan 2012}
-Loddeøerne var underdimmentioneret\issue{1} og det var ikke til at komme til at trykke på resetknappen på Arduinoen da bordet dækkede overdet.\issue{2} Der blev tilføjet en resetknap på mainboardet samt et stik til at læse data fra styret.\issue{12}
+Mainboardets loddeøer var underdimmentioneret\issue{1}, hvilket betyder, at lodninger blev besværlige.Yderligere var det ikke til at komme til at trykke på resetknappen på Arduinoen, da shieldet dækkede over knappen.\issue{2} Der blev tilføjet en reset knap på mainboardet, i den følgende version. Der blev også tilføjet et stik til datamodtagning fra styringen på mainboardet.\issue{12}
 
 \subsection{Mainboard v2.0}
 \boarddate{1 marts 2012}
-Logik kredsløbet blev opgivet og efterfølgende blev der brugt tre Arduino pins per motor.\issue{21} Displayboardet blev ligeledes opgivet.\issue{9} Pinheaderne til 9V og IMUen var desuden for tæt sammen.\issue{13}
+Logik kredsløbet blev kasseret. Efterfølgende blev der brugt tre Arduino pins per motor.\issue{21} Display-boardet blev ligeledes kasseret.\issue{9} Pinheaderne til 9V og IMUen var desuden for tæt sammen, hvilket blev rettet i den nyeste version.\issue{13}
 
 \subsection{Mainboard v3.0}
 \boarddate{26 marts 2012} Dette board blev aldrig lavet færdig.
-Tilføjet pins til radio.\issue{29}
+På boardet blev der dog tilføjet pins til en radio, hvis formål er at kunne ændre reguleringsværdierne trådløst.\issue{29}
 
 \subsection{Mainboard v3.1}
 \boarddate{29 marts 2012}
-Formodstandene til optocouplerne på motorboardet blev flyttet til motorboardet.\issue{37}
-Pinheaderen til IMUen blev lavet om fra 2×7 til 2×5
+For-modstandene til optocouplerne på mainboardet blev flyttet til motorboardet, for at samle komponenterne på en smartere måde.\issue{37}
+Derudover blev pinheaderen til IMUen lavet om fra 2×7 til 2×5, da dette var tilstrækkeligt og mere minimalistisk.
 
 \subsection{Mainboard v4.0}\label{sec:main40}
 \boarddate{24 april 2012}
-Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden.\issue{42} Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på kotorcontrolleren kørte langsommere end den anden. Problement blev isoleret til at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlens end baglens, men med samme forskel på begge hjul.
+Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden.\issue{42} Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på motorcontrolleren kørte langsommere end den anden. 
+Problement blev isoleret til, at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også, at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns, men med samme forskel på begge hjul.
 
-Opbytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
+Opmytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
 
 \chapter{Mekanik}
 Motorer, batterier, 
