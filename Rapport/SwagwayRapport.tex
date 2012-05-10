@@ -166,8 +166,12 @@ Kommunikation med IMUen sker over en I²C-bus. På bussen er der normalt en mast
 
 Masteren er den enhed som bestemmer Standard Clock Line, og slaverne er den enhed som lystrer til masteren. Hastigheden på forbindelsen kan være 100KHz, 400KHz eller 3400KHz. Masteren er den eneste som kan starte en forbindelse mellem enhederne, og det gør den ved at starte en sekvens på bussen, som ændrer SDA fra høj til lav. Start sekvensen indikerer i en bit, om masteren vil modtage data fra slaven, eller om den vil sende til slaven. Denne bit, også kaldet LSB eller Least Significant Bit placeres efter syv andre bits, som er slavens adresse. Herefter udsendes endnu en bit, som slaven skal besvare ved at trække SDA lav. Denne bit kaldes ACK som står for acknowledgement, som betyder anerkendelse. Herefter sendes der data via. SDA synkront med clock linen, som afsluttes med endnnu en ACK bit. Til slut skiftes SDA til høj igen, mens SCL beholds høj.  
 \section{Styring}
-Mål: En længerevarende og holdbar løsning til at styre Swagwayens retning.
-Potentiometer, gaffelsensor, strain-gate
+Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det ønskes ikke, at enheden efter forholdsvis kort tid skulle udskiftes eller repareres. Vi overvejede fem forskellige løsninger: En linæer potentiometer, et drejepotentiometer, gaffelsensor, strain-gate og stepper motor.
+\subsection{Linæer potentiometer}
+\subsection{Dreje potentiometer}
+\subsection{Gaffelsensor}
+\subsection{Strain-gate}
+\subsection{Stepper motor}
 
 \chapter{Control}
 \section{Filter}
