@@ -72,10 +72,13 @@
    \authorvar}\\
  \datevar\\
 \end{center}
+\begin{abstract}
+  This journal is a walk-thorugh of the source code of Swagway Debugger, a Windows application for debugging and tuning filters, e.g. Kalman-filters, on balancing robots and Segway clones. It is made as a part of the Swagway project.
+\end{abstract}
 \thispagestyle{empty}
 
 \chapter{Indledning}
-Formålet med opgaven er at lave et stykke software der kan bruges sammen med forfatterens eksamenprojekt i Teknikfag~A:~El. Formålet med teknikfags projektet er at bygge en Segway klon, en motoriseret selvbalancrende tohjulet trasportenhed. Nawnet på Segway klonen er Swagway. Under udviklingen af Swagway blev der behov for et stykke software til at teste et filter.
+Formålet med opgaven er at lave et stykke software der kan bruges sammen med forfatterens eksamenprojekt i Teknikfag~A:~El. Formålet med teknikfags projektet er at bygge en Segway klon, en motoriseret selvbalancrende tohjulet trasportenhed. Navnet på Segway klonen er Swagway. Under udviklingen af Swagway blev der behov for et stykke software til at teste et filter.\footnote{Websiden for hele projekter findes på \url{https://github.com/neic/Swagway}. Derfra er der adgang til alt kildekode, rapporter og andre skriftlige fremstillinger.}
 
 \subsubsection{Kort beskrivelse af Swagway funktion}
 For at Swagway kan holde sig lodret skal den kende vinklen den er fra lodret. Det udregner den ved at læse data fra to sensorer: et accelerometer og et gyroskob.
@@ -102,7 +105,12 @@ Der er fem globale variabler:
 De tre første er buffere der bliver brugt til midlertidig at gemme modtaget data i, de to sidste er tællere over antallet af pakker.
 
 \section{Indstillinger}
-\fxwarning{Indsæt billed af "settings"-tab}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1\textwidth]{settings.png}
+  % \caption[]{}
+  % \label{fig:}
+\end{figure}
 Ved opstart af applikationen indlæses alle tilgængelige serial-porte og der sættes en standardinstilling for valget af seriel hastighed:
 \form{34}{39}
 Ved afslutning af applikationen lukkes en eventuel åben seriel-port:
@@ -114,12 +122,16 @@ Ved afslutning af applikationen lukkes en eventuel åben seriel-port:
 % btReload_Click undladt
 Eventhandleren for \texttt{btConnect} både forbinder og afbryder til en seriel-port. Hvis der er afbrud finder den hvilken serielport og hastighed der er valgt, forbinder og opdaterer statuslinjen og dens egen tekst. Hvis der er oprettet forbindelse afbryder den og ligeledes opdaterer statuslinjen og dens egen tekst:
 \form{76}{104}
-Up-Down tælleren%fix
-\texttt{udPackages} bestemmer hvor meget data der skal vises på grafen. Når værdien i tælleren ændres ændre den dynamisk skala. Endeligt kalder opdaterer den grafens X-akses maksimal værdi:
+NumericUpDown-tælleren, \texttt{udPackages}, bestemmer hvor meget data der skal vises på grafen. Når værdien i tælleren ændres ændre den dynamisk skala. Endeligt kalder opdaterer den grafens X-akses maksimal værdi:
 \form{106}{125}
 
 \section{Seriel modtagelse og monitor}
-\fxwarning{Vis monitor}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1\textwidth]{monitor.png}
+  % \caption[]{}
+  % \label{fig:}
+\end{figure}
 Når der, efter der er forbundet til en seriel-port, ankommer data lægges det i bufferen \texttt{readFromUART} og \texttt{ReadToMonitor} kaldes:
 \form{131}{136}
 \texttt{ReadToMonitor} Skriver den modtaget data, \texttt{readFromUART}, direkte til monitoren uden at vidrebehandle den. Den undesøger om der er meget data i monitoren og sletter en smugle af det ældste hvis det er tilfældet. Til slut kalder den \texttt{CleanData()}.
@@ -141,7 +153,12 @@ Pakkerne i \texttt{rxListBuffer} bliver renset for alt der står efter “>” o
 Applikationen kan også sende data. Se hvordan på linje 195--218 af Form1.cs.
 
 \section{Graf}
-\fxwarning{Vis graf}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=1\textwidth]{graph.png}
+  % \caption[]{}
+  % \label{fig:}
+\end{figure}
 Når en ny pakke er blevet renset, bliver hver del af den tilføjet grafen i forskellige serier. Tiden bliver ignoreret. Der bliver så undersøgt om der er pakker over grænseværdien. Hvis der er det bliver de fjernet fra grafen:
 \form{224}{239}
 
@@ -149,11 +166,13 @@ Når en ny pakke er blevet renset, bliver hver del af den tilføjet grafen i for
 En timer kalder hvert sekund eventhandleren \texttt{timerSample\_Tick} undersøger hvor mange pakker der er tilføjet det sidste sekund. Den skriver antallet til statuslinjen og opdaterer en statusbjælke:
 \form{245}{258}
 
-
-%\chapter{\texttt{Debug\_test.ino}}
+\chapter{\texttt{Debug\_test.ino}}
+Swagway projektet med gyroskob og accelerometer er afleveret, så for at teste Swagway Debugger er der lavet et lille test program til en Arduino. Til Arduinoen er der tilkoblet to potentiometre til at simulere data fra gyroskob og accelerometer. Den del af softwares som har intresse er den som sender pakken med data:
 \lstset{language=[Visual]C++,
   morekeywords={[2]abs,acos,asin,atan,atan2,ceil,constrain,cos,degrees,exp,floor,log,map,max,min,radians,random,randomSeed,round,sin,sq,sqrt,tan,bitRead,bitWrite,bitSet,bitClear,bit,highByte,lowByte,analogReference,analogRead,analogWrite,attachInterrupt,detachInterrupt,delay,delayMicroseconds,digitalWrite,digitalRead,interrupts,millis,micros,noInterrupts,noTone,pinMode,pulseIn,shiftIn,shiftOut,tone,Serial,Serial1,Serial2,Serial3,begin,end,peek,read,print,println,available,flush,setTimeout,find,findUntil,parseInt,parseFloat,readBytes,readBytesUntil},
-    keywordstyle={[2]\bfseries\color[rgb]{0.8,0.33,0}}}
-%\lstinputlisting{../Software/Debug_test/Debug_test.ino}
+  keywordstyle={[2]\bfseries\color[rgb]{0.8,0.33,0}}}
+\lstinputlisting[firstnumber=88,firstline=88,lastline=99]{../Software/Debug_test/Debug_test.ino}
 
-\end{document} 
+\chapter{Konklusion}
+Software blev udviklet og opfyldte både de mål der blev sat samt at hjælpe med Teknologi~A projektet.
+\end{document}
