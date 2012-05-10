@@ -148,6 +148,14 @@ Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og dat
 
 %For at komme begge problemer til livs bliver begge sensorer brugt og data fra begge to bliver samlet i et såkaldt Kalman-filter. Kalman-filtret kan tilnærmelsesvis ses som et high-pass og low-pass filter. Det taget de hurtige ændringer (high-pass) fra gyroskop-dataene og bruger accelerometer-dataene til at holde det målte og det fysiske nulpunkt ens.
 
+
+
+
+\fxnote{ http://invensense.com/mems/gyro/documents/whitepapers/InvenSense-MEMSMotionProcessing-ConsumerProducts-3DUIWhitepaper-031210.pdf figur1 fig:memsacc} 
+
+Et accelerometer måler en bevægelse, som enten er forårsaget af tyngdekraften eller en bevægelse. Som set på figur \ref{fig:memsacc} måles accelerationen ved en ændring i kapacitansen (c), som skyldes en ændring i massens (m) position. Kapasitansen fører til en ændring i spændingen, som herefter digitaliseres kan derefter benyttes af en mikrokontroller som Arduinoen. Dette gøres for de tre akser x, y og z, og accelerationen kan nu måles i alle retninger.
+
+
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.3\textwidth]{pictures/imu.jpg}
