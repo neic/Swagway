@@ -1,5 +1,5 @@
 \documentclass[a4paper,oneside,article,danish,table]{memoir}
-\semiisopage \checkandfixthelayout
+\checkandfixthelayout
 \XeTeXtracingfonts= 1
 \usepackage{babel,microtype,verbatim,threeparttable,amsmath,amssymb,unicode-math,hyperref,siunitx,mhchem,tikz,pgfplots,tikz-timing}
 \sisetup{per-mode=symbol}
@@ -12,14 +12,14 @@
 \usepackage[margin,draft]{fixme}
 \fxusetheme{color}
 
-\newcommand{\authorvar}{Carl~Emil~Grøn~Christensen \& Mathias~Dannesbo}
-\newcommand{\pretitlevar}{Teknikfag A eksamen:}
+\newcommand{\authorvar}{Carl-Emil~Grøn~Christensen \& Mathias~Dannesbo}
+\newcommand{\pretitlevar}{Teknikfag~A~eksamen:}
 \newcommand{\titlevar}{Swagway} 
 \newcommand{\subtitlevar}{0} 
 \newcommand{\datevar}{\today} 
 \newcommand{\subjectvar}{Teknikfag~A:~El}
-\newcommand{\classvar}{}
-\newcommand{\teachervar}{}
+\newcommand{\classvar}{EUC~Nord: HTX~Frederikshavn, f11htx3.B}
+\newcommand{\teachervar}{Alan~Gilarska}
 
 \makepagestyle{articlehead}
 \makeevenhead{articlehead}{}{\titlevar}{}
@@ -58,17 +58,18 @@
 
 \begin{document}
 % \includepdf{forside.pdf} \clearpage%------------------------ Forside
-\vfill
+
 \noindent
 {\fontsize{90}{108}\selectfont \color{red!80!black}\titlevar}\\
-{\color{blue!90!black}
-{\LARGE \authorvar}\\
-\datevar}
-
-\begin{center}
-  \includegraphics[width=0.3\textheight]{pictures/swagway.jpg}
-\end{center}
 \vfill
+\noindent
+{\color{blue!90!black} \LARGE
+{\fontsize{16.55}{20}\selectfont \authorvar}\\
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} ll}
+  \subjectvar & \datevar\\
+\end{tabular*}
+}
+
 \thispagestyle{empty}
 \clearpage
 \begin{center}
@@ -81,7 +82,6 @@
   {\LARGE 
   af\\
    \authorvar}\\
- \datevar\\
 \end{center}
 
 \vfill
@@ -90,7 +90,8 @@
 \end{abstract}\vfill
 \noindent
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} ll}
-
+  \classvar&\subjectvar\\
+  {Lærer: }\teachervar & \datevar\\
 \end{tabular*}
 \thispagestyle{empty}
 \clearpage
