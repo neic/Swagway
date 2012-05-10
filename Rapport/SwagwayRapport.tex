@@ -144,18 +144,18 @@ Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og dat
 Et accelerometer måler en bevægelse, som enten er forårsaget af tyngdekraften eller en bevægelse. Som set på figur \ref{fig:memsacc} måles accelerationen i et moderne MEMS accelerometer ved en ændring i kapacitansen, $c$, som skyldes en ændring i massens, $m$, position. Kapasitansen fører til en ændring i spændingen, som herefter digitaliseres via ADC og kan benyttes af en mikrokontroller som Arduinoen. Dette gøres for de tre akser x, y og z, og accelerationen kan nu måles i alle retninger.
 
 \subsubsection{IMU}
-For at komme problemer til livs bliver begge sensorer brugt og data fra begge to bliver samlet i et såkaldt Kalman-filter. Kalman-filtret kan tilnærmelsesvis ses som et high-pass og low-pass filter. Det taget de hurtige ændringer (high-pass) fra gyroskop-dataene og bruger accelerometer-dataene til at holde det målte og det fysiske nulpunkt ens.
+For at løse problemet med at gyroskopet driver og problemet med at accelerometret ikke er nøjagtig når det bliver påvirket af andre accelerationer end tygdekraften kan man bruge begge sensorer sammen. Man bruger begge sensoreres data og samler dem i et filter. Se mere herom i sektion \ref{sec:filter}.
 
+De fleste moderne accelerometere og gyroskoper kommer i små SMD pakker som er vanskelig håndlodde. Heldigvis er det forholdsvis let at få disse sensorer monteret på et breakoutboard. Efter at have kigget på andre Segway kloner og balancerobotter faldt valget på en IMU fra Sparkfun. Se figur \ref{fig:imu}. En inertial measurement unit, IMU, er en enhed som kombinere flere sensorer.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.3\textwidth]{pictures/imu.jpg}
   \caption[IMU breakoutboard fra Sparkfun]{IMU breakoutboard fra Sparkfun. (CC BY-NC-SA 3.0, Sparkfun)}
   \label{fig:imu}
 \end{figure}
-
-\subsection{Sensor software}
-I²C, wire.h, libraries
-
+IMUen fra Sparkfun et ADXL345 accelerometer og et ITG-3200 gyroskop. Accelerometret og gyroskopet er begge tre-akset. \fxnote{tre-akset?} Det giver IMUen seks frihedsgrader (DOF).
+\subsection{I²C}
+\fxnote{I²C, wire.h, libraries}
 Kommunikation med IMUen sker over en I²C-bus. På bussen er der normalt en master\footnote{Det er mulig at lave et multi-master opstilling hvis alle masterne understøtter det.} og en eller flere slaves. I Swagwayen er Arduinoen master og accelerometeret og gyroskopet er begge slaves. I²C bussen består af to fysiske forbindelser, en serial data linje (SDA) og en clock (SCL). Alle enheder på bussen forbinder til disse to forbindelser. Linjerne er open-drain med eksterne pull-up modstande. Det vil sige at i hver enhed sidder der MOSFETer der trækker spændingen på linjen ned efter behov. De eksterne pull-op modstande trækker linjerne op igen. Se figur \ref{fig:i2cbasic}.
 \begin{figure}[htbp]
   \centering
@@ -163,14 +163,14 @@ Kommunikation med IMUen sker over en I²C-bus. På bussen er der normalt en mast
   \caption{Eksempel på I²C-netværk}
   \label{fig:i2cbasic}
 \end{figure}
-
+\fxnote{3v vs 5v}
 Masteren er den enhed som bestemmer Standard Clock Line, og slaverne er den enhed som lystrer til masteren. Hastigheden på forbindelsen kan være 100KHz, 400KHz eller 3400KHz. Masteren er den eneste som kan starte en forbindelse mellem enhederne, og det gør den ved at starte en sekvens på bussen, som ændrer SDA fra høj til lav. Start sekvensen indikerer i en bit, om masteren vil modtage data fra slaven, eller om den vil sende til slaven. Denne bit, også kaldet LSB eller Least Significant Bit placeres efter syv andre bits, som er slavens adresse. Herefter udsendes endnu en bit, som slaven skal besvare ved at trække SDA lav. Denne bit kaldes ACK som står for acknowledgement, som betyder anerkendelse. Herefter sendes der data via. SDA synkront med clock linen, som afsluttes med endnnu en ACK bit. Til slut skiftes SDA til høj igen, mens SCL beholds høj.  
 \section{Styring}
 Mål: En længerevarende og holdbar løsning til at styre Swagwayens retning.
 Potentiometer, gaffelsensor, strain-gate
 
 \chapter{Control}
-\section{Filter}
+\section{Filter}\label{sec:filter}
 Målet med filtret er at samle dataen fra gyroskopet, accelerometeret og ud fra disse beregne en vinkel, som vi kan benytte til at regulere PWM efter. Ud fra dette mål, udvalgte vi tre filtre, som har de egenskaber vi leder efter.
 \subsection{Komplementær filter}
 \subsection{Kalman filter}
