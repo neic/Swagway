@@ -5,8 +5,8 @@
 \sisetup{per-mode=symbol}
 \microtypesetup{final,verbose=silent}
 \usetikzlibrary{mindmap,arrows,positioning,shapes}
-%\setmainfont[Ligatures={TeX}]{Arno Pro}
-\setmainfont{Linux Libertine O}
+\setmainfont[Ligatures={TeX}]{Arno Pro}
+%\setmainfont{Linux Libertine O}
 \setmathfont{[Asana-Math]}
 %\hfuzz=1pt
 \usepackage[margin,draft]{fixme}
@@ -134,6 +134,21 @@ H\=vor\\
 \end{tabbing}
 \texttt{CleanData()} tager den rå modtaget data, \texttt{readFromUART}, og tilføjer det til en ny buffer, \texttt{rxStringBuffer}, som allerede indeholder en rest data fra sidste gang. Denne buffer bliver splittet og hver pakke bliver indsat i listen \texttt{rxListBuffer}. Den sidste, ikke fuldstændige, pakke bliver lagt tilbage i \texttt{rxStringBuffer} og er klar til at bliver parret sammen ved næste kald af \texttt{CleanData()}:
 \form{151}{157}
+Pakkerne i \texttt{rxListBuffer} bliver renset for alt der står efter “>” og bliver undersøgt om de passer ind i formen for en pakke af en regular expression. Hvis den gør dette bliver, pakken splittet til et array af strings for derefter at bliver parset til et array af floats. Dette array bliver givet vidre til til funktionen \texttt{plotPackage()}:
+\form{159}{189}
+
+\section{Serial send}
+Applikationen kan også sende data. Se hvordan på linje 195--218 af Form1.cs.
+
+\section{Graf}
+\fxwarning{Vis graf}
+Når en ny pakke er blevet renset, bliver hver del af den tilføjet grafen i forskellige serier. Tiden bliver ignoreret. Der bliver så undersøgt om der er pakker over grænseværdien. Hvis der er det bliver de fjernet fra grafen:
+\form{224}{239}
+
+\section{Statuslinje}
+En timer kalder hvert sekund eventhandleren \texttt{timerSample\_Tick} undersøger hvor mange pakker der er tilføjet det sidste sekund. Den skriver antallet til statuslinjen og opdaterer en statusbjælke:
+\form{245}{258}
+
 
 %\chapter{\texttt{Debug\_test.ino}}
 \lstset{language=[Visual]C++,
