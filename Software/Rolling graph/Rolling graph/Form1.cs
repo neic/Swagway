@@ -57,13 +57,13 @@ namespace Rolling_graph
           cbComPort.Items.Add(s); // Føj til listen
         }
 
-      if (cbComPort.Items.Count > 0) // Hvis der er fundet serielporte
+      if (cbComPort.Items.Count > 0) // Hvis der er fundet seriel-porte
         {
-          cbComPort.SelectedIndex = 0; // Sætter den første serielport som standardinstilling
+          cbComPort.SelectedIndex = 0; // Sætter den første seriel-port som standardinstilling
         }
       else
         {
-          lbConnectionStatus.Text = "No COM-ports found"; // Ellers advar i statuslinjen
+          lbConnectionStatus.Text = "No COM-ports found"; // Ellers advarer i statuslinjen
         }
     }
 
@@ -135,12 +135,12 @@ namespace Rolling_graph
       this.BeginInvoke(new EventHandler(ReadToMonitor));
     }
 
-    /* Skriver rå data til monitor, ryderop i monitor og kalder CleanData()*/
+    /* Skriver rå data til monitor, ryder op i monitor og kalder CleanData()*/
     private void ReadToMonitor(object sender, EventArgs e)
     {
       tbMonitor.AppendText(readFromUART); // Tilføjer til monitor
 
-      if (tbMonitor.TextLength > 50000) // Hvis der mere end ca. 2000 pakker
+      if (tbMonitor.TextLength > 50000) // Hvis der mere end ca. 2000 pakker i monitor
         {
           tbMonitor.Lines = tbMonitor.Lines.Skip(20).ToArray(); // Slet 20 linjer
         }
@@ -238,9 +238,9 @@ namespace Rolling_graph
         }
     }
 
-    /*************/
-    /* Statusbar */
-    /*************/
+    /***************/
+    /* Statuslinje */
+    /***************/
 
     /* Udregn antal pakker per sekund */
     private void timerSample_Tick(object sender, EventArgs e) // Kaldes hvert sekund
