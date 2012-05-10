@@ -132,7 +132,7 @@ Pull-up, Bus capasistance, level shifter,
 Et gyroskop måler vinkelhastigheder, hvor hurtigt noget drejer om en akse. En normal 
 
 . Hvis denne vinkelhastighed integreres over tid finder man vinklen gyroskopet har flyttet sig. Problemet med at integrer gyroskopdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt.
-
+Gyroskopet er et ITG 3200. Det er et mikroelektromekanisk system, også kaldet MEMS. Det betyder, at det både er en mekanisk og elektrisk funktion i et system.
 \subsubsection{Accelerometer}
 Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tyngdekræft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnet vinkel forkert.
 
@@ -244,37 +244,38 @@ Der var desuden nogle af ledningene for tætsiddene og loddeøerne var lidt unde
 
 \fxwarning{ref til fig:mosch2.1}
 
-Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten kunne styres med PWM. Dog startede motoren på ca. 30\% fart i den ene retning. Ved at måle på PWM signalet fra mainboardet og signalet til motoren kunne problemet indskrænkes til at være på Motorcontrolleren.
+Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten kunne styres med PWM. Dog startede motoren på ca. 30\% fart uintentionelt i den ene retning. Ved at måle på PWM signalet fra mainboardet og signalet til motoren via. et oscilloskop, kunne problemet indskrænkes til at være på Motorcontrolleren.
 
-Det viste sig efter megen debugging, at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik \texttt{HIGH} lige så hurtigt som forventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino.
+Det viste sig efter megen debugging, at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik \texttt{HIGH} lige så hurtigt som ventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino, for at gennemskue problemet.
 
 \fxwarning{Indsæt diagram over forsøg med optocoupler og HEXFET}
 
-Forsøget viste, at når optocoupleren sad mellem HEXFETen og Arduinoen var der en kapacitet mellem HEXFETens gate og source. Figur \ref{fig:stigetid} viser nederst PWM signalet fra Arduinoen og øverst signalet på P-kanal HTXFETens gate. Man ser tydeligt at det tager en ubelejlig tid før signalet på gaten stiger.
+Forsøget viste, at når optocoupleren sad mellem HEXFETen og Arduinoen var der en ubekendt kapacitet mellem HEXFETens gate og source. Figur \ref{fig:stigetid} viser nederst PWM signalet fra Arduinoen og øverst signalet på P-kanal HTXFETens gate, hvor man tydeligt kan se, at det tager en ubelejlig tid før signalet på gaten stiger.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{pictures/stigetid.jpg}
-  \caption[Oscilloskop billede af stigetid på en P-kanal HEXFET gate]{Oscilloskop billede af stigetid på en P-kanal HEXFET gate. Nederst ses PWM-signalet fra Arduinoen, øverst ses signalet på gaten.}
+  \caption[Oscilloskop billede af stigetid på en P-kanal HEXFET gate]{Oscilloskop billede af stigetid på en P-kanal HEXFET gate. Nederst ses PWM-signalet fra Arduinoen, øverst ses signalet på HEXFETens gate.}
   \label{fig:stigetid}
 \end{figure}
 
-Ved at sætte en mindre pull-up-modstand på kunne den aflades hurtigere, men det var ikke muligt at få den tilpas langt ned til at kunne styre motoren godt. Ved at fjerne optocoupler og køre HEXFETens gate direkte fra Arduinoen eller ved fjerne HEXFETen og måle direkte på optocoupleren, var stigningstiden $\approx0$. Det var kun i kombination mellem HEXFETen og transistoren i optocoupleren at stigningstiden ikke var $\approx0$.
+Ved at sætte en mindre pull-up modstand på, kunne gaten aflades hurtigere, men det var ikke muligt at få den tilpas langt ned til at kunne styre motoren godt. Ved at fjerne optocoupleren og køre HEXFETens gate direkte fra Arduinoen eller ved fjerne HEXFETen og måle direkte på optocoupleren, var stigningstiden $\approx0$. Det var kun i kombination mellem HEXFETen og transistoren i optocoupleren, at stigningstiden ikke var $\approx0$.
 
-Der blev forsøgt med en 4N25 optocoupler istedet for 4N35 og en BC547 istedet for optocoupleren; der var samme stigningstid.
+Der blev forsøgt med en 4N25 optocoupler istedet for 4N35, og en BC547 istedet for optocoupleren; der var samme stigningstid.
 
 Det har ikke været muligt, selv med hjælp fra vejleder, at forklare hvorfor denne kapacitet er der.
 
 Problemet blev ikke løst, det blev bare gjort ubetydeligt: Istedet for at bruge en N- og en P-kanal HEXFET til at bestemme retning og køre PWM på de andre to N- og P-kanal HEXFETer, blev det lavet om til at begge P-kanal HEXFETer blev brugt til at bestemme retning og at N-kanal HEXFETerne bliver brugt at køre PWM. Det er ikke et problem at stigetiden på P-kanal HEXFETerne er langsom da de kun ændre sig når der skiftes retning og ikke med høj frekvens som ved PWM.
 
-For ikke at tilføje flere optocouplere og bruge flere pins på arduinoen blev der, på Motorcontrolleren tilføjet to invertere. Se figur \fxwarning{ref: dia:v3.0}
+For ikke at tilføje flere optocouplere og bruge flere pins på Arduinoen blev der, på motorcontrolleren tilføjet to invertere. Se figur \fxwarning{ref: dia:v3.0}
 \subsection{Motorcontroller v3.0}
 \boarddate{27. marts 2012}
-\fxwarning{Indset diagram over Motorcontroller v3.0 (Figur over printet kan findes i bilag)}
-Efter at der blev tilføjet en inverter på to af gatesne til P-kanal HEXFETerne er denne low når der ikke er spænding på optocouplerne (fx når den ikke er koblet til Mainboardet). Det tænder HEXFETen, det, sammen med N-kanal HEXFETerne som også er tændt uden spænding på optocouplerne, kortslutter H-broen. Motorcontroller v3.0 var fungerede, men det var upraktisk at den var kortsluttet unden at være koblet sammen med Mainboardet.
+\fxwarning{Indsæt diagram over Motorcontroller v3.0 (Figur over printet kan findes i bilag)}
+Efter at der blev tilføjet en inverter på to af gatesne til P-kanal HEXFETerne er denne \texttt{LOW} når der ikke er spænding på optocouplerne (for eksempel når den ikke er koblet til mainboardet). Det tænder HEXFETen sammen med N-kanal HEXFETerne, som også er tændt uden spænding på optocouplerne, hvilket kortslutter H-broen. Motorcontroller v3.0 var fungerede, men det var upraktisk, at den var kortsluttet uden at være koblet sammen med mainboardet.
 
-Pull-up modstandende blev erstattet af pull-down.
+Pull-up modstandende blev derfor erstattet med pull-down modstande.
 \subsection{Motorcontroller v4.0}
-\boarddate{12. april 2012} Dette board blev aldrig lavet færdigt. En stor del af boardet blev re-routed da der var blevet rodet efter mange versioner. Diagram og Figur over printet kan findes i bilag. \fxwarning{ref}
+\boarddate{12. april 2012} Dette board blev aldrig lavet færdigt. 
+En stor del af boardet blev re-routed da der var blevet rodet efter mange versioner. Diagram og Figur over printet kan findes i bilag. \fxwarning{ref}
 
 \subsection{Motorcontroller v4.1}
 \boarddate{13. april 2012}
@@ -282,15 +283,15 @@ Der var en ledning der ikke var routed og der var noget mindre re-routing.
 
 \subsection{Motorcontroller v4.2}
 \boarddate{17. april 2012} Dette board blev aldrig lavet færdigt.
-Formodstandene til optocouplerne blev flyttet fra mainboardet til Motorcontrolleren, for at undgå, at disse blev brændt af.
+For-modstandene til optocouplerne blev flyttet fra mainboardet til motorcontrolleren.
 
 \subsection{Motorcontroller v5.0}
 \boarddate{24. april 2012} Dette board blev aldrig lavet færdigt.
-Der blev tilføjet LEDer til optocouplerne så man kan se hvornår de er tændt, og for at lette debugging.  
+Der blev tilføjet LEDer til optocouplerne, så man kan se, hvornår de er tændt, og for at lette debugging.  
 
 \subsection{Motorcontroller v5.1}
 \boarddate{24. april 2012} Dette board blev aldrig lavet færdigt.
-Nogle pins blev flyttet i fladkablet. 
+Nogle pins blev flyttet rundt i fladkablet for at lette logikken. 
 
 \subsection{Motorcontroller v5.2}
 \boarddate{24. april 2012}
@@ -303,7 +304,9 @@ Nogle pins blev flyttet i fladkablet.
 \end{figure}
 \fxwarning{ref til fig:mosch5.2}
 
-Dette board fungerer og sidder i Swagwayen.
+Boardet v5.2 sidder i Swagway produktet og fungerer. Den nuværende version er en erstatning af et magen til, da dette brændte af under en længerevarende, ellers succesfuld, prøvekørsel.
+
+Motorene danner strøm når de går i frigang, og hvis man derfor kører hurtigt fremad, og ændrer vinklen til et modsatgående fortegn, sendes strømmen tilbage igennem boardet. Der blev derfor tilføjet dioder til at tage strømmen.
 
 \subsection{Motorcontroller v6.0}
 \boarddate{24. april 2012}
@@ -374,10 +377,13 @@ Opmytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og l
 \chapter{Mekanik}
 Motorer, batterier, 
 \chapter{Konklusion} \label{chap:kon}
-Vi satte os de og de mål, vi nåede de og de mål.
+Vores mål var at lave en balance robot, hvor vi havde tilvalgt at lave styring til begge sider, hvis tiden rækkede til det.
+
+Swagwayen fungerer som den står idag, og kan balancere på egen hånd. Det viste sig, at lave styring så den kunne dreje var i overkanten af hvad vi kunne nå inden for den givne tidsramme, hvori vi dog opfyldte vores minimumskrav. Swagwayen kan også køre frem og tilbage med en fører.
 
 \chapter{Perspektivering} \label{chap:per}
-Styring
+Som nævnt i projektbeskrivelsen, ville vi gerne med mere tid, have haft implementeret styring til Swagwayen. 
+
 Kraftigere motorer med mindre gearkasser.
 Encodere
 
