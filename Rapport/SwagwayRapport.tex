@@ -121,6 +121,8 @@ Det kan se som tre isolerede problemstillinger som passer ind i I-C-O-modellen:
 \item[Output] Drive to motore baseret på signalet.
 \end{itemize}
 
+Arduino uno, åbenlyst at bruge denne da vi har modtaget undervisning i dette.
+
 \chapter{Input}
 \section{Sensor}
 Efter nogen research af andre køretøjer og mindre robotter med der fungerer på sammen måde, var det klart at gyroskoper og accelerometere kunne måle vinklen så hurtigt og præcist som det var krævet.
@@ -263,16 +265,24 @@ H-bro, PWM, PWM-kondensator, beskyttelses dioder, 4000 serie, optocopler
 \subsection{Samlet board}
 Det var upraktisk at have alle funktioner på samme board. H-broerne og optocouplerne blev flyttet på sit eget board “Motorcontroller v1.0”.
 
-\subsection{Motorcontroller v1.0}
+\subsection{Motorcontroller v1.0} \fxnote{lav board date til margin note}
 \boarddate{24. januar 2012}
 \fxwarning{Indsæt diagram over Motorcontroller v1.0}
 \fxwarning{Indsæt figur over Motorcontroller v1.0}
+\subsubsection{Det var der galt}
 Boardet virkede ikke. Det opførte sig som det var kortsluttet. Det viste sig, at efter boardet var skilt helt af igen, at det plus tegn der skulle vise polariteten var sat ved den forkerte pol. Printet havde taget skade af at blive loddet på flere gange.
 
-Der var desuden nogle af ledningene for tætsiddene og loddeøerne var lidt underdimensionerede. Der manglede også en mulighed for at se, hvilken vej strømmen løber i H-broerne. Dette blev rettet i v2.0.
-\subsection{Motorcontroller v2.0}
-\boarddate{8. marts 2012} Dette board blev aldrig lavet færdigt; Ledningerne omkring pinheaderen var for tæt efter at loddeøeren blev forstørret. Diagram og figur over printet kan findes i bilag. \fxwarning{ref}
+Der var desuden nogle af ledningene for tætsiddene og loddeøerne var lidt underdimensionerede. Der manglede også en mulighed for at se, hvilken vej strømmen løber i H-broerne.
+\subsubsection{Det blev der rettet}
+Plus tegnet blev flyttet over til den rigtige pol. Ledningerne blev flyttet længere væk fra hinanden, og loddeøernes størrelser forøget.
 
+\subsection{Motorcontroller v2.0}
+\boarddate{8. marts 2012} 
+\subsubsection{Det var der galt}
+Dette board blev aldrig lavet færdigt; Ledningerne omkring pinheaderen var for tæt efter at loddeøeren blev forstørret. Diagram og figur over printet kan findes i bilag. \fxwarning{ref}
+
+\subsubsection{Det blev der rettet}
+Loddeøerne blev gjort en smule mindre for at tillade ledningerners forbipasserend.
 \subsection{Motorcontroller v2.1}
 \boarddate{8 marts 2012}
 \begin{figure}[htbp]
@@ -281,9 +291,8 @@ Der var desuden nogle af ledningene for tætsiddene og loddeøerne var lidt unde
   \caption{Diagram over Motorcontroller v2.1}
   \label{fig:mosch2.1}
 \end{figure}
-
+\subsubsection{Det var der galt}
 \fxwarning{ref til fig:mosch2.1}
-
 Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten kunne styres med PWM. Dog startede motoren på ca. 30\% fart uintentionelt i den ene retning. Ved at måle på PWM signalet fra mainboardet og signalet til motoren via. et oscilloskop, kunne problemet indskrænkes til at være på Motorcontrolleren.
 
 Det viste sig efter megen debugging, at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik \texttt{HIGH} lige så hurtigt som ventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino, for at gennemskue problemet.
@@ -306,35 +315,55 @@ Det har ikke været muligt, selv med hjælp fra vejleder, at forklare hvorfor de
 
 Problemet blev ikke løst, det blev bare gjort ubetydeligt: Istedet for at bruge en N- og en P-kanal HEXFET til at bestemme retning og køre PWM på de andre to N- og P-kanal HEXFETer, blev det lavet om til at begge P-kanal HEXFETer blev brugt til at bestemme retning og at N-kanal HEXFETerne bliver brugt at køre PWM. Det er ikke et problem at stigetiden på P-kanal HEXFETerne er langsom da de kun ændre sig når der skiftes retning og ikke med høj frekvens som ved PWM.
 
-For ikke at tilføje flere optocouplere og bruge flere pins på Arduinoen blev der, på motorcontrolleren tilføjet to invertere. Se figur \fxwarning{ref: dia:v3.0}
+For ikke at tilføje flere optocouplere og bruge flere pins på Arduinoen blev der, på motorcontrolleren tilføjet to invertere.
+\subsubsection{Det blev der rettet}
+Vi byttede om på to P- og N-kanal HEXFETer, så der nu køres PWM på N-kanalen, og P-kanalen bestemmer retning. Derudover blev det tilføjet to invertere på motorcontrolleren. Se figur \fxwarning{ref: dia:v3.0}
+
 \subsection{Motorcontroller v3.0}
 \boarddate{27. marts 2012}
+\subsubsection{Det var der galt} 
 \fxwarning{Indsæt diagram over Motorcontroller v3.0 (Figur over printet kan findes i bilag)}
 Efter at der blev tilføjet en inverter på to af gatesne til P-kanal HEXFETerne er denne \texttt{LOW} når der ikke er spænding på optocouplerne (for eksempel når den ikke er koblet til mainboardet). Det tænder HEXFETen sammen med N-kanal HEXFETerne, som også er tændt uden spænding på optocouplerne, hvilket kortslutter H-broen. Motorcontroller v3.0 var fungerede, men det var upraktisk, at den var kortsluttet uden at være koblet sammen med mainboardet.
 
+\subsubsection{Det blev der rettet}
 Pull-up modstandende blev derfor erstattet med pull-down modstande.
 \subsection{Motorcontroller v4.0}
-\boarddate{12. april 2012} Dette board blev aldrig lavet færdigt. 
+\boarddate{12. april 2012} 
+\subsubsection{Det var der galt} 
+Dette board blev aldrig lavet færdigt. 
 En stor del af boardet blev re-routed da der var blevet rodet efter mange versioner. Diagram og Figur over printet kan findes i bilag. \fxwarning{ref}
-
+\subsubsection{Det blev der rettet}
+Boardet blev rerouted pga. rod.
 \subsection{Motorcontroller v4.1}
 \boarddate{13. april 2012}
+\subsubsection{Det var der galt} 
 Der var en ledning der ikke var routed og der var noget mindre re-routing.
-
+\subsubsection{Det blev der rettet}
+Rettet op på fejl i routing
 \subsection{Motorcontroller v4.2}
-\boarddate{17. april 2012} Dette board blev aldrig lavet færdigt.
+\boarddate{17. april 2012} 
+\subsubsection{Det var der galt} 
+Dette board blev aldrig lavet færdigt.
+For-modstandene til optocouplerene sad på mainboardet af en ukendt årsag. Det virkede mere logisk og praktisk at have disse på motorboardet.
+\subsubsection{Det blev der rettet}
 For-modstandene til optocouplerne blev flyttet fra mainboardet til motorcontrolleren.
-
 \subsection{Motorcontroller v5.0}
-\boarddate{24. april 2012} Dette board blev aldrig lavet færdigt.
-Der blev tilføjet LEDer til optocouplerne, så man kan se, hvornår de er tændt, og for at lette debugging.  
-
+\boarddate{24. april 2012} 
+\subsubsection{Det var der galt} 
+Dette board blev aldrig lavet færdigt.
+Det er svært at debugge motorcontrolleren når man ikke kan se hvad der sker. Optocouplerenes manglende tegn på hvad der sker skabte problemer.
+\subsubsection{Det blev der rettet}
+Der blev tilføjet LEDer til optocouplerne.
 \subsection{Motorcontroller v5.1}
-\boarddate{24. april 2012} Dette board blev aldrig lavet færdigt.
-Nogle pins blev flyttet rundt i fladkablet for at lette logikken. 
-
+\boarddate{24. april 2012} 
+\subsubsection{Det var der galt} 
+Dette board blev aldrig lavet færdigt.
+Logikken blev ændret pga. en fejl.
+\subsubsection{Det blev der rettet}
+Nogle ledninger i fladkablet blev byttet om.
 \subsection{Motorcontroller v5.2}
 \boarddate{24. april 2012}
+
 \fxwarning{Board brænder af}
 \begin{figure}[htbp]
   \centering
@@ -343,11 +372,12 @@ Nogle pins blev flyttet rundt i fladkablet for at lette logikken.
   \label{fig:mosch5.2}
 \end{figure}
 \fxwarning{ref til fig:mosch5.2}
-
+\subsubsection{Det var der galt} 
 Boardet v5.2 sidder i Swagway produktet og fungerer. Den nuværende version er en erstatning af et magen til, da dette brændte af under en længerevarende, ellers succesfuld, prøvekørsel.
 
-Motorene danner strøm når de går i frigang, og hvis man derfor kører hurtigt fremad, og ændrer vinklen til et modsatgående fortegn, sendes strømmen tilbage igennem boardet. Der blev derfor tilføjet dioder til at tage strømmen.
-
+Motorene danner strøm når de går i frigang, og hvis man derfor kører hurtigt fremad, og ændrer vinklen til et modsatgående fortegn, sendes strømmen tilbage igennem boardet. Der blev derfor tilføjet beskyttelses dioder for at tage strømmen.
+\subsubsection{Det blev der rettet}
+Der blev til v6.0 tilføjet beskyttelses dioder til kredsløbet, for at tage strømmen fra motorene.
 \subsection{Motorcontroller v6.0}
 \boarddate{24. april 2012}
 
@@ -392,28 +422,42 @@ Motorene danner strøm når de går i frigang, og hvis man derfor kører hurtigt
 
 \subsection{Mainboard v1.0}
 \boarddate{24 jan 2012}
-Mainboardets loddeøer var underdimmentioneret\issue{1}, hvilket betyder, at lodninger blev besværlige.Yderligere var det ikke til at komme til at trykke på resetknappen på Arduinoen, da shieldet dækkede over knappen.\issue{2} Der blev tilføjet en reset knap på mainboardet, i den følgende version. Der blev også tilføjet et stik til datamodtagning fra styringen på mainboardet.\issue{12}
-
+\subsubsection{Det var der galt}
+Mainboardets loddeøer var underdimensioneret\issue{1}, hvilket betyder, at lodninger blev besværlige. Yderligere var det ikke til at komme til at trykke på resetknappen på Arduinoen, da shieldet dækkede over knappen.\issue{2} 
+\subsubsection{Det blev der rettet}
+Der blev tilføjet en reset knap på mainboardet, i den følgende version. Der blev også tilføjet et stik til datamodtagning fra styringen på mainboardet.\issue{12}
+Derudover blev loddeøerne udvidet.
 \subsection{Mainboard v2.0}
 \boarddate{1 marts 2012}
-Logik kredsløbet blev kasseret. Efterfølgende blev der brugt tre Arduino pins per motor.\issue{21} Display-boardet blev ligeledes kasseret.\issue{9} Pinheaderne til 9V og IMUen var desuden for tæt sammen, hvilket blev rettet i den nyeste version.\issue{13}
-
+\subsubsection{Det var der galt}
+Logik kredsløbet blev kasseret. Efterfølgende blev der brugt tre Arduino pins per motor.\issue{21} Display-boardet blev ligeledes kasseret.\issue{9} Pinheaderne til 9V og IMUen var desuden for tæt sammen.\issue{13}
+\subsubsection{Det blev der rettet}
+Pinheader til 9V batteri og IMU blev flttet længere væk fra hinanden. Nyt logik implementeret.
 \subsection{Mainboard v3.0}
-\boarddate{26 marts 2012} Dette board blev aldrig lavet færdig.
+\boarddate{26 marts 2012} 
+\subsubsection{Det var der galt}
+Dette board blev aldrig lavet færdig.
 På boardet blev der dog tilføjet pins til en radio, hvis formål er at kunne ændre reguleringsværdierne trådløst.\issue{29}
+\subsubsection{Det blev der rettet}
+
 
 \subsection{Mainboard v3.1}
 \boarddate{29 marts 2012}
-For-modstandene til optocouplerne på mainboardet blev flyttet til motorboardet, for at samle komponenterne på en smartere måde.\issue{37}
-Derudover blev pinheaderen til IMUen lavet om fra 2×7 til 2×5, da dette var tilstrækkeligt og mere minimalistisk.
-
+\subsubsection{Det var der galt}
+For-modstandene var placeret på mainboardet, hvilket var ulogisk.\issue{37}
+Pinheader til IMU passer med en 5×2 socket, men der er placeret en 7×2 på boardet.
+\subsubsection{Det blev der rettet}
+For-modstandene blev flyttet fra mainboardet til motorcontrolleren. Pinheaderen til IMUen blev lavet om.
 \subsection{Mainboard v4.0}\label{sec:main40}
 \boarddate{24 april 2012}
+\subsubsection{Det var der galt}
 Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden.\issue{42} Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på motorcontrolleren kørte langsommere end den anden. 
-Problement blev isoleret til, at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også, at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns, men med samme forskel på begge hjul.
+Problement blev isoleret til, at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også, at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. 
 
-Opmytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
+\subsubsection{Det blev der rettet}
+Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns, men med samme forskel på begge hjul.
 
+Ombytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
 \chapter{Mekanik}
 Motorer, batterier, 
 \chapter{Konklusion} \label{chap:kon}
