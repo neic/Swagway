@@ -58,7 +58,19 @@
 
 \begin{document}
 % \includepdf{forside.pdf} \clearpage%------------------------ Forside
+\vfill
+\noindent
+{\fontsize{90}{108}\selectfont \color{red!80!black}\titlevar}\\
+{\color{blue!90!black}
+{\LARGE \authorvar}\\
+\datevar}
 
+\begin{center}
+  \includegraphics[width=0.3\textheight]{pictures/swagway.jpg}
+\end{center}
+\vfill
+\thispagestyle{empty}
+\clearpage
 \begin{center}
   \if\pretitlevar 0
   \else{\Large\pretitlevar\\} \fi
@@ -117,7 +129,16 @@ To sensorer, drift.
 Pull-up, Bus capasistance, level shifter,
 
 \subsubsection{Gyroskop}
+Et gyroskop måler vinkelhastigheder, hvor hurtigt noget drejer om en akse. En normal 
+
+. Hvis denne vinkelhastighed integreres over tid finder man vinklen gyroskopet har flyttet sig. Problemet med at integrer gyroskopdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt.
+
 Gyroskopet er et ITG 3200. Det er et mikroelektromekanisk system, også kaldet MEMS. Det betyder, at det både er en mekanisk og elektrisk funktion i et system.
+
+\subsubsection{Accelerometer}
+Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tyngdekræft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnet vinkel forkert.
+
+%For at komme begge problemer til livs bliver begge sensorer brugt og data fra begge to bliver samlet i et såkaldt Kalman-filter. Kalman-filtret kan tilnærmelsesvis ses som et high-pass og low-pass filter. Det taget de hurtige ændringer (high-pass) fra gyroskop-dataene og bruger accelerometer-dataene til at holde det målte og det fysiske nulpunkt ens.
 
 \begin{figure}[htbp]
   \centering
