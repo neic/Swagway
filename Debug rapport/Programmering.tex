@@ -13,19 +13,19 @@
 \fxusetheme{color}
 
 \newcommand{\authorvar}{Mathias~Dannesbo}
-\newcommand{\pretitlevar}{Programmering C eksamen:}
-\newcommand{\titlevar}{Swagway Debugger} 
+\newcommand{\pretitlevar}{Programmering~C~eksamen:}
+\newcommand{\titlevar}{Swagway~Debugger} 
 \newcommand{\subtitlevar}{0} 
 \newcommand{\datevar}{\today} 
-\newcommand{\subjectvar}{Programmering C}
-\newcommand{\classvar}{}
+\newcommand{\subjectvar}{Programmering~C}
+\newcommand{\classvar}{EUC Nord: HTX Frederikshavn, f11htx3.B}
 \newcommand{\teachervar}{}
 
 \makepagestyle{articlehead}
-\makeevenhead{articlehead}{}{\titlevar}{}
+\makeevenhead{articlehead}{\authorvar}{\subjectvar: \titlevar\\\classvar}{\datevar}
 \makeevenfoot{articlehead}{}{\thepage}{}
-\makeoddhead{articlehead}{}{\titlevar}{}
-\makeoddfoot{articlehead}{}{}{\thepage}
+\makeoddhead{articlehead}{\authorvar}{\subjectvar: \titlevar\\\classvar}{\datevar}
+\makeoddfoot{articlehead}{}{\thepage}{}
 \pagestyle{articlehead}
 
 \usepackage{listings,textcomp}
@@ -73,32 +73,32 @@
  \datevar\\
 \end{center}
 \begin{abstract}
-  This journal is a walk-thorugh of the source code of Swagway Debugger, a Windows application for debugging and tuning filters, e.g. Kalman-filters, on balancing robots and Segway clones. It is made as a part of the Swagway project.
+This journal is a walk-through of the source code of Swagway Debugger, a Windows application for debugging and tuning Kalman-filters, on balancing robots and Segway clones. It is made as a part of the Swagway project.
 \end{abstract}
 \thispagestyle{empty}
 
 \chapter{Indledning}
-Formålet med opgaven er at lave et stykke software der kan bruges sammen med forfatterens eksamenprojekt i Teknikfag~A:~El. Formålet med teknikfags projektet er at bygge en Segway klon, en motoriseret selvbalancrende tohjulet trasportenhed. Navnet på Segway klonen er Swagway. Under udviklingen af Swagway blev der behov for et stykke software til at teste et filter.\footnote{Websiden for hele projekter findes på \url{https://github.com/neic/Swagway}. Derfra er der adgang til alt kildekode, rapporter og andre skriftlige fremstillinger.}
+Formålet med opgaven er at lave et stykke software der kan bruges sammen med forfatterens eksamenprojekt i Teknikfag~A:~El. Formålet med teknikfags projektet er at bygge en Segway klon, en motoriseret selvbalancrende tohjulet transportenhed. Navnet på teknikfag~A-projektet er Swagway. Under udviklingen af Swagway blev der behov for et stykke software til at teste et filter.\footnote{Websiden for hele projekter findes på \url{https://github.com/neic/Swagway}. Derfra er der adgang til alt kildekode, rapporter og andre skriftlige fremstillinger.}
 
 \subsubsection{Kort beskrivelse af Swagway funktion}
-For at Swagway kan holde sig lodret skal den kende vinklen den er fra lodret. Det udregner den ved at læse data fra to sensorer: et accelerometer og et gyroskob.
+For at Swagway kan holde sig lodret skal den kende vinklen den er fra lodret. Det udregner den ved at læse data fra to sensorer: et accelerometer og et gyroskop.
 
-Et gyroskob kan måle vinkelhastigheder. Det vil sige ændringer i vinklen. Hvis denne vinkelhastighed integreres over tid finder man vinklen gyroskobet har flyttet sig. Problemet med at integrer gyroskobdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt.
+Et gyroskop kan måle vinkelhastigheder. Det vil sige ændringer i vinklen. Hvis denne vinkelhastighed integreres over tid finder man vinklen gyroskopet har flyttet sig. Problemet med at integrer gyroskopdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt.
 
-Et accelerometer kan måle accelerationer. Man kan med hjælp fra tanges og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tygdekræft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnet vinkel forkert.
+Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tyngdekræft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnet vinkel forkert.
 
-For at komme begge problemer til livs bliver begge sensorer brugt og data fra begge to bliver samlet i et såkaldt Kalman-filter. Kalman-filtret kan tilnærmelses ses som et high-pass og low-pass filter. Det taget de hurtige ændringer (high-pass) fra gyroskob-dataene og bruger accelerometer-dataene til at holde det målte og det fysiske nulpunkt over ens.
+For at komme begge problemer til livs bliver begge sensorer brugt og data fra begge to bliver samlet i et såkaldt Kalman-filter. Kalman-filtret kan tilnærmelsesvis ses som et high-pass og low-pass filter. Det taget de hurtige ændringer (high-pass) fra gyroskop-dataene og bruger accelerometer-dataene til at holde det målte og det fysiske nulpunkt ens.
 
 \subsubsection{Swagway Debugger}
-For at teste om Kalman-filtret er implementeret og tunet korrekt er det nødvendig at sammenligne de tre vinkler fra hhv. gyroskobet, accelerometert og kalmanfiltret. En måde at gøre dette på er ved at sende disse data fra elektronikken på Swagwayen til en PC og vise den grafisk. Det er her Swagway~Debugger-softwaren kommer ind i billedet.
+For at teste om Kalman-filtret er implementeret og tunet korrekt er det nødvendig at sammenligne de tre vinkler fra hhv. gyroskopet, accelerometeret og Kalman-filtret. En måde at gøre dette på er ved at sende disse data fra elektronikken på Swagwayen til en PC og vise dem grafisk. Det er her Swagway~Debugger-softwaren kommer ind i billedet.
 
-Swagway~Debugger modtager data fra en Arduino mikrocontroller på Swagwayen over en seriel-port og skriver dataene på en graf. Som der står i produktbeskrivelsen:
+Swagway~Debugger modtager data, over en seriel-port, fra en Arduino microcontroller på Swagwayen og skriver dataene på en graf. Som der står i produktbeskrivelsen:
 \begin{quotation}
   Opgaven er at lave software der kan modtage data fra en Arduino over en serielport og visualiserer det. Softwaren er til test af filtereringen af data fra et gyroskop og accelerometer. Softwaren viser bl.a. et rullende plot, samt nogle viserinstrumenter.
 \end{quotation}
 
 \chapter{Udførelse}
-Swagway~Debugger er skrevet på Windows i C\# som en Windows Form Application. Der er ingen eksterne afhængighedder; det bruger kun Microsoft biblioteker: \fxwarning{Er dette biblioteker?}
+Swagway~Debugger er skrevet på Microsoft Windows i C\# som en Windows Form Application. Der er ingen eksterne afhængighedder; det bruger kun Microsoft biblioteker:
 \form{9}{12}
 Der er fem globale variabler:
 \form{18}{23}
@@ -111,18 +111,18 @@ De tre første er buffere der bliver brugt til midlertidig at gemme modtaget dat
   % \caption[]{}
   % \label{fig:}
 \end{figure}
-Ved opstart af applikationen indlæses alle tilgængelige serial-porte og der sættes en standardinstilling for valget af seriel hastighed:
+Ved opstart af applikationen indlæses alle tilgængelige serial-porte og der sættes en standardindstilling for valget af seriel hastighed:
 \form{34}{39}
 Ved afslutning af applikationen lukkes en eventuel åben seriel-port:
 \form{41}{48}
 
-\texttt{LoadSerialPorts()} kaldes ved opstart og af knappet \texttt{btReload}. Den føjer alle systemets serial-porte til listen, sætter den første seriel-port som standardindstilling og advare i statuslinjen hvis der ikke er fundet seriel-porte:
+\texttt{LoadSerialPorts()} kaldes ved opstart og ved tryk knappen \texttt{btReload}. Den føjer alle systemets serial-porte til listen, sætter den første seriel-port som standardindstilling og advare i statuslinjen hvis der ikke er fundet nogle seriel-porte:
 \form{50}{68}
 
 % btReload_Click undladt
-Eventhandleren for \texttt{btConnect} både forbinder og afbryder til en seriel-port. Hvis der er afbrud finder den hvilken serielport og hastighed der er valgt, forbinder og opdaterer statuslinjen og dens egen tekst. Hvis der er oprettet forbindelse afbryder den og ligeledes opdaterer statuslinjen og dens egen tekst:
+Eventhandleren for \texttt{btConnect} både forbinder og afbryder til en seriel-port. Hvis der er afbrud finder den hvilken seriel-port og hastighed der er valgt, forbinder og opdaterer statuslinjen og dens egen tekst til “Disconnect”. Hvis der er oprettet forbindelse afbryder den og ligeledes opdaterer statuslinjen og dens egen tekst til “Connect”:
 \form{76}{104}
-NumericUpDown-tælleren, \texttt{udPackages}, bestemmer hvor meget data der skal vises på grafen. Når værdien i tælleren ændres ændre den dynamisk skala. Endeligt kalder opdaterer den grafens X-akses maksimal værdi:
+NumericUpDown-tælleren, \texttt{udPackages}, bestemmer hvor meget data der skal vises på grafen. Når værdien i tælleren ændres ændre den dynamisk skala. Endeligt opdaterer den grafens X-akses maksimalværdi:
 \form{106}{125}
 
 \section{Seriel modtagelse og monitor}
@@ -134,23 +134,22 @@ NumericUpDown-tælleren, \texttt{udPackages}, bestemmer hvor meget data der skal
 \end{figure}
 Når der, efter der er forbundet til en seriel-port, ankommer data lægges det i bufferen \texttt{readFromUART} og \texttt{ReadToMonitor} kaldes:
 \form{131}{136}
-\texttt{ReadToMonitor} Skriver den modtaget data, \texttt{readFromUART}, direkte til monitoren uden at vidrebehandle den. Den undesøger om der er meget data i monitoren og sletter en smugle af det ældste hvis det er tilfældet. Til slut kalder den \texttt{CleanData()}.
+\texttt{ReadToMonitor} Skriver den modtaget data, \texttt{readFromUART}, direkte til monitoren uden at behandle den. Den undesøger om der er meget data i monitoren og sletter en smugle af det ældste hvis det er tilfældet. Til slut kalder den \texttt{CleanData()}.
 \form{138}{149}
 Datapakkerne fra Swagwayen er af formen $<\langle \text{gyro} \rangle,\langle \text{acc} \rangle,\langle \text{kalm} \rangle,\langle \text{tid} \rangle>$
 \begin{tabbing}
 H\=vor\\
-\> $\langle \text{gyro} \rangle$ er vinklen målt med gyroskobet med to decimaler og eventuelt negativt fortegn,\\
-\> $\langle \text{acc} \rangle$ er vinklen målt med accelerometret med to decimaler og eventuelt negativt fortegn,\\
-\> $\langle \text{gyro} \rangle$ er vinklen udregnet af Kalman-filtret  med to decimaler og eventuelt negativt fortegn og\\
-\> $\langle \text{tid} \rangle$ er tiden i µS siden sidste pakke blev sendt.
+\> $\langle \text{gyro} \rangle$ er vinklen målt med gyroskopet med to decimaler og eventuelt negativt fortegn,\\
+\> $\langle \text{acc} \rangle$ er vinklen målt med accelerometeret med to decimaler og eventuelt negativt fortegn,\\
+\> $\langle \text{gyro} \rangle$ er vinklen udregnet af Kalman-filtret med to decimaler og eventuelt negativt fortegn og\\
+\> $\langle \text{tid} \rangle$ er tiden i \si{µS} siden sidste pakke blev sendt.
 \end{tabbing}
-\texttt{CleanData()} tager den rå modtaget data, \texttt{readFromUART}, og tilføjer det til en ny buffer, \texttt{rxStringBuffer}, som allerede indeholder en rest data fra sidste gang. Denne buffer bliver splittet og hver pakke bliver indsat i listen \texttt{rxListBuffer}. Den sidste, ikke fuldstændige, pakke bliver lagt tilbage i \texttt{rxStringBuffer} og er klar til at bliver parret sammen ved næste kald af \texttt{CleanData()}:
+\texttt{CleanData()} tager den rå modtaget data, \texttt{readFromUART}, og tilføjer det til en ny buffer, \texttt{rxStringBuffer}. Den indeholder allerede en rest data fra sidste gang. Denne buffer bliver splittet og hver pakke bliver indsat i listen \texttt{rxListBuffer}. Den sidste, ikke fuldstændige, pakke bliver lagt tilbage i \texttt{rxStringBuffer} og er klar til at bliver parret sammen ved næste kald af \texttt{CleanData()}:
 \form{151}{157}
-Pakkerne i \texttt{rxListBuffer} bliver renset for alt der står efter “>” og bliver undersøgt om de passer ind i formen for en pakke af en regular expression. Hvis den gør dette bliver, pakken splittet til et array af strings for derefter at bliver parset til et array af floats. Dette array bliver givet vidre til til funktionen \texttt{plotPackage()}:
+Pakkerne i \texttt{rxListBuffer} bliver renset for alt der står efter “>” og bliver undersøgt om de passer ind i formen for en pakke af en regular expression. Hvis den gør dette bliver pakken splittet til et array af \texttt{string}s for derefter at bliver parset til et array af \texttt{float}s. Dette array bliver givet vidre til til funktionen \texttt{plotPackage()}:
 \form{159}{189}
 
-\section{Serial send}
-Applikationen kan også sende data. Se hvordan på linje 195--218 af Form1.cs.
+Applikationen kan også sende data. Det er undladt af journalen. Se hvordan virker på linje 195--218 af Form1.cs.
 
 \section{Graf}
 \begin{figure}[htbp]
@@ -159,7 +158,7 @@ Applikationen kan også sende data. Se hvordan på linje 195--218 af Form1.cs.
   % \caption[]{}
   % \label{fig:}
 \end{figure}
-Når en ny pakke er blevet renset, bliver hver del af den tilføjet grafen i forskellige serier. Tiden bliver ignoreret. Der bliver så undersøgt om der er pakker over grænseværdien. Hvis der er det bliver de fjernet fra grafen:
+Når en ny pakke er blevet renset, bliver hver del af den tilføjet grafen i forskellige serier. Tiden bliver ignoreret. Der bliver så undersøgt om der er flere pakker end grænseværdien. Hvis der er det, bliver de fjernet fra grafen:
 \form{224}{239}
 
 \section{Statuslinje}
@@ -167,12 +166,12 @@ En timer kalder hvert sekund eventhandleren \texttt{timerSample\_Tick} undersøg
 \form{245}{258}
 
 \chapter{\texttt{Debug\_test.ino}}
-Swagway projektet med gyroskob og accelerometer er afleveret, så for at teste Swagway Debugger er der lavet et lille test program til en Arduino. Til Arduinoen er der tilkoblet to potentiometre til at simulere data fra gyroskob og accelerometer. Den del af softwares som har intresse er den som sender pakken med data:
+Swagway projektet med gyroskopet og accelerometeret er afleveret, så for at teste Swagway Debugger er der lavet et lille test program til en Arduino. Til Arduinoen er der tilkoblet to potentiometerere til at simulere data fra gyroskop og accelerometer. Den del af softwaren som har interesse er den som sender pakken med data:
 \lstset{language=[Visual]C++,
   morekeywords={[2]abs,acos,asin,atan,atan2,ceil,constrain,cos,degrees,exp,floor,log,map,max,min,radians,random,randomSeed,round,sin,sq,sqrt,tan,bitRead,bitWrite,bitSet,bitClear,bit,highByte,lowByte,analogReference,analogRead,analogWrite,attachInterrupt,detachInterrupt,delay,delayMicroseconds,digitalWrite,digitalRead,interrupts,millis,micros,noInterrupts,noTone,pinMode,pulseIn,shiftIn,shiftOut,tone,Serial,Serial1,Serial2,Serial3,begin,end,peek,read,print,println,available,flush,setTimeout,find,findUntil,parseInt,parseFloat,readBytes,readBytesUntil},
   keywordstyle={[2]\bfseries\color[rgb]{0.8,0.33,0}}}
 \lstinputlisting[firstnumber=88,firstline=88,lastline=99]{../Software/Debug_test/Debug_test.ino}
 
 \chapter{Konklusion}
-Software blev udviklet og opfyldte både de mål der blev sat samt at hjælpe med Teknologi~A projektet.
+Softwaren blev udviklet og opfyldte både de mål der blev sat i programmering~C, samt blev brugt i teknikfag~A-projektet til at teste Kalman-filteret.
 \end{document}
