@@ -130,6 +130,12 @@ To sensorer, drift.
 \subsection{Sensor hardware}
 Pull-up, Bus capasistance, level shifter,
 
+Gyroskoper og accelerometere har indtaget forbrugerens produkter, og kortlægger allerede nu deres bevægelser. De faldende priser og faldene energiforbrug har gjort, at gyroskoper og accelerometere er langt mere tilgængelige for alle. Mobiltelefoner, spilkonsoller og kameraer kan nu måle hvordan du bevæger dig, og flere og flere enheder importerer også disse bevægelses sensorer, for at adskille sig fra de andre.
+
+Disse bevægelses sensorer er avancerede MEMS (mikroelektromekaniske systemer) teknologier, som inkoorpererer gyroskoper, accelerometere, kompas sensorer, kameraer og GPS modtagere. Bevægelses behandling foretages oftest med en kombination af to sensorer, for at få optimal præcision.
+I dette projekt har vi arbejdet med gyroskoper og accelerometere, som vi også kender fra vores smart phones. Swagwayen skal, lige som en smartphone kan måle om den står eller ligger ned, måle i hvilken vinkel den står i. \fxnote{Check om vi har forklaret at der er brug for begge komponenter}  
+
+
 \subsubsection{Gyroskop}
 Et gyroskop måler vinkelhastigheder, hvor hurtigt noget drejer om en akse. En normal 
 
@@ -141,6 +147,14 @@ Gyroskopet er et ITG 3200. Det er et mikroelektromekanisk system, også kaldet M
 Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tyngdekræft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnet vinkel forkert.
 
 %For at komme begge problemer til livs bliver begge sensorer brugt og data fra begge to bliver samlet i et såkaldt Kalman-filter. Kalman-filtret kan tilnærmelsesvis ses som et high-pass og low-pass filter. Det taget de hurtige ændringer (high-pass) fra gyroskop-dataene og bruger accelerometer-dataene til at holde det målte og det fysiske nulpunkt ens.
+
+
+
+
+\fxnote{ http://invensense.com/mems/gyro/documents/whitepapers/InvenSense-MEMSMotionProcessing-ConsumerProducts-3DUIWhitepaper-031210.pdf figur1 fig:memsacc} 
+
+Et accelerometer måler en bevægelse, som enten er forårsaget af tyngdekraften eller en bevægelse. Som set på figur \ref{fig:memsacc} måles accelerationen ved en ændring i kapacitansen (c), som skyldes en ændring i massens (m) position. Kapasitansen fører til en ændring i spændingen, som herefter digitaliseres kan derefter benyttes af en mikrokontroller som Arduinoen. Dette gøres for de tre akser x, y og z, og accelerationen kan nu måles i alle retninger.
+
 
 \begin{figure}[htbp]
   \centering
