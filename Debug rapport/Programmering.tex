@@ -108,6 +108,33 @@ Ved opstart af applikationen indlæses alle tilgængelige serial-porte og der s�
 Ved afslutning af applikationen lukkes en eventuel åben seriel-port:
 \form{41}{48}
 
+\texttt{LoadSerialPorts()} kaldes ved opstart og af knappet \texttt{btReload}. Den føjer alle systemets serial-porte til listen, sætter den første seriel-port som standardindstilling og advare i statuslinjen hvis der ikke er fundet seriel-porte:
+\form{50}{68}
+
+% btReload_Click undladt
+Eventhandleren for \texttt{btConnect} både forbinder og afbryder til en seriel-port. Hvis der er afbrud finder den hvilken serielport og hastighed der er valgt, forbinder og opdaterer statuslinjen og dens egen tekst. Hvis der er oprettet forbindelse afbryder den og ligeledes opdaterer statuslinjen og dens egen tekst:
+\form{76}{104}
+Up-Down tælleren%fix
+\texttt{udPackages} bestemmer hvor meget data der skal vises på grafen. Når værdien i tælleren ændres ændre den dynamisk skala. Endeligt kalder opdaterer den grafens X-akses maksimal værdi:
+\form{106}{125}
+
+\section{Seriel modtagelse og monitor}
+\fxwarning{Vis monitor}
+Når der, efter der er forbundet til en seriel-port, ankommer data lægges det i bufferen \texttt{readFromUART} og \texttt{ReadToMonitor} kaldes:
+\form{131}{136}
+\texttt{ReadToMonitor} Skriver den modtaget data, \texttt{readFromUART}, direkte til monitoren uden at vidrebehandle den. Den undesøger om der er meget data i monitoren og sletter en smugle af det ældste hvis det er tilfældet. Til slut kalder den \texttt{CleanData()}.
+\form{138}{149}
+Datapakkerne fra Swagwayen er af formen $<\langle \text{gyro} \rangle,\langle \text{acc} \rangle,\langle \text{kalm} \rangle,\langle \text{tid} \rangle>$
+\begin{tabbing}
+H\=vor\\
+\> $\langle \text{gyro} \rangle$ er vinklen målt med gyroskobet med to decimaler og eventuelt negativt fortegn,\\
+\> $\langle \text{acc} \rangle$ er vinklen målt med accelerometret med to decimaler og eventuelt negativt fortegn,\\
+\> $\langle \text{gyro} \rangle$ er vinklen udregnet af Kalman-filtret  med to decimaler og eventuelt negativt fortegn og\\
+\> $\langle \text{tid} \rangle$ er tiden i µS siden sidste pakke blev sendt.
+\end{tabbing}
+\texttt{CleanData()} tager den rå modtaget data, \texttt{readFromUART}, og tilføjer det til en ny buffer, \texttt{rxStringBuffer}, som allerede indeholder en rest data fra sidste gang. Denne buffer bliver splittet og hver pakke bliver indsat i listen \texttt{rxListBuffer}. Den sidste, ikke fuldstændige, pakke bliver lagt tilbage i \texttt{rxStringBuffer} og er klar til at bliver parret sammen ved næste kald af \texttt{CleanData()}:
+\form{151}{157}
+
 %\chapter{\texttt{Debug\_test.ino}}
 \lstset{language=[Visual]C++,
   morekeywords={[2]abs,acos,asin,atan,atan2,ceil,constrain,cos,degrees,exp,floor,log,map,max,min,radians,random,randomSeed,round,sin,sq,sqrt,tan,bitRead,bitWrite,bitSet,bitClear,bit,highByte,lowByte,analogReference,analogRead,analogWrite,attachInterrupt,detachInterrupt,delay,delayMicroseconds,digitalWrite,digitalRead,interrupts,millis,micros,noInterrupts,noTone,pinMode,pulseIn,shiftIn,shiftOut,tone,Serial,Serial1,Serial2,Serial3,begin,end,peek,read,print,println,available,flush,setTimeout,find,findUntil,parseInt,parseFloat,readBytes,readBytesUntil},
