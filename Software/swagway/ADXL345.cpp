@@ -3,7 +3,7 @@
 /*                                               */
 /* Author: Mathias Dannesbo <neic@neic.dk> and   */
 /*         Carl-Emil Grøn Christensen            */
-/* Time-stamp: <2012-04-04 18:04:52 (neic)>      */
+/* Time-stamp: <2012-05-11 04:52:13 (neic)>      */
 /* Part of the Swagway project                   */
 /* https://github.com/neic/Swagway               */
 /*                                               */
@@ -23,7 +23,6 @@ void ADXL345::init(unsigned int address)
   _dev_address = address;
   setStandbyMode();
   setMeasureMode();
-
 }
 
 void ADXL345::setStandbyMode()
