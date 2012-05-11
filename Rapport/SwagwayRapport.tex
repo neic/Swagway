@@ -1,7 +1,7 @@
 \documentclass[a4paper,11pt,oneside,article,danish,table]{memoir}
 \checkandfixthelayout
 \XeTeXtracingfonts= 1
-\usepackage{babel,microtype,verbatim,threeparttable,amsmath,amssymb,unicode-math,hyperref,siunitx,mhchem,tikz,pgfplots,tikz-timing}
+\usepackage{babel,microtype,verbatim,threeparttable,amsmath,amssymb,unicode-math,hyperref,siunitx,mhchem,tikz,pgfplots,tikz-timing,pdfpages}
 \sisetup{per-mode=symbol}
 \microtypesetup{final,verbose=silent}
 \usetikzlibrary{mindmap,arrows,positioning,shapes}
@@ -83,6 +83,8 @@
 
 \thispagestyle{empty}
 \clearpage
+\includepdf{TroogLove.pdf}
+\includepdf{TroogLove.pdf}
 \begin{center}
   \if\pretitlevar 0
   \else{\Large\pretitlevar\\} \fi
@@ -655,7 +657,7 @@ Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns
 Ombytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
 
 \chapter{Mekanik}
-Mekanikken i Swagwayen består af to 24V DC motorer som hver kan trække 8A. Motorene blev anskaffet fra en gammel kørestol, som havde en top fart af cirka \SI{13}{\kilometer\per\hour}. Motorene drives af to \SI{18}{\ampere\hour} batterier.
+Mekanikken i Swagwayen består af to 24V DC motorer som hver kan trække 8A. Motorene blev anskaffet fra en gammel kørestol, som havde en top fart af cirka \SI{13}{km\per h}. Motorene drives af to \SI{18}{\ampere h} batterier.
 
 \chapter{Konklusion} \label{chap:kon}
 Vores mål var at lave en balance robot, hvor vi havde tilvalgt at lave styring til begge sider, hvis tiden rækkede til det.
