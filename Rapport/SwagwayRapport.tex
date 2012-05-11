@@ -216,23 +216,33 @@ Værdierne og navnene er hentet ud fra databladet til ADXL345. \cite{adxl345} At
 
 Efterfølgene er der defineret en klasse med alle funktioner relateret til accelerometeret:
 \adxlh{37}{49}
-\begin{center}
-  \vdots
-\end{center}
 
-I \texttt{ADXL345.cpp} er funktionalitet skrevet. Som eksempel er her tre af de første funktioner er begge til opsætning af accelerometret:
+I \texttt{ADXL345.cpp} er funktionalitet skrevet. Som eksempel er her tre af de første funktioner er begge til opsætning af accelerometret.
 
-\subsubsection{\texttt{setMeasureMode()}}
+\subsubsection{setMeasureMode()}
+
 \adxlc{33}{36}
-\lstinline{setMeasureMode()} skriver til registret \lstinline{POWER_CTL}. Funktionaliteten af \lstinline{POWER_CTL} er beskrevet i \cite{ADXL345}\fxwarning{fix ref}. \lstinline{POWER_CTL}s adresse er, som tidligere beskrevet, defineret i \texttt{ADXL345.h}. \lstinline{MEASUREMODE} er en sekvens af otte bits (en byte) somm hvis de skrives i \lstinline{POWER_CTL}, vil sætte accelerometret i måle tilstand. Sekvensen er ligledes udledt af \cite{ADXL345}\fxwarning{fix ref}. Den er i dette tilfælde \texttt{0000\,0000}\fxwarning{opdater sekvensen}
+\lstinline{setMeasureMode()} skriver til power control registret, \lstinline{POWER_CTL}. Funktionaliteten af \lstinline{POWER_CTL} er beskrevet i \cite{ADXL345}\fxwarning{fix ref}. \lstinline{POWER_CTL}s adresse er, som tidligere beskrevet, defineret i \texttt{ADXL345.h}. \lstinline{MEASUREMODE} er en sekvens af otte bits (en byte) somm hvis de skrives i \lstinline{POWER_CTL}, vil sætte accelerometret i måle tilstand. Sekvensen er ligledes udledt af \cite{ADXL345}\fxwarning{fix ref}. Den er i dette tilfælde \texttt{0000\,0000}\fxwarning{opdater sekvensen}
 
-\subsubsection{\texttt{getOutputRate()}}
+\subsubsection{getOutputRate()}
+
 \adxlc{38}{42}
 \lstinline{getOutputRate()} læser registret \lstinline{BW_RATE}, ligger dataene i en buffer og retunerer aflæsningen.
 
-\subsubsection{\texttt{setFullRes()}}
+\subsubsection{setFullRes()}
+
 \adxlc{56}{60}
-\lstinline{setFullRes()} skriver en
+\lstinline{setFullRes()} skal kun ændre \emph{en} bit i registret \lstinline{DATA_FORMAT}. For at bebeholde de andre bits læser den først det som står i registret og gemmer det i en buffer. \lstinline{1 << 3} betyder en bit shiftet tre pladser til venstre: \lstinline{00001000}.  \lstinline{~(1 << 3)} er Bitwise NOT værdien af dette: \lstinline{11110111}. Det bliver AND med bufferen, \lstinline{(_buff[0] & ~(1 << 3))}. Det er lig med alle de bit som er sat i bufferen pånær den fjerde sidste. Altså: den sætter den fjerde sidste bit til 0 og bibeholder alle andre. \lstinline{(_fullRes << 3)} er værdien der skal sættes shiftet tre pladser til venstre: \lstinline{0000x000}. Disse to værdi bliver til slut OR med hindanden og den fjerde sidste bit er nu ændret til værdien af \lstinline{_fullRes} uden at nogle andre bits bliver ændret. Denne værdi bliver nu skrevet tilbage i samme buffer.
+
+To andre eksempler på funktionaliteten af \texttt{ADXL345.cpp}. Disse funktioner har med modtagelse af data at gøre.
+
+\subsubsection{isRawDataReady()}
+\adxlc{75}{79}
+Accelerometeret har et register med interrupt flag, \lstinline{INT_SOURCE}. \lstinline{isRawDataReady()} læser dette register og gemmer det i en buffer. Bufferen bliver shiftet syv pladser til højre og  \lstinline{isRawDataReady()} retunere en bool værdi alt efter om interrupt flaget er sat.
+
+\subsubsection{readAccRaw()}
+\adxlc{99}{105}
+Dataende i accelerometeret fylder seks registre af 8 bit. Hver akse fylder to registre hvoraf det første er den mindst betydene. \lstinline{readAccRav()} læser \lstinline{DATAX0} og seks registre frem. Dataene bliver lagt i et buffer-array. Den mest betydene af de to bytes som høre sammen bliver shiftet 8 pladser til venstre og derefter AND med den mindst betydene. De to bytes bliver sat sammen direkte efter hindanden. Værdierne bliver retuneret til tre integer-pointers.
 
 \section{Styring}
 Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det ønskes ikke, at enheden efter forholdsvis kort tid skulle udskiftes eller repareres. Vi overvejede fem forskellige løsninger: En lineær potentiometer, et drejepotentiometer, gaffelsensor, strain-gate og stepper motor.
