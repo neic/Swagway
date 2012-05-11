@@ -163,7 +163,6 @@ De fleste moderne accelerometere og gyroskoper kommer i små SMD pakker som er v
 IMUen fra Sparkfun et ADXL345 accelerometer og et ITG-3200 gyroskop. Accelerometret og gyroskopet er begge tre-akset. \fxnote{tre-akset?} Det giver IMUen seks frihedsgrader (DOF). Swagwayen skal dog kun bruge tre frihedsgrader; to akser fra accelerometret og en fra gyroskopet, men IMUen med seks frihedsgrader var det mindste med digital interface.
 
 \subsection{I²C}
-\fxnote{I²C, wire.h, libraries}
 Kommunikation med IMUen sker digital over en I²C-bus. På bussen er der en master\footnote{Det er mulig at lave et multi-master opstilling hvis alle masterne understøtter det.} og en eller flere slaves. I Swagwayen er Arduinoen master og accelerometeret og gyroskopet er begge slaves. I²C bussen består af to fysiske forbindelser, en serial data linje (SDA) og en clock (SCL). Alle enheder på bussen forbinder til disse to forbindelser. Linjerne er open-drain med eksterne pull-up modstande. Det vil sige at i hver enhed sidder der MOSFETer der trækker spændingen på linjen mod GND efter behov. De eksterne pull-op modstande trækker linjerne op igen. Se figur \ref{fig:i2cbasic}.
 \begin{figure}[htbp]
   \centering
@@ -202,9 +201,9 @@ At læse et register er lidt mere omfattende:
  Wire.endTransmission(); // afslutter sessionen
 \end{lstlisting}
 
+\subsection{IMU biblioteker}
+Til at begynde med kørte
 
-
-Masteren er den enhed som bestemmer Standard Clock Line, og slaverne er den enhed som lystrer til masteren. Hastigheden på forbindelsen kan være 100KHz, 400KHz eller 3400KHz. Masteren er den eneste som kan starte en forbindelse mellem enhederne, og det gør den ved at starte en sekvens på bussen, som ændrer SDA fra høj til lav. Start sekvensen indikerer i en bit, om masteren vil modtage data fra slaven, eller om den vil sende til slaven. Denne bit, også kaldet LSB eller Least Significant Bit placeres efter syv andre bits, som er slavens adresse. Herefter udsendes endnu en bit, som slaven skal besvare ved at trække SDA lav. Denne bit kaldes ACK som står for acknowledgement, som betyder anerkendelse. Herefter sendes der data via. SDA synkront med clock linen, som afsluttes med endnnu en ACK bit. Til slut skiftes SDA til høj igen, mens SCL beholds høj.  
 \section{Styring}
 Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det ønskes ikke, at enheden efter forholdsvis kort tid skulle udskiftes eller repareres. Vi overvejede fem forskellige løsninger: En lineær potentiometer, et drejepotentiometer, gaffelsensor, strain-gate og stepper motor.
 \subsection{Lineær potentiometer} \fxnote{billede af linæert potentiometer}
