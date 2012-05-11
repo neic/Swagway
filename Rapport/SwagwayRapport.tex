@@ -226,15 +226,15 @@ I \texttt{ADXL345.cpp} er funktionalitet skrevet. Eksempelvis to af de første f
 
 \section{Styring}
 Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det ønskes ikke, at enheden efter forholdsvis kort tid skulle udskiftes eller repareres. Vi overvejede fem forskellige løsninger: En lineær potentiometer, et drejepotentiometer, gaffelsensor, strain-gate og stepper motor.
-\subsection{Lineær potentiometer} \fxnote{billede af linæert potentiometer}
-Et lieært potentiometer fungerer som et normalt potentiometer, dog trækkes "armen" i en sliske som set på HERPADERP NIGGER DICK BILLEDE. 
+\subsection{Lineær potentiometer} \fxnote{billede af linæert potentiometer fig:linpot}
+Et lieært potentiometer fungerer som et normalt potentiometer, dog trækkes "armen" i en sliske som set på figur \ref{fig:linpot}
 Potentiometret skal placeres i bunden af stangen, hvorefter potentiometrets arm trækkes med stangens bevægelse. Herefter vil man kunne ændre på PWM signalet til motorene, og på den måde dreje. Løsningen er simpel at udføre, og vil virke let i praksis.
 
-Ulempen ved denne løsning er dog, at potentiometret hurtigt slides op ved brug, og det er derfor ikke en holdbar løsning.
+Ulempen ved denne løsning er dog, at potentiometret hurtigt slides op ved brug, og det er derfor ikke en holdbar løsning. \fxwarning{wut?}
 \subsection{Dreje potentiometer}
 Samme princip fra det lineæere potentiometer gælder her. Derimod drejes dette potentiometer i stedet for om sin egen akse. Ideen med dette var, at man let kan implementere den i toppen af Swagwayens styr, og så styre PWM signalet til motorerene sådan. 
 
-Lige som det lineæere potentiometer, slides denne løsning hurtigt, og er derfor ikke holdbar. Derudover er denne løsning ikke lige så intuitiv og føles klodset, hvilket ikke er det vi ønsker med produktet.
+Lige som det linæere potentiometer, slides denne løsning hurtigt, og er derfor ikke holdbar. Derudover er denne løsning ikke lige så intuitiv og føles klodset, hvilket ikke er det vi ønsker med produktet.
 \subsection{Gaffelsensor}
 Gaffelsensorer benyttes i gamle kuglemuse, som vi alle nok kender. Gaffelsensorene måler hvor meget noget har flyttet sig ved at analysere bevægelsen i forhold til nogle bånd buede bånd, i to krysende retninger. Ud fra bevægelsen kan gaffelsensoren bestemme, hvordan kuglen har bevæget sig i dens socket. En lignende anordning kunne placeres i bunden af stangen lige som det lineæere potentiometer, og en kugle kunne skubbes rundt lige som i en mus, for at bestemme stangens hældningen. Løsningen er meget præcis hvis den er lavet mekanisk godt.
 
@@ -250,6 +250,8 @@ Det sværeste ved denne løsning er, at implementere den.
 
 Hvis tiden havde rækket til det, havde vi derfor valgt denne som den umiddelbare løsning.
 \chapter{Control}
+\section{Hoved \lstinline{loop()}}
+\fxerror{Skriv om main loop}
 \section{Filter}\label{sec:filter}
 Målet med filtret er at samle dataen fra gyroskopet, accelerometeret og ud fra disse beregne en vinkel, som vi kan benytte til at regulere PWM efter. Ud fra dette mål, udvalgte vi tre filtre, som har de egenskaber vi leder efter.
 \subsection{Komplementær filter}
@@ -264,7 +266,7 @@ For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold til vinkle
 \subsection{Lineær}
 Den simpleste og mest basale reguleringsteknik til at holde Swagwayen i balance er et lineært filter. Her mappes PWM mellem et og treddive, hvorefter den forøges med en, hver gang vinklen stiger med en i den ene eller anden retning. Swagwayen vil derfor stige lineært i hastighed med den vinkel som den hælder med.
 
-Den lineære regulering fungerer fint o
+Den lineære regulering fungerer fint o \fxwarning{her mangler noget}
 \subsection{PID}
 \subsection{Eksponentiel}
 
@@ -524,8 +526,10 @@ Problement blev isoleret til, at Arduinoen ikke sendte PWM med samme frekvens ti
 Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns, men med samme forskel på begge hjul.
 
 Ombytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
+
 \chapter{Mekanik}
-Motorer, batterier, 
+\fxerror{Skriv om Motorer, batterier, etc.}
+
 \chapter{Konklusion} \label{chap:kon}
 Vores mål var at lave en balance robot, hvor vi havde tilvalgt at lave styring til begge sider, hvis tiden rækkede til det.
 
@@ -533,10 +537,9 @@ Swagwayen fungerer som den står idag, og kan balancere på egen hånd. Det vist
 
 \chapter{Perspektivering} \label{chap:per}
 Som nævnt i projektbeskrivelsen, ville vi gerne med mere tid, have haft implementeret styring til Swagwayen. 
-
+\fxerror{her mangler noget}
 Kraftigere motorer med mindre gearkasser.
 Encodere
-
 
 \clearpage
 \listoftables
@@ -546,7 +549,7 @@ Encodere
 \clearpage \appendix
 
 \chapter{Arbejdsdeling}
-\fxwarning{Tilføj arbejdsdeling}
+\fxerror{Tilføj arbejdsdeling}
 
 \section{Udvikling}
 \section{Praktisk}
