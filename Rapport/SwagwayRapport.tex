@@ -385,6 +385,7 @@ Det var upraktisk at have alle funktioner på samme board. H-broerne og optocoup
 
 \subsection{Motorcontroller v1.0}
 \boarddate{24. januar 2012}
+Se figur \ref{fig:oldmotor} øverst til venstre.
 \fxwarning{Indsæt diagram over Motorcontroller v1.0}
 \fxwarning{Indsæt figur over Motorcontroller v1.0}
 \subsubsection{Det var der galt}
@@ -403,6 +404,7 @@ Dette board blev aldrig lavet færdigt; Ledningerne omkring pinheaderen var for 
 Loddeøerne blev gjort en smule mindre for at tillade ledningerners forbipasserend.
 \subsection{Motorcontroller v2.1}
 \boarddate{8 marts 2012}
+Se figur \ref{fig:oldmotor} øverst i midten.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/MotorcontrollerSch2-1.pdf}
@@ -440,6 +442,7 @@ Vi byttede om på to P- og N-kanal HEXFETer, så der nu køres PWM på N-kanalen
 
 \subsection{Motorcontroller v3.0}
 \boarddate{27. marts 2012}
+Se figur \ref{fig:oldmotor} øverst til højre.
 \subsubsection{Det var der galt} 
 \fxwarning{Indsæt diagram over Motorcontroller v3.0 (Figur over printet kan findes i bilag)}
 Efter at der blev tilføjet en inverter på to af gatesne til P-kanal HEXFETerne er denne \lstinline{LOW} når der ikke er spænding på optocouplerne (for eksempel når den ikke er koblet til mainboardet). Det tænder HEXFETen sammen med N-kanal HEXFETerne, som også er tændt uden spænding på optocouplerne, hvilket kortslutter H-broen. Motorcontroller v3.0 var fungerede, men det var upraktisk, at den var kortsluttet uden at være koblet sammen med mainboardet.
@@ -482,6 +485,7 @@ Logikken blev ændret pga. en fejl.
 Nogle ledninger i fladkablet blev byttet om.
 \subsection{Motorcontroller v5.2}
 \boarddate{24. april 2012}
+Se figur \ref{fig:oldmotor} nederst i midten.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{pictures/fried.jpg}
@@ -503,7 +507,14 @@ Motorene danner strøm når de går i frigang, og hvis man derfor kører hurtigt
 Der blev til v6.0 tilføjet beskyttelses dioder til kredsløbet, for at tage strømmen fra motorene.
 \subsection{Motorcontroller v6.0}
 \boarddate{24. april 2012}
-
+Se figur \ref{fig:oldmotor} nederst til højre.
+\fxnote{her kan skrives noget}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{pictures/oldmotorboards.jpg}
+  \caption[Tidligere versioner af Motorcontrolleren]{Tidligere versioner af Motorcontrolleren. Øverste række fra venstre: v1.0, v2.1, v3.0. Nederst række fra venstre: v?.?, v5.2, v6.0}
+  \label{fig:oldmotor}
+\end{figure}
 \chapter{Auxiliary}
 \begin{table}[htbp]
   \caption{Pin forbindelser på Arduino}
