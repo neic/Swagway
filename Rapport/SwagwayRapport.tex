@@ -263,7 +263,7 @@ Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det 
 Et lieært potentiometer fungerer som et normalt potentiometer, dog trækkes "armen" i en sliske som set på figur \ref{fig:linpot}
 Potentiometret skal placeres i bunden af stangen, hvorefter potentiometrets arm trækkes med stangens bevægelse. Herefter vil man kunne ændre på PWM signalet til motorene, og på den måde dreje. Løsningen er simpel at udføre, og vil virke let i praksis.
 
-Ulempen ved denne løsning er dog, at potentiometret hurtigt slides op ved brug, og det er derfor ikke en holdbar løsning. \fxwarning{wut?}
+Ulempen ved denne løsning er dog, at potentiometret hurtigt slides op ved brug, og det er derfor ikke en holdbar løsning.
 \subsection{Dreje potentiometer}
 Samme princip fra det lineæere potentiometer gælder her. Derimod drejes dette potentiometer i stedet for om sin egen akse. Ideen med dette var, at man let kan implementere den i toppen af Swagwayens styr, og så styre PWM signalet til motorerene sådan. 
 
@@ -381,8 +381,7 @@ En H-bro er fire kontakter sat op som et H, med en motor i midten. A og B kontak
 
 H-broen på Swagwayen er lidt mere kompleks. Hele logikken kan findes på tabel \ref{tab:sandhed}. 
 \section{PWM}
-Pulsbreddemodulation (Pulse-Width-Modulationer en metode til at kontrollere mængden af strøm i elektriske
-apparater. 
+Pulsbreddemodulation (Pulse-Width-Modulationer en metode til at kontrollere mængden af strøm i elektriske apparater. 
 
 PWM leverer strøm ved at sende en impuls, med variabel tid mellem 0 og 255. Jo mere tallet nærmer sig 255, jo længere tid er det elektriske apparat som er tilsluttet tændt. Se figur \ref{fig:pwm}
 
@@ -438,8 +437,6 @@ Det var upraktisk at have alle funktioner på samme board. H-broerne og optocoup
 \subsection{Motorcontroller v1.0}
 \boarddate{24. januar 2012}
 Se figur \ref{fig:oldmotor} øverst til venstre.
-\fxwarning{Indsæt diagram over Motorcontroller v1.0}
-\fxwarning{Indsæt figur over Motorcontroller v1.0}
 \subsubsection{Det var der galt}
 Boardet virkede ikke. Det opførte sig som om det var kortsluttet. Det viste sig, at efter boardet var skilt helt af igen, at det plus tegn der skulle vise polariteten, var sat ved den forkerte pol. Printet havde taget skade af at blive loddet på flere gange.
 
@@ -450,14 +447,14 @@ Plus tegnet blev flyttet over til den rigtige pol. Ledningerne blev flyttet læn
 \subsection{Motorcontroller v2.0}
 \boarddate{8. marts 2012} 
 \subsubsection{Det var der galt}
-Dette board blev aldrig lavet færdigt; Ledningerne omkring pinheaderen var for tæt efter at loddeøeren blev forstørret. Diagram og figur over printet kan findes i bilag. \fxwarning{ref}
+Dette board blev aldrig lavet færdigt; Ledningerne omkring pinheaderen var for tæt efter at loddeøeren blev forstørret.
 
 \subsubsection{Det blev der rettet}
 Loddeøerne blev gjort en smule mindre for at tillade ledningerners forbipasserend.
 
-\subsection{Motorcontroller v2.1}
+\subsection{Motorcontroller v2.1}\label{sec:Motorcontroller2.1}
 \boarddate{8 marts 2012}
-Se figur \ref{fig:oldmotor} øverst i midten.
+Se figur \ref{fig:oldmotor} øverst i midten og figur \ref{fig:mosch2.1}.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/MotorcontrollerSch2-1.pdf}
@@ -465,8 +462,7 @@ Se figur \ref{fig:oldmotor} øverst i midten.
   \label{fig:mosch2.1}
 \end{figure}
 \subsubsection{Det var der galt}
-\label{sec:Motorcontroller2.1}
-\fxwarning{ref til fig:mosch2.1}
+
 Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten kunne styres med PWM. Dog startede motoren på ca. 30\% fart uintentionelt i den ene retning. Ved at måle på PWM signalet fra mainboardet og signalet til motoren via. et oscilloskop, kunne problemet indskrænkes til at være på Motorcontrolleren.
 
 Det viste sig efter megen debugging, at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik \lstinline{HIGH} lige så hurtigt som ventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino, for at gennemskue problemet.
@@ -657,7 +653,7 @@ Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns
 Ombytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
 
 \chapter{Mekanik}
-Mekanikken i Swagwayen består af to 24V DC motorer som hver kan trække 8A. Motorene blev anskaffet fra en gammel kørestol, som havde en top fart af cirka \SI{13}{km\per h}. Motorene drives af to \SI{18}{\ampere h} batterier.
+Mekanikken i Swagwayen består af to 24V DC motorer som hver kan trække 8A. Motorene blev anskaffet fra en gammel kørestol, som havde en top fart af cirka \SI{13}{km\per h}. Motorene drives af to \SI{18}{\ampere h½} batterier.
 
 \chapter{Konklusion} \label{chap:kon}
 Vores mål var at lave en balance robot, hvor vi havde tilvalgt at lave styring til begge sider, hvis tiden rækkede til det.
@@ -676,6 +672,23 @@ Hvis vi fortsætter med projektet på et tidspunkt, skal der også tilføjes enc
 \clearpage \appendix
 
 \chapter{Arbejdsdeling}
+\begin{itemize}
+\item[Indledning] Fælles
+\item[Sensor teori] Carl-Emil
+\item[Sensor: IMU] Mathias
+\item[Sensor: I²C] Mathias
+\item[Sensor: I²C biblioteker] Mathias
+\item[Styring] Carl-Emil
+\item[Hoved loop] Mathias
+\item[Filter] Carl-Emil
+\item[Regulering] Carl-Emil
+\item[Output] Carl-Emil
+\item[Motorcontrolere] Fælles
+\item[Auxiliary] Fælles
+\item[Mekanik] Carl-Emil
+\item[Konklusion] Fælles
+\item[Perspektivering] Fælles
+\end{itemize}
 \fxerror{Tilføj arbejdsdeling}
 
 \section{Udvikling}
