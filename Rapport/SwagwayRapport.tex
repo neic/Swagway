@@ -266,10 +266,25 @@ For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold til vinkle
 \subsection{Lineær}
 Den simpleste og mest basale reguleringsteknik til at holde Swagwayen i balance er et lineært filter. Her mappes PWM mellem et og treddive, hvorefter den forøges med en, hver gang vinklen stiger med en i den ene eller anden retning. Swagwayen vil derfor stige lineært i hastighed med den vinkel som den hælder med.
 
-Den lineære regulering fungerer fint o \fxwarning{her mangler noget}
+Den lineære regulering fungerer fint uden en fører eller med andet formål end blot at balancere.
 \subsection{PID}
-\subsection{Eksponentiel}
+Proportional-Integral-Differential kontroller er en loop feedback mekanisme. PID kontrollerer en stor del af industrielle kontrolsystemer, da det er en feedback controller: Den beregne en "fejl" som er forskellen mellem den ønskede handling og den udførte. PID kontrolleren forsøger herefter at minimere fejlen ved at justere på kontrol input. PID forsøger derfor at opretholde eks. vinklen konstant ved det ønskede, ved hele tiden at justere sig selv. 
 
+PID er delt op i tre dele: 
+Et proportionalt gain $K_P, som ganges med fejlen i systemet.
+Integralet af fejlen over tid, som ganges med $K_I, for at fjerne fejlen omkring nul punktet, også kaldet steady-state.
+Differentialet af hvor hurtig fejlen ændrer sig, ganges med $K_D. Hvis der sker en hurtig ændring, bliver $K_D meget stor for at kompensere.
+
+Disse tre dele gør op for PID, som sørger for, at fejlen justeres lige meget hvilken måde den ændres.
+
+Vi startede med at implementere PID til at regulere den, men erfarede hurtigt at det ikke virkede.\fxwarning{insert old code} For at PID virker, er det vigtigt at den fejl man beregner, stammer fra kilden. Efter som vi ikke havde encodere på motorene kunne vi ikke bestemme hvordan motorene reagerede. Så i stedet for at beregne forskellen mellem den ønskede handling og den udførte, beregnede vi forskellen mellem den ønskede handling og den handling PWM signalet sendte. Da tiden var ved at løbe ud, bestemte vi os for at lade PID og encoderne ligge, og gå videre til en ny løsning.
+\subsection{Eksponentiel}
+I stedet for PID introducerede vi en eksponentiel funktion. Den eksponentielle funktion får PWM signalet til at stige som en normal eksponentiel funktion stiger. Variablerne som funktionen er opstillet efter er fundet ud fra trial and error princippet. Nedenfor ses implementationen af reguleringen:
+\swino{54}{58}
+
+\sqino{168}{180}
+
+Den eksponentielle funktion er den som sidder i det nuværende produkt. Vi kan med denne funktion køre på Swagwayen uden at falde, og den kan holde sin position uden at stå og "rykke" hårdt fra side til side.
 \chapter{Output}
 For at holde Swagwayen i balance, ønsker vi, ligesom Segwayen, at motorene skal kunne køre i begge retninger med en variabel hastighed.
 \section{H-broens virkemåde} \fxnote{insert H bridge pic}
