@@ -278,8 +278,12 @@ Det sværeste ved denne løsning er, at implementere den.
 
 Hvis tiden havde rækket til det, havde vi derfor valgt denne som den umiddelbare løsning.
 \chapter{Control}
-\section{Hoved \lstinline{loop()}}
-\fxerror{Skriv om main loop}
+\section{Hoved loop}
+Hoved loopet i \texttt{swagway.ino} er forholds kort fordi de fleste funktioner er flyttet til biblioteker eller metoder. Hele loopet består af tre \lstinline{if()}-statements. I det første bliver accelerometeret spurgt om der er nye data klar. Hvis det er tilfældet bliver dataende hentet og \lstinline{atac2()} bliver brugt til at udregne vinklen ud fra $xy$-planet. Et flag der indekerer at der er ankommet nye data fra accelerometeret sættes til \lstinline{true}.
+
+Derefter bliver gyroskopet spurgt om der er nye data klar. Hvis de er det bliver de ligeledes hentet. Data fra gyroskopets $z$-akse integrers.\footnote{Integralet af gyroskobets $z$-akse bruges ikke direkte til at balancere. Det sendes kun over serielporten til debugging og tuning af Kalman-filteret.} Et tilsvarende flag der indekerer at der er ankommet nye data fra gyroskopet bliver stat til \lstinline{true}.
+\swino{102}{130}
+Når flagende indikerer at der er nye data fra både accelerometeret og gyroskopet sendes dataende til Kalman-filtert som retunerer en estimeret vinkel. (Se afsnit \ref{sec:filter} for forklaring hvordan det virker.) Vinklen sendes videre til regulering (se afsnit \ref{sec:regulering}) som retunerer en PWM-værdi som sendes til motoren. 
 \section{Filter}\label{sec:filter}
 Målet med filtret er at samle dataen fra gyroskopet, accelerometeret og ud fra disse beregne en vinkel, som vi kan benytte til at regulere PWM efter. Ud fra dette mål, udvalgte vi tre filtre, som har de egenskaber vi leder efter.
 \subsection{Komplementær filter}
@@ -289,7 +293,7 @@ Filtret består af et lav pas filter på accelerometeret, som kun lader længere
 \subsection{Kalman filter}
 Kalman filtret er et professionelt filter, som benyttes i de fleste køretøjer nutildags, da dette filter er yderst præcis. Kalman filtret er desværre også ekstremt svært at forstå, men fungerer i princippet lige som det komplementære: Det fjerne støj fra de to enheder, og reducerer kraftigt deres ulighed. Kalman filtret er klart det bedste da den selv korrigerer dens gain med tiden - den lærer jo længere tid den kører. Desværre kræver Kalman filtret en ekstraoordinær viden inden for matematik.
 
-\section{Regulering}
+\section{Regulering}\label{sec:regulering}
 For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold til vinklen, skal vi bestemme et forhold mellem vinklens hældning og PWM. 
 \subsection{Lineær}
 Den simpleste og mest basale reguleringsteknik til at holde Swagwayen i balance er et lineært filter. Her mappes PWM mellem et og treddive, hvorefter den forøges med en, hver gang vinklen stiger med en i den ene eller anden retning. Swagwayen vil derfor stige lineært i hastighed med den vinkel som den hælder med.
@@ -512,7 +516,7 @@ Se figur \ref{fig:oldmotor} nederst til højre.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/oldmotorboards.jpg}
-  \caption[Tidligere versioner af Motorcontrolleren]{Tidligere versioner af Motorcontrolleren. Øverste række fra venstre: v1.0, v2.1, v3.0. Nederst række fra venstre: v?.?, v5.2, v6.0}
+  \caption[Tidligere versioner af Motorcontrolleren]{Tidligere versioner af Motorcontrolleren. Øverste række fra venstre: v1.0, v2.1, v3.0. Nederst række fra venstre: v4.1, v5.2, v6.0}
   \label{fig:oldmotor}
 \end{figure}
 \chapter{Auxiliary}
