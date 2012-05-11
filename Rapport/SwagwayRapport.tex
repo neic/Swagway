@@ -219,7 +219,7 @@ Det var ikke til at finde et ligende bibliotek til accelerometret, så med inspi
 
 Headerfilen indeholder først definitioner på konstanter som enhedsadressen og registere:
 \adxlh{23}{35}
-Værdierne og navnene er hentet ud fra databladet til ADXL345. \cite{adxl345} At have definitioner på alle konstanter gør koden lættere læselig, så man ikke skal søge referencer i databladet.
+Værdierne og navnene er hentet fra \cite[s. 23]{adxl345} At have definitioner på alle konstanter gør koden lættere læselig, så man ikke skal søge referencer i databladet.
 
 Efterfølgene er der defineret en klasse med alle funktioner relateret til accelerometeret:
 \adxlh{37}{49}
@@ -229,7 +229,7 @@ I \texttt{ADXL345.cpp} er funktionalitet skrevet. Som eksempel er her tre af de 
 \subsubsection{setMeasureMode()}
 
 \adxlc{33}{36}
-\lstinline{setMeasureMode()} skriver til power control registret, \lstinline{POWER_CTL}. Funktionaliteten af \lstinline{POWER_CTL} er beskrevet i \cite{ADXL345}\fxwarning{fix ref}. \lstinline{POWER_CTL}s adresse er, som tidligere beskrevet, defineret i \texttt{ADXL345.h}. \lstinline{MEASUREMODE} er en sekvens af otte bits (en byte) somm hvis de skrives i \lstinline{POWER_CTL}, vil sætte accelerometret i måle tilstand. Sekvensen er ligledes udledt af \cite{ADXL345}\fxwarning{fix ref}. Den er i dette tilfælde \texttt{0000\,0000}\fxwarning{opdater sekvensen}
+\lstinline{setMeasureMode()} skriver til power control registret, \lstinline{POWER_CTL}. Funktionaliteten af \lstinline{POWER_CTL} er beskrevet i \cite[s. 25--26]{adxl345}. \lstinline{POWER_CTL}s adresse er, som tidligere beskrevet, defineret i \texttt{ADXL345.h}. \lstinline{MEASUREMODE} er en sekvens af otte bits (en byte) somm hvis de skrives i \lstinline{POWER_CTL}, vil sætte accelerometret i måle tilstand. Sekvensen er ligledes udledt af \cite{adxl345}. Den er i dette tilfælde \texttt{0000\,1000}.
 
 \subsubsection{getOutputRate()}
 
@@ -239,7 +239,7 @@ I \texttt{ADXL345.cpp} er funktionalitet skrevet. Som eksempel er her tre af de 
 \subsubsection{setFullRes()}
 
 \adxlc{56}{60}
-\lstinline{setFullRes()} skal kun ændre \emph{en} bit i registret \lstinline{DATA_FORMAT}. For at bebeholde de andre bits læser den først det som står i registret og gemmer det i en buffer. \lstinline{1 << 3} betyder en bit shiftet tre pladser til venstre: \lstinline{00001000}.  \lstinline{~(1 << 3)} er Bitwise NOT værdien af dette: \lstinline{11110111}. Det bliver AND med bufferen, \lstinline{(_buff[0] & ~(1 << 3))}. Det er lig med alle de bit som er sat i bufferen pånær den fjerde sidste. Altså: den sætter den fjerde sidste bit til 0 og bibeholder alle andre. \lstinline{(_fullRes << 3)} er værdien der skal sættes shiftet tre pladser til venstre: \lstinline{0000x000}. Disse to værdi bliver til slut OR med hindanden og den fjerde sidste bit er nu ændret til værdien af \lstinline{_fullRes} uden at nogle andre bits bliver ændret. Denne værdi bliver nu skrevet tilbage i samme buffer.
+\lstinline{setFullRes()} skal kun ændre \emph{en} bit i registret \lstinline{DATA_FORMAT}. For at bebeholde de andre bits læser den først det som står i registret og gemmer det i en buffer. \lstinline{1 << 3} betyder en bit shiftet tre pladser til venstre: \texttt{0000\,1000}.  \lstinline{~(1 << 3)} er Bitwise NOT værdien af dette: \texttt{1111\,0111}. Det bliver AND med bufferen, \lstinline{(_buff[0] & ~(1 << 3))}. Det er lig med alle de bit som er sat i bufferen pånær den fjerde sidste. Altså: den sætter den fjerde sidste bit til 0 og bibeholder alle andre. \lstinline{(_fullRes << 3)} er værdien der skal sættes shiftet tre pladser til venstre: \texttt{0000\,x000}. Disse to værdi bliver til slut OR med hindanden og den fjerde sidste bit er nu ændret til værdien af \lstinline{_fullRes} uden at nogle andre bits bliver ændret. Denne værdi bliver nu skrevet tilbage i samme buffer.
 
 To andre eksempler på funktionaliteten af \texttt{ADXL345.cpp}. Disse funktioner har med modtagelse af data at gøre.
 
@@ -271,7 +271,8 @@ En strain-gate løsning er en anordning, som placeres på siden af stangen. Stra
 
 Problemet er dog, at den ikke virker på vores stang, da den er for stiv, og løsningen hverken er intuitiv eller responsiv for forbrugeren. Den er ikke lige til at finde ud af fra første øjekast, og den er sværere at lære.
 \subsection{Stepper motor}
-Det sidste løsningsforslag: Stepper motor. Planen med denne var at foretage den modsatte funktion af hvad man normalt gør med en stepper motor: I stedet for at få motoren til at bevæge noget, skal styret bevæge motoren, hvorefter det måles hvilket step den er på i Arduinoen. Løsningen er ekstremt robust og præcis, som vi kender stepper motorer for. Derudover vil den ikke være modtagelig for omgivelsernes påvirkninger i form af støv eller andet snavs. Yderligere kan steppene geares, så den bliver endnu mere præcis hvis nødvendigt.
+Det sidste løsningsforslag: Stepper motor. Planen med denne var at foretage den modsatte funktion af hvad man normalt gør med en stepper motor: I stedet for at få motoren til at bevæge noget, skal styret bevæge motoren, hvorefter det måles hvilket step den er på i Arduinoen. Løsningen er ekstremt robust og præcis, som vi kender stepper motorer for. Derudover vil den ikke være modtagelig for omgivelsernes påvirkninger i form af støv eller andet snavs. Yderligere kan steppene geares, så den bliver endnu mere præcis hvis nødve
++ndigt.
 
 Det sværeste ved denne løsning er, at implementere den. 
 
