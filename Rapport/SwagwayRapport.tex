@@ -1,4 +1,4 @@
-\documentclass[a4paper,oneside,article,danish,table]{memoir}
+\documentclass[a4paper,11pt,oneside,article,danish,table]{memoir}
 \checkandfixthelayout
 \XeTeXtracingfonts= 1
 \usepackage{babel,microtype,verbatim,threeparttable,amsmath,amssymb,unicode-math,hyperref,siunitx,mhchem,tikz,pgfplots,tikz-timing}
@@ -57,7 +57,7 @@
 \newcommand{\adxlc}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/ADXL345.cpp}}
 \newcommand{\itgh}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/ITG3200.h}}
 \newcommand{\itgc}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/ITG3200.cpp}}
-\newcommand{\boarddate}[1]{\marginpar{\textcolor{blue!80!black}{#1}}}
+\newcommand{\boarddate}[1]{\marginpar{\tiny\textcolor{blue!80!black}{#1}}}
 \newcommand{\issue}[1]{\textsuperscript{\textcolor{blue!80!black}{\href{https://github.com/neic/Swagway/issues/#1}{\##1}}}}
 
 
@@ -335,7 +335,7 @@ Man kan altså sige, at PWM er et on/off system hvor man styrer ved hurtigt, at 
 spændingen. Tiden der går imellem at den er on/off er så kort, at en LED som sådan ikke mærker det. Så
 den vil ikke blinke, men derimod lyse mindre hvis man øger bredden imellem impulserne.
 
-Måden vi styre dette på i en Arduino er via \texttt{analogWrite(pin,\dots);}. Her har vi mulighed for at give en værdi fra 0--255. Dette betyder at \texttt{analogWrite(pin,255);} er 100\% og \texttt{analogWrite(pin,127);} er 50\%. Dette kan også ses på figur \ref{fig:pwm}.\fxwarning{Hele afsnittet skal omskrives}
+Måden vi styre dette på i en Arduino er via \lstinline{analogWrite(pin,\dots);}. Her har vi mulighed for at give en værdi fra 0--255. Dette betyder at \lstinline{analogWrite(pin,255);} er 100\% og \lstinline{analogWrite(pin,127);} er 50\%. Dette kan også ses på figur \ref{fig:pwm}.\fxwarning{Hele afsnittet skal omskrives}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/pwm.pdf}
@@ -414,7 +414,7 @@ Loddeøerne blev gjort en smule mindre for at tillade ledningerners forbipassere
 \fxwarning{ref til fig:mosch2.1}
 Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten kunne styres med PWM. Dog startede motoren på ca. 30\% fart uintentionelt i den ene retning. Ved at måle på PWM signalet fra mainboardet og signalet til motoren via. et oscilloskop, kunne problemet indskrænkes til at være på Motorcontrolleren.
 
-Det viste sig efter megen debugging, at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik \texttt{HIGH} lige så hurtigt som ventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino, for at gennemskue problemet.
+Det viste sig efter megen debugging, at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik \lstinline{HIGH} lige så hurtigt som ventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino, for at gennemskue problemet.
 
 \fxwarning{Indsæt diagram over forsøg med optocoupler og HEXFET}
 
@@ -442,7 +442,7 @@ Vi byttede om på to P- og N-kanal HEXFETer, så der nu køres PWM på N-kanalen
 \boarddate{27. marts 2012}
 \subsubsection{Det var der galt} 
 \fxwarning{Indsæt diagram over Motorcontroller v3.0 (Figur over printet kan findes i bilag)}
-Efter at der blev tilføjet en inverter på to af gatesne til P-kanal HEXFETerne er denne \texttt{LOW} når der ikke er spænding på optocouplerne (for eksempel når den ikke er koblet til mainboardet). Det tænder HEXFETen sammen med N-kanal HEXFETerne, som også er tændt uden spænding på optocouplerne, hvilket kortslutter H-broen. Motorcontroller v3.0 var fungerede, men det var upraktisk, at den var kortsluttet uden at være koblet sammen med mainboardet.
+Efter at der blev tilføjet en inverter på to af gatesne til P-kanal HEXFETerne er denne \lstinline{LOW} når der ikke er spænding på optocouplerne (for eksempel når den ikke er koblet til mainboardet). Det tænder HEXFETen sammen med N-kanal HEXFETerne, som også er tændt uden spænding på optocouplerne, hvilket kortslutter H-broen. Motorcontroller v3.0 var fungerede, men det var upraktisk, at den var kortsluttet uden at være koblet sammen med mainboardet.
 
 \subsubsection{Det blev der rettet}
 Pull-up modstandende blev derfor erstattet med pull-down modstande.
@@ -571,7 +571,7 @@ For-modstandene blev flyttet fra mainboardet til motorcontrolleren. Pinheaderen 
 \boarddate{24 april 2012}
 \subsubsection{Det var der galt}
 Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden.\issue{42} Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på motorcontrolleren kørte langsommere end den anden. 
-Problement blev isoleret til, at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \texttt{AnalogWrite()} ser man også, at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. 
+Problement blev isoleret til, at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \lstinline{AnalogWrite()} ser man også, at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. 
 
 \subsubsection{Det blev der rettet}
 Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns, men med samme forskel på begge hjul.
