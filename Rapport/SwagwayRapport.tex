@@ -393,7 +393,7 @@ Se figur \ref{fig:oldmotor} øverst til venstre.
 \fxwarning{Indsæt diagram over Motorcontroller v1.0}
 \fxwarning{Indsæt figur over Motorcontroller v1.0}
 \subsubsection{Det var der galt}
-Boardet virkede ikke. Det opførte sig som det var kortsluttet. Det viste sig, at efter boardet var skilt helt af igen, at det plus tegn der skulle vise polariteten var sat ved den forkerte pol. Printet havde taget skade af at blive loddet på flere gange.
+Boardet virkede ikke. Det opførte sig som om det var kortsluttet. Det viste sig, at efter boardet var skilt helt af igen, at det plus tegn der skulle vise polariteten, var sat ved den forkerte pol. Printet havde taget skade af at blive loddet på flere gange.
 
 Der var desuden nogle af ledningene for tætsiddene og loddeøerne var lidt underdimensionerede. Der manglede også en mulighed for at se, hvilken vej strømmen løber i H-broerne.
 \subsubsection{Det blev der rettet}
@@ -406,6 +406,7 @@ Dette board blev aldrig lavet færdigt; Ledningerne omkring pinheaderen var for 
 
 \subsubsection{Det blev der rettet}
 Loddeøerne blev gjort en smule mindre for at tillade ledningerners forbipasserend.
+
 \subsection{Motorcontroller v2.1}
 \boarddate{8 marts 2012}
 Se figur \ref{fig:oldmotor} øverst i midten.
@@ -453,6 +454,7 @@ Efter at der blev tilføjet en inverter på to af gatesne til P-kanal HEXFETerne
 
 \subsubsection{Det blev der rettet}
 Pull-up modstandende blev derfor erstattet med pull-down modstande.
+
 \subsection{Motorcontroller v4.0}
 \boarddate{12. april 2012} 
 \subsubsection{Det var der galt} 
@@ -460,12 +462,15 @@ Dette board blev aldrig lavet færdigt.
 En stor del af boardet blev re-routed da der var blevet rodet efter mange versioner. Diagram og Figur over printet kan findes i bilag. \fxwarning{ref}
 \subsubsection{Det blev der rettet}
 Boardet blev rerouted pga. rod.
+
 \subsection{Motorcontroller v4.1}
 \boarddate{13. april 2012}
+Se figur \ref{fig:oldmotor} Nederst til venstre.
 \subsubsection{Det var der galt} 
 Der var en ledning der ikke var routed og der var noget mindre re-routing.
 \subsubsection{Det blev der rettet}
 Rettet op på fejl i routing
+
 \subsection{Motorcontroller v4.2}
 \boarddate{17. april 2012} 
 \subsubsection{Det var der galt} 
@@ -473,6 +478,7 @@ Dette board blev aldrig lavet færdigt.
 For-modstandene til optocouplerene sad på mainboardet af en ukendt årsag. Det virkede mere logisk og praktisk at have disse på motorboardet.
 \subsubsection{Det blev der rettet}
 For-modstandene til optocouplerne blev flyttet fra mainboardet til motorcontrolleren.
+
 \subsection{Motorcontroller v5.0}
 \boarddate{24. april 2012} 
 \subsubsection{Det var der galt} 
@@ -480,6 +486,7 @@ Dette board blev aldrig lavet færdigt.
 Det er svært at debugge motorcontrolleren når man ikke kan se hvad der sker. Optocouplerenes manglende tegn på hvad der sker skabte problemer.
 \subsubsection{Det blev der rettet}
 Der blev tilføjet LEDer til optocouplerne.
+
 \subsection{Motorcontroller v5.1}
 \boarddate{24. april 2012} 
 \subsubsection{Det var der galt} 
@@ -487,6 +494,7 @@ Dette board blev aldrig lavet færdigt.
 Logikken blev ændret pga. en fejl.
 \subsubsection{Det blev der rettet}
 Nogle ledninger i fladkablet blev byttet om.
+
 \subsection{Motorcontroller v5.2}
 \boarddate{24. april 2012}
 Se figur \ref{fig:oldmotor} nederst i midten.
@@ -565,19 +573,21 @@ Mainboardets loddeøer var underdimensioneret\issue{1}, hvilket betyder, at lodn
 \subsubsection{Det blev der rettet}
 Der blev tilføjet en reset knap på mainboardet, i den følgende version. Der blev også tilføjet et stik til datamodtagning fra styringen på mainboardet.\issue{12}
 Derudover blev loddeøerne udvidet.
+
 \subsection{Mainboard v2.0}
 \boarddate{1 marts 2012}
 \subsubsection{Det var der galt}
 Logik kredsløbet blev kasseret. Efterfølgende blev der brugt tre Arduino pins per motor.\issue{21} Display-boardet blev ligeledes kasseret.\issue{9} Pinheaderne til 9V og IMUen var desuden for tæt sammen.\issue{13}
 \subsubsection{Det blev der rettet}
-Pinheader til 9V batteri og IMU blev flttet længere væk fra hinanden. Nyt logik implementeret.
+Pinheaderen til 9V batteriet og IMUen blev flttet længere væk fra hinanden. Derudover blev der implementeret nyt logik.
+
 \subsection{Mainboard v3.0}
 \boarddate{26 marts 2012} 
 \subsubsection{Det var der galt}
 Dette board blev aldrig lavet færdig.
 På boardet blev der dog tilføjet pins til en radio, hvis formål er at kunne ændre reguleringsværdierne trådløst.\issue{29}
 \subsubsection{Det blev der rettet}
-
+-
 
 \subsection{Mainboard v3.1}
 \boarddate{29 marts 2012}
@@ -585,12 +595,13 @@ På boardet blev der dog tilføjet pins til en radio, hvis formål er at kunne �
 For-modstandene var placeret på mainboardet, hvilket var ulogisk.\issue{37}
 Pinheader til IMU passer med en 5×2 socket, men der er placeret en 7×2 på boardet.
 \subsubsection{Det blev der rettet}
-For-modstandene blev flyttet fra mainboardet til motorcontrolleren. Pinheaderen til IMUen blev lavet om.
+For-modstandene blev flyttet fra mainboardet til motorcontrolleren. Pinheaderen til IMUen blev lavet om til en 5×2 socket.
+
 \subsection{Mainboard v4.0}\label{sec:main40}
 \boarddate{24 april 2012}
 \subsubsection{Det var der galt}
 Swagwayen kører med dette board, men den ene motor kørte hurtigere end den anden.\issue{42} Det lignede umiddelbart en mekanisk fejl, men ved at bytte om på ledningerne til motorene viste det sig at den ene kanal på motorcontrolleren kørte langsommere end den anden. 
-Problement blev isoleret til, at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \lstinline{AnalogWrite()} ser man også, at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. 
+Problemet blev isoleret til, at Arduinoen ikke sendte PWM med samme frekvens til begge kanaler. I Arduino referencen for \lstinline{AnalogWrite()} ser man også, at pin 5 og 6 PWM kører fra en anden timer end de andre PWM pins. Tilfældigvis kørte den ene motor på begge af disse pins. 
 
 \subsubsection{Det blev der rettet}
 Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns, men med samme forskel på begge hjul.
@@ -598,7 +609,7 @@ Pin 5 og 9 blev byttet så Swagwayen kører lidt hurtigere forlæns end baglæns
 Ombytningen af de to pins blev gjort ved at bryde kobberbanerne på printet og lodde to ledninger på, der blev ikke lavet et nyt board.
 
 \chapter{Mekanik}
-\fxerror{Skriv om Motorer, batterier, etc.}
+Mekanikken i Swagwayen består af to 24V DC motorer som hver kan trække 8A. Motorene blev anskaffet fra en gammel kørestol, som havde en top fart af cirka \SI{13}{\kilometer\per\hour}. Motorene drives af to \SI{18}{\ampere\hour} batterier.
 
 \chapter{Konklusion} \label{chap:kon}
 Vores mål var at lave en balance robot, hvor vi havde tilvalgt at lave styring til begge sider, hvis tiden rækkede til det.
@@ -606,10 +617,8 @@ Vores mål var at lave en balance robot, hvor vi havde tilvalgt at lave styring 
 Swagwayen fungerer som den står idag, og kan balancere på egen hånd. Det viste sig, at lave styring så den kunne dreje var i overkanten af hvad vi kunne nå inden for den givne tidsramme, hvori vi dog opfyldte vores minimumskrav. Swagwayen kan også køre frem og tilbage med en fører.
 
 \chapter{Perspektivering} \label{chap:per}
-Som nævnt i projektbeskrivelsen, ville vi gerne med mere tid, have haft implementeret styring til Swagwayen. 
-\fxerror{her mangler noget}
-Kraftigere motorer med mindre gearkasser.
-Encodere
+Som nævnt i projektbeskrivelsen, ville vi gerne med mere tid, have haft implementeret styring i form af stepper motorer til Swagwayen. Derudover ville det være interessant at have haft kraftigere motorer med planetgear for at kunne køre hurtigere og holde Swagwayen mere stabil. De store gear i de nuværende motorer gør den for tung, og inertimomentet for stort.
+Hvis vi fortsætter med projektet på et tidspunkt, skal der også tilføjes encodere til motorene for at kunne genimplementere PID for bedre regulering.  
 
 \clearpage
 \listoftables
@@ -633,16 +642,4 @@ Encodere
 \lstinputlisting{../Software/swagway/ADXL345.h}
 \section{\texttt{ADXL345.cpp}}
 \lstinputlisting{../Software/swagway/ADXL345.cpp}
-
-\chapter{Status log}
-
-\section{13. marts}
-Mainbord er fungerende. v2.0 af motorboardet er næsten færdig.
-
-Kredsløbet uden om printne er næsten færdig.
-
-Vi kan læse data fra IMUen og vi har et halvt implementert kalman-filter.
-
-Efter kalmanfilteret fungere skal der implementeres PID med wrapper kode.
-
 \end{document} 
