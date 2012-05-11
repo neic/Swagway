@@ -253,12 +253,18 @@ Hvis tiden havde rækket til det, havde vi derfor valgt denne som den umiddelbar
 \section{Filter}\label{sec:filter}
 Målet med filtret er at samle dataen fra gyroskopet, accelerometeret og ud fra disse beregne en vinkel, som vi kan benytte til at regulere PWM efter. Ud fra dette mål, udvalgte vi tre filtre, som har de egenskaber vi leder efter.
 \subsection{Komplementær filter}
+Det komplementære filter er kendetegnet ved, at det er let at sætte op, fordi det er meget intuitivt. Filtret hjælper også kraftigt på støj og drifting. Derudover er det hurtigt, hvilket betyder at Arduinoen kan beregne vinklen i nærmest real-time. 
+
+Filtret består af et lav pas filter på accelerometeret, som kun lader længerevarende ændringer igennem, hvilket fjerner de problemer accelerometeret har med bevægelses-acceleration. Gyroskopets data passerer igennem et høj pas filter, som fjerner længerevarende ændringer. De længerevarende ændringer som gyroen er udsat for er drifting. Når de to svagheder er reduceret kraftigt vha. det komplementære filter, ender man med en vinkel der ligger meget nær virkeligheden.
 \subsection{Kalman filter}
-\subsection{Modificeret Kalman filter}
+Kalman filtret er et professionelt filter, som benyttes i de fleste køretøjer nutildags, da dette filter er yderst præcis. Kalman filtret er desværre også ekstremt svært at forstå, men fungerer i princippet lige som det komplementære: Det fjerne støj fra de to enheder, og reducerer kraftigt deres ulighed. Kalman filtret er klart det bedste da den selv korrigerer dens gain med tiden - den lærer jo længere tid den kører. Desværre kræver Kalman filtret en ekstraoordinær viden inden for matematik.
 
 \section{Regulering}
-For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold btil vinklen, skal vi bestemme et forhold mellem vinklens hældning og PWM. 
+For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold til vinklen, skal vi bestemme et forhold mellem vinklens hældning og PWM. 
 \subsection{Lineær}
+Den simpleste og mest basale reguleringsteknik til at holde Swagwayen i balance er et lineært filter. Her mappes PWM mellem et og treddive, hvorefter den forøges med en, hver gang vinklen stiger med en i den ene eller anden retning. Swagwayen vil derfor stige lineært i hastighed med den vinkel som den hælder med.
+
+Den lineære regulering fungerer fint o
 \subsection{PID}
 \subsection{Eksponentiel}
 
