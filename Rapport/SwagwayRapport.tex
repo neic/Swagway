@@ -121,7 +121,7 @@ Det kan se som tre isolerede problemstillinger som passer ind i I-C-O-modellen:
 \item[Output] Drive to motore baseret på signalet.
 \end{itemize}
 
-Arduino uno, åbenlyst at bruge denne da vi har modtaget undervisning i dette.
+Projektet er udarbejdet ud fra mikrokontrolleren Arduino Uno, i programmet arduino. Mikrokontrolleren bliver programmeret via. programmet Arduino, som nærmest er i sproget C++ med et Arduino bibliotek. Da vi har modtaget undervisning i denne platform, har dette været det oplagte redskab at benytte til løsningen af vores projekt.
 
 \chapter{Input}
 \section{Sensor}
@@ -140,7 +140,7 @@ Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og dat
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/accbasic.pdf}
-  % \caption[]{}
+  \caption[MEMS accelerometer]{}
   \label{fig:memsacc}
 \end{figure}
 Et accelerometer måler en bevægelse, som enten er forårsaget af tyngdekraften eller en bevægelse. Som set på figur \ref{fig:memsacc} måles accelerationen i et moderne MEMS accelerometer ved en ændring i kapacitansen, $c$, som skyldes en ændring i massens, $m$, position. Kapasitansen fører til en ændring i spændingen, som herefter digitaliseres via ADC og kan benyttes af en mikrokontroller som Arduinoen. Dette gøres for de tre akser x, y og z, og accelerationen kan nu måles i alle retninger.
@@ -211,8 +211,10 @@ For at kontrolere hvorledes Swagwayens motorer bevæger sig i forhold btil vinkl
 
 \chapter{Output}
 For at holde Swagwayen i balance, ønsker vi, ligesom Segwayen, at motorene skal kunne køre i begge retninger med en variabel hastighed.
-\section{H-broens virkemåde}
-H-bro teori
+\section{H-broens virkemåde} \fxnote{insert H bridge pic}
+\label{sec:H-broen}
+H-broen bruges til kontrol af motore. 
+En H-bro er fire kontakter sat op som et H, med en motor i midten. Begge kontakter på en side må ikke være trykkede nede samtidigt, så kører strømmen uden om motoren. Derudover må man ikke tænde for de øverste motore samtidigt, for så kortslutter den. Hvis man derimod tænder for en af de øverste, og så den modsatte nederste kontakt, bevæger motoren sig i den retning strømmen løber. Man tænder altså derfor H-broen i par af to modsatte: Hvis den øverste til højre er tændt, tændes den nederste til venstre også, og hvis den øverste venstre tændes, tændes den nederste til højre også. Hele logikken kan findes på tabel \ref{fig:sandhed}. 
 \section{PWM}
 Pulsbreddemodulation (Pulse-Width-Modulation): Er en metode til at kontrollere spændingen i elektriske
 apparater. Det er en metode til at levere spænding igennem en række impulser i stedet for der konstant er strøm igennem systemet. Ved at øge eller formindske bredden af impulsen kan man kontrollere en motor.
@@ -230,7 +232,11 @@ Måden vi styre dette på i en Arduino er via \texttt{analogWrite(pin,\dots);}. 
 \end{figure}
 
 \section{Overvejelser}
-Vores valg: Dobbelt H-bro med mange chip eller bygge selv. Med eller uden PWM “i bunden”.
+Der er to muligheder under fremstilling af en H-bro. Enten kan der benyttes en simpel H-bro chip, eller man kan fremstille en selv. Chippen er den nemme løsning, som gør alting super let at arbejde med. Dog kan chippen ikke håndtere store strømme, og det var derfor urealistisk at piggy-back dem.
+
+Vi fremstillede derfor selv en H-bro, da den kan klare de store mængder af strøm vi arbejder med, selvom at det er langt mere komplekst og det forøger kraftigt mængden af ting der kan gå galt.
+
+Efter som at motorene skal kunne køres med variable hastigheder, skal der køres PWM på disse. Man kan vælge, om dette skal ske i toppen eller bunden af H-broen som diskuteret før \ref{sec:H-broen}. Vi startede med at gøre dette i toppen, men dette blev senere ændret til bunden, hvilket er dybere beskrevet i motorcontroller v2.1. \ref{sec:Motorcontroller2.1}
 \section{Motorcontroller}
 
 \begin{table}[htbp]
@@ -292,6 +298,7 @@ Loddeøerne blev gjort en smule mindre for at tillade ledningerners forbipassere
   \label{fig:mosch2.1}
 \end{figure}
 \subsubsection{Det var der galt}
+\label{sec:Motorcontroller2.1}
 \fxwarning{ref til fig:mosch2.1}
 Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten kunne styres med PWM. Dog startede motoren på ca. 30\% fart uintentionelt i den ene retning. Ved at måle på PWM signalet fra mainboardet og signalet til motoren via. et oscilloskop, kunne problemet indskrænkes til at være på Motorcontrolleren.
 
