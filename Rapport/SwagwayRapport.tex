@@ -210,8 +210,6 @@ At læse et register er lidt mere omfattende:
 
 Disse to funktioner bliver senere refereret til som hhv. \lstinline{writemem()} og \lstinline{readmem()}.
 
-\fxwarning{skriv om hvad registerne kan}
-
 \subsection{IMU biblioteker}
 I begyndelsen af projektet var alt kommunikationen med ADXL345 og ITG-3200 programmeret i \texttt{swagway.ino}. Det virkede og Arduinoen modtog data fra IMUen, men koden var svær at vedligeholde og gik tit i stykker. Der var desuden en fejl igennem lægere tid der resulterede i at den vinkel der blev udregnet fra gyroskopet, \lstinline{gyroAngle}, var ca. dobbelt så stor som den burde være.\issue{20} Efter mange ufuldendte forsøg på at rette fejlen blev alt gammel kode der var releateret til I²C slettet. Der blev istedet brugt et bibliotek passende til gyroskopet hvor alle funktioner var implementeret. Biblioteket hedder ITG-3200.
 
