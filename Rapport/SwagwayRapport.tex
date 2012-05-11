@@ -145,7 +145,7 @@ Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og dat
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/accbasic.pdf}
-  \caption[MEMS accelerometer]{}
+  \caption{Et accelerometers interne MEMS-struktur}
   \label{fig:memsacc}
 \end{figure}
 Et accelerometer måler en bevægelse, som enten er forårsaget af tyngdekraften eller en bevægelse. Som set på figur \ref{fig:memsacc} måles accelerationen i et moderne MEMS accelerometer ved en ændring i kapacitansen, $c$, som skyldes en ændring i massens, $m$, position. Kapasitansen fører til en ændring i spændingen, som herefter digitaliseres via ADC og kan benyttes af en mikrokontroller som Arduinoen. Dette gøres for de tre akser x, y og z, og accelerationen kan nu måles i alle retninger.
@@ -201,8 +201,28 @@ At læse et register er lidt mere omfattende:
  Wire.endTransmission(); // afslutter sessionen
 \end{lstlisting}
 
+Disse to funktioner bliver senere refereret til som hhv. \lstinline{writemem()} og \lstinline{readmem()}.
+
+\fxwarning{skriv om hvad registerne kan}
+
 \subsection{IMU biblioteker}
-Til at begynde med kørte
+I begyndelsen af projektet var alt kommunikationen med ADXL345 og ITG-3200 programmeret i \texttt{swagway.ino}. Det virkede og Arduinoen modtog data fra IMUen, men koden var svær at vedligeholde og gik tit i stykker. Der var desuden en fejl igennem lægere tid der resulterede i at den vinkel der blev udregnet fra gyroskopet, \lstinline{gyroAngle}, var ca. dobbelt så stor som den burde være.\issue{20} Efter mange ufuldendte forsøg på at rette fejlen blev alt gammel kode der var releateret til I²C slettet. Der blev istedet brugt et bibliotek passende til gyroskopet hvor alle funktioner var implementeret. Biblioteket hedder itg3200.
+
+Det var ikke til at finde et ligende bibliotek til accelerometret, så med inspiration fra itg3200-bibliotekt blev der skrevet et. Biblioteket består af to filer. En headerfil, \texttt{ADXL345.h}, og selve funktionaliteten, \texttt{ADXL345.cpp}.
+
+Headerfilen indeholder først definitioner på konstanter som enhedsadressen og registere:
+\adxlh{23}{35}
+Værdierne og navnene er hentet ud fra databladet til ADXL345. \cite{adxl345} At have definitioner på alle konstanter gør koden lættere læselig, så man ikke skal søge referencer i databladet.
+
+Efterfølgene er der defineret en klasse med alle funktioner relateret til accelerometeret:
+\adxlh{37}{49}
+\begin{center}
+  \vdots
+\end{center}
+
+I \texttt{ADXL345.cpp} er funktionalitet skrevet. Eksempelvis to af de første funktioner:
+\adxlc{28}{36}
+\lstinline{setStandbyMode()} skriver til registret \lstinline{POWER_CTL}. Funktionaliteten af \lstinline{POWER_CTL} er beskrevet i \cite{ADXL345}\fxwarning{fix ref}. \lstinline{POWER_CTL}s adresse er, som tidligere beskrevet, defineret i \texttt{ADXL345.h}. \lstinline{STANDBY_MODE} er en sekvens af otte bits (en byte) som hvis de skrives i \lstinline{POWER_CTL} vil sætte accelerometret i standby. Sekvensen er ligledes udledt af \cite{ADXL345}\fxwarning{fix ref}. Det er i dette tilfælde \texttt{0000\,0000}
 
 \section{Styring}
 Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det ønskes ikke, at enheden efter forholdsvis kort tid skulle udskiftes eller repareres. Vi overvejede fem forskellige løsninger: En lineær potentiometer, et drejepotentiometer, gaffelsensor, strain-gate og stepper motor.
