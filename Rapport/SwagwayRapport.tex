@@ -100,6 +100,7 @@
 \vfill
 \begin{abstract} %------------------------------ Abstract
   \fxwarning{Skriv resume}
+  
 \end{abstract}\vfill
 \noindent
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} ll}
@@ -316,7 +317,8 @@ Differentialet af hvor hurtig fejlen ændrer sig, ganges med $K_D$. Hvis der ske
 
 Disse tre dele gør op for PID, som sørger for, at fejlen justeres lige meget hvilken måde den ændres.
 
-Vi startede med at implementere PID til at regulere den, men erfarede hurtigt at det ikke virkede.\fxwarning{insert old code} For at PID virker, er det vigtigt at den fejl man beregner, stammer fra kilden. Efter som vi ikke havde encodere på motorene kunne vi ikke bestemme hvordan motorene reagerede. Så i stedet for at beregne forskellen mellem den ønskede handling og den udførte, beregnede vi forskellen mellem den ønskede handling og den handling PWM signalet sendte. Da tiden var ved at løbe ud, bestemte vi os for at lade PID og encoderne ligge, og gå videre til en ny løsning.
+Vi startede med at implementere PID til at regulere den, men erfarede hurtigt at det ikke virkede.\fxwarning{insert old code} For at PID virker, er det vigtigt at den fejl man beregner, stammer fra kilden. Efter som vi ikke havde encodere på motorene kunne vi ikke bestemme hvordan motorene reagerede. Så i stedet for at beregne forskellen mellem den ønskede handling og den udførte, beregnede vi forskellen mellem den ønskede handling og den handling PWM signalet sendte. Se figur \ref{fig:pid} for en grafisk forklaring. For at PID kontrollen skal fungere, skal der foretages målinger efter motoren, vist med den blå linje, hvorimod vi foretog målingerne før motoren, vist med den røde linje.
+Da tiden var ved at løbe ud, bestemte vi os for at lade PID og encoderne ligge, og gå videre til en ny løsning.
 
 \begin{figure}[htbp]
   \centering
@@ -356,7 +358,7 @@ Vi startede med at implementere PID til at regulere den, men erfarede hurtigt at
     \draw [dashed, thick, red] (sum21) |- (sum13);
     \draw [dashed, thick, red, ->] (sum13) -- (sum1);
   \end{tikzpicture}
-  % \caption[]{}
+  \caption{Motor regulering}
   \label{fig:pid}
 \end{figure}
 \subsection{Eksponentiel}
