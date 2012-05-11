@@ -220,9 +220,19 @@ Efterfølgene er der defineret en klasse med alle funktioner relateret til accel
   \vdots
 \end{center}
 
-I \texttt{ADXL345.cpp} er funktionalitet skrevet. Eksempelvis to af de første funktioner:
-\adxlc{28}{36}
-\lstinline{setStandbyMode()} skriver til registret \lstinline{POWER_CTL}. Funktionaliteten af \lstinline{POWER_CTL} er beskrevet i \cite{ADXL345}\fxwarning{fix ref}. \lstinline{POWER_CTL}s adresse er, som tidligere beskrevet, defineret i \texttt{ADXL345.h}. \lstinline{STANDBY_MODE} er en sekvens af otte bits (en byte) som hvis de skrives i \lstinline{POWER_CTL} vil sætte accelerometret i standby. Sekvensen er ligledes udledt af \cite{ADXL345}\fxwarning{fix ref}. Det er i dette tilfælde \texttt{0000\,0000}
+I \texttt{ADXL345.cpp} er funktionalitet skrevet. Som eksempel er her tre af de første funktioner er begge til opsætning af accelerometret:
+
+\subsubsection{\texttt{setMeasureMode()}}
+\adxlc{33}{36}
+\lstinline{setMeasureMode()} skriver til registret \lstinline{POWER_CTL}. Funktionaliteten af \lstinline{POWER_CTL} er beskrevet i \cite{ADXL345}\fxwarning{fix ref}. \lstinline{POWER_CTL}s adresse er, som tidligere beskrevet, defineret i \texttt{ADXL345.h}. \lstinline{MEASUREMODE} er en sekvens af otte bits (en byte) somm hvis de skrives i \lstinline{POWER_CTL}, vil sætte accelerometret i måle tilstand. Sekvensen er ligledes udledt af \cite{ADXL345}\fxwarning{fix ref}. Den er i dette tilfælde \texttt{0000\,0000}\fxwarning{opdater sekvensen}
+
+\subsubsection{\texttt{getOutputRate()}}
+\adxlc{38}{42}
+\lstinline{getOutputRate()} læser registret \lstinline{BW_RATE}, ligger dataene i en buffer og retunerer aflæsningen.
+
+\subsubsection{\texttt{setFullRes()}}
+\adxlc{56}{60}
+\lstinline{setFullRes()} skriver en
 
 \section{Styring}
 Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det ønskes ikke, at enheden efter forholdsvis kort tid skulle udskiftes eller repareres. Vi overvejede fem forskellige løsninger: En lineær potentiometer, et drejepotentiometer, gaffelsensor, strain-gate og stepper motor.
