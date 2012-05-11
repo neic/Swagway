@@ -1,4 +1,4 @@
-\documentclass[a4paper,11pt,oneside,article,danish,table]{memoir}
+\documentclass[a4paper,final,11pt,oneside,article,danish,table]{memoir}
 \checkandfixthelayout
 \XeTeXtracingfonts= 1
 \usepackage{babel,microtype,verbatim,threeparttable,amsmath,amssymb,unicode-math,hyperref,siunitx,mhchem,tikz,pgfplots,tikz-timing,pdfpages}
@@ -9,7 +9,7 @@
 \setmainfont{Linux Libertine O}
 \setmathfont{[Asana-Math]}
 %\hfuzz=1pt
-\usepackage[margin,draft]{fixme}
+\usepackage[margin]{fixme}
 \fxusetheme{color}
 
 \newcommand{\authorvar}{Carl-Emil~Grøn~Christensen \& Mathias~Dannesbo}
@@ -22,10 +22,10 @@
 \newcommand{\teachervar}{Allan~Gilarska}
 
 \makepagestyle{articlehead}
-\makeevenhead{articlehead}{}{\titlevar}{}
+\makeevenhead{articlehead}{}{\classvar\\\titlevar}{\datevar}
 \makeevenfoot{articlehead}{}{\thepage}{}
-\makeoddhead{articlehead}{}{\titlevar}{}
-\makeoddfoot{articlehead}{}{}{\thepage}
+\makeoddhead{articlehead}{}{\classvar\\\titlevar}{\datevar}
+\makeoddfoot{articlehead}{}{\thepage}{}
 \pagestyle{articlehead}
 
 \usepackage{listings,textcomp}
@@ -98,10 +98,7 @@
 \end{center}
 
 \vfill
-\begin{abstract} %------------------------------ Abstract
-  \fxwarning{Skriv resume}
-  
-\end{abstract}\vfill
+
 \noindent
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} ll}
   \classvar&\subjectvar\\
@@ -154,7 +151,7 @@ Disse bevægelses sensorer er avancerede MEMS (mikroelektromekaniske systemer) t
 I dette projekt har vi arbejdet med gyroskoper og accelerometere, som vi også kender fra vores smartphones. Swagwayen skal, lige som en smartphone kan måle om den står eller ligger ned, måle i hvilken vinkel den står i.   
 
 \subsubsection{Gyroskop}
-Et gyroskop måler vinkelhastigheder, hvor hurtigt noget drejer om en akse. Hvis denne vinkelhastighed integreres over tid finder man vinklen som gyroskopet har flyttet sig. Problemet med at integrere gyroskopdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt. Moderne gyroskoper er en MEMS. Det betyder, at det både er en mekanisk og elektrisk funktion i et system. /fxnote{hvordan fungerer MEMS i et gyroskop}
+Et gyroskop måler vinkelhastigheder, hvor hurtigt noget drejer om en akse. Hvis denne vinkelhastighed integreres over tid finder man vinklen som gyroskopet har flyttet sig. Problemet med at integrere gyroskopdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt. Moderne gyroskoper er en MEMS. Det betyder, at det både er en mekanisk og elektrisk funktion i et system.
 
 \subsubsection{Accelerometer}
 Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tyngdekraft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnede vinkel forkert, da denne også frembringer en spike i accelerationsmålingen.
@@ -260,8 +257,8 @@ Dataen i accelerometeret fylder seks registre af 8 bit. Hver akse fylder to regi
 
 \section{Styring}
 Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det ønskes ikke, at enheden efter forholdsvis kort tid skulle udskiftes eller repareres. Vi overvejede fem forskellige løsninger: En lineær potentiometer, et drejepotentiometer, gaffelsensor, strain-gate og stepper motor.
-\subsection{Lineær potentiometer} \fxnote{billede af linæert potentiometer fig:linpot}
-Et lieært potentiometer fungerer som et normalt potentiometer, dog trækkes "armen" i en sliske som set på figur \ref{fig:linpot}
+\subsection{Lineær potentiometer} 
+Et lieært potentiometer fungerer som et normalt potentiometer, dog trækkes "armen" i en sliske.
 Potentiometret skal placeres i bunden af stangen, hvorefter potentiometrets arm trækkes med stangens bevægelse. Herefter vil man kunne ændre på PWM signalet til motorene, og på den måde dreje. Løsningen er simpel at udføre, og vil virke let i praksis.
 
 Ulempen ved denne løsning er dog, at potentiometret hurtigt slides op ved brug, og det er derfor ikke en holdbar løsning.
@@ -317,7 +314,7 @@ Differentialet af hvor hurtig fejlen ændrer sig, ganges med $K_D$. Hvis der ske
 
 Disse tre dele gør op for PID, som sørger for, at fejlen justeres lige meget hvilken måde den ændres.
 
-Vi startede med at implementere PID til at regulere den, men erfarede hurtigt at det ikke virkede.\fxwarning{insert old code} For at PID virker, er det vigtigt at den fejl man beregner, stammer fra kilden. Efter som vi ikke havde encodere på motorene kunne vi ikke bestemme hvordan motorene reagerede. Så i stedet for at beregne forskellen mellem den ønskede handling og den udførte, beregnede vi forskellen mellem den ønskede handling og den handling PWM signalet sendte. Se figur \ref{fig:pid} for en grafisk forklaring. For at PID kontrollen skal fungere, skal der foretages målinger efter motoren, vist med den blå linje, hvorimod vi foretog målingerne før motoren, vist med den røde linje.
+Vi startede med at implementere PID til at regulere den, men erfarede hurtigt at det ikke virkede. For at PID virker, er det vigtigt at den fejl man beregner, stammer fra kilden. Efter som vi ikke havde encodere på motorene kunne vi ikke bestemme hvordan motorene reagerede. Så i stedet for at beregne forskellen mellem den ønskede handling og den udførte, beregnede vi forskellen mellem den ønskede handling og den handling PWM signalet sendte. Se figur \ref{fig:pid} for en grafisk forklaring. For at PID kontrollen skal fungere, skal der foretages målinger efter motoren, vist med den blå linje, hvorimod vi foretog målingerne før motoren, vist med den røde linje.
 Da tiden var ved at løbe ud, bestemte vi os for at lade PID og encoderne ligge, og gå videre til en ny løsning.
 
 \begin{figure}[htbp]
@@ -469,8 +466,6 @@ Boardet fungerede umiddelbart. Motoren kunne køre i begge retninger og farten k
 
 Det viste sig efter megen debugging, at spændingen på gaten på P-kanal HEXFETerne (IRF4905) ikke gik \lstinline{HIGH} lige så hurtigt som ventet. Der blev opstillet et forsøg på et breadboard med en P-kanal HEXFET, en optocoupler og en Arduino, for at gennemskue problemet.
 
-\fxwarning{Indsæt diagram over forsøg med optocoupler og HEXFET}
-
 Forsøget viste, at når optocoupleren sad mellem HEXFETen og Arduinoen var der en ubekendt kapacitet mellem HEXFETens gate og source. Figur \ref{fig:stigetid} viser nederst PWM signalet fra Arduinoen og øverst signalet på P-kanal HTXFETens gate, hvor man tydeligt kan se, at det tager en ubelejlig tid før signalet på gaten stiger.
 \begin{figure}[htbp]
   \centering
@@ -489,13 +484,12 @@ Problemet blev ikke løst, det blev bare gjort ubetydeligt: Istedet for at bruge
 
 For ikke at tilføje flere optocouplere og bruge flere pins på Arduinoen blev der, på motorcontrolleren tilføjet to invertere.
 \subsubsection{Det blev der rettet}
-Vi byttede om på to P- og N-kanal HEXFETer, så der nu køres PWM på N-kanalen, og P-kanalen bestemmer retning. Derudover blev det tilføjet to invertere på motorcontrolleren. Se figur \fxwarning{ref: dia:v3.0}
+Vi byttede om på to P- og N-kanal HEXFETer, så der nu køres PWM på N-kanalen, og P-kanalen bestemmer retning. Derudover blev det tilføjet to invertere på motorcontrolleren.
 
 \subsection{Motorcontroller v3.0}
 \boarddate{27. marts 2012}
 Se figur \ref{fig:oldmotor} øverst til højre.
 \subsubsection{Det var der galt} 
-\fxwarning{Indsæt diagram over Motorcontroller v3.0 (Figur over printet kan findes i bilag)}
 Efter at der blev tilføjet en inverter på to af gatesne til P-kanal HEXFETerne er denne \lstinline{LOW} når der ikke er spænding på optocouplerne (for eksempel når den ikke er koblet til mainboardet). Det tænder HEXFETen sammen med N-kanal HEXFETerne, som også er tændt uden spænding på optocouplerne, hvilket kortslutter H-broen. Motorcontroller v3.0 var fungerede, men det var upraktisk, at den var kortsluttet uden at være koblet sammen med mainboardet.
 
 \subsubsection{Det blev der rettet}
@@ -505,7 +499,7 @@ Pull-up modstandende blev derfor erstattet med pull-down modstande.
 \boarddate{12. april 2012} 
 \subsubsection{Det var der galt} 
 Dette board blev aldrig lavet færdigt. 
-En stor del af boardet blev re-routed da der var blevet rodet efter mange versioner. Diagram og Figur over printet kan findes i bilag. \fxwarning{ref}
+En stor del af boardet blev re-routed da der var blevet rodet efter mange versioner.
 \subsubsection{Det blev der rettet}
 Boardet blev rerouted pga. rod.
 
@@ -547,7 +541,7 @@ Se figur \ref{fig:oldmotor} nederst i midten.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{pictures/fried.jpg}
-  \caption[]{En HEXFET på Motorcontroller v5.2 der er brændt af}
+  \caption{En HEXFET på Motorcontroller v5.2 der er brændt af}
   \label{fig:fried}
 \end{figure}
 \begin{figure}[htbp]
@@ -556,9 +550,8 @@ Se figur \ref{fig:oldmotor} nederst i midten.
   \caption{Diagram over Motorcontroller v5.2}
   \label{fig:mosch5.2}
 \end{figure}
-\fxwarning{ref til fig:mosch5.2}
 \subsubsection{Det var der galt} 
-Boardet v5.2 sidder i Swagwayen og fungerer. Den nuværende version er en erstatning af et magen til, da dette brændte af under en længerevarende, ellers succesfuld, prøvekørsel. Se figur \ref{fig:fried}. \fxnote{her kan skrived mere}
+Boardet v5.2 sidder i Swagwayen og fungerer. Den nuværende version er en erstatning af et magen til, da dette brændte af under en længerevarende, ellers succesfuld, prøvekørsel. Se figur \ref{fig:fried}.
 
 Motorene danner strøm når de går i frigang, og hvis man derfor kører hurtigt fremad, og ændrer vinklen til et modsatgående fortegn, sendes strømmen tilbage igennem boardet. Der blev derfor tilføjet beskyttelses dioder for at tage strømmen.
 \subsubsection{Det blev der rettet}
@@ -566,7 +559,6 @@ Der blev til v6.0 tilføjet beskyttelses dioder til kredsløbet, for at tage str
 \subsection{Motorcontroller v6.0}
 \boarddate{24. april 2012}
 Se figur \ref{fig:oldmotor} nederst til højre.
-\fxnote{her kan skrives noget}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/oldmotorboards.jpg}
@@ -691,11 +683,6 @@ Hvis vi fortsætter med projektet på et tidspunkt, skal der også tilføjes enc
 \item[Konklusion] Fælles
 \item[Perspektivering] Fælles
 \end{itemize}
-\fxerror{Tilføj arbejdsdeling}
-
-\section{Udvikling}
-\section{Praktisk}
-\section{Skriftligt}
 
 \chapter{Kildekode}
 
