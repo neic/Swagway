@@ -52,6 +52,11 @@
     {å}{{\aa}}1
 }
 
+\newcommand{\swino}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/swagway.ino}}
+\newcommand{\adxlh}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/ADXL345.h}}
+\newcommand{\adxlc}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/ADXL345.cpp}}
+\newcommand{\itgh}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/ITG3200.h}}
+\newcommand{\itgc}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/ITG3200.cpp}}
 \newcommand{\boarddate}[1]{\textcolor{blue!80!black}{#1}}
 \newcommand{\issue}[1]{\textsuperscript{\textcolor{blue!80!black}{\href{https://github.com/neic/Swagway/issues/#1}{\##1}}}}
 
@@ -167,8 +172,37 @@ Kommunikation med IMUen sker digital over en I²C-bus. På bussen er der en mast
   \label{fig:i2cbasic}
 \end{figure}
 
-På Arduinoen er I²C SDA på A4 og SCL på pin A5. Der er også indbygget pull-up modstande på \fxnote{fix}
-\fxnote{3v vs 5v}
+På Arduinoen er I²C SDA på A4 og SCL på pin A5 med indbygget pull-up modstande på \SI{20}{k\ohm}--\SI{50}{k\ohm}. \cite[s. 317]{atmega} De er aktiveret som standard når man bruger Wire biblioteket.\footnote{For reference se linje 75 i \texttt{utility/twi.c} i Wire biblioteket.}
+
+Arduinoens spænding er \SI{5}{V} og IMUens er \SI{3,3}{V}. IMUen bliver forsynet med \SI{3,3}{V} fra Arduinoen, men SDA og SCL er koblet direkte til Arduinoens pins som har \SI{5}{V} som reference. Den korekte løsning ville være at lave en level-shifter imellem en \SI{5}{V}- og en \SI{3,3}{V}-del af I²C-bussen, men når pull-up modstandene er så høje som de er det stadig forsvarligt at kører IMUen direkte med \SI{5}{V} som $V_{IO}$-reference. Der er flere eksempler på det samme blandt andre på Internettet der bruger samme chips.
+
+Den lætteste måde at kommunikere over I²C fra en Arduino er at bruge Wire-bibliotektet som kommer sammen Arduino-softwaren: \lstinline{#include <Wire.h>} For at få Arduinoen til at tilslutte sig bussen som master kaldes \lstinline{Wire.begin();} uden parametere. Slaverne på I²C-bussen har alle en adresse som fremgår af deres respektive datablade.
+
+ADXL345 og ITG-3200 indeholder begge flere register med forskellige funktioner. Nogle registre indeholder opsætningen for chippen, andre indeholder det data som chippen måler. Hvis man, fra Arduinoen, vil skrive til et af registrene køre man følgene kode:
+\begin{lstlisting}
+  Wire.beginTransmission(deviceAddress);   // begynder en session med enheden med deviceAddress
+  Wire.write(regAddress); // sender adressen på den register man vil ændre
+  Wire.write(value); // sender værdien registeren skal indtage
+  Wire.endTransmission(); // afslutter sessionen
+\end{lstlisting}
+
+At læse et register er lidt mere omfattende:
+\begin{lstlisting}
+ Wire.beginTransmission(deviceAddress); // begynder en session med enheden med deviceAddress
+ Wire.write(regAddress); // sender adressen på den register man vil ændre
+ Wire.endTransmission(); // afslutter sessionen
+  
+ Wire.beginTransmission(deviceAddress); // begynder en ny session
+ Wire.requestFrom(deviceAdress, numberOfBytes); // sender anmodning på at modtage numberOfBytes
+ int i = 0; 
+ while (Wire.available()) { // så længe der er data tilgængeligt
+   buffer[i] = Wire.read(); // modtag data og fyld det i buffer
+   i++;
+ }
+ Wire.endTransmission(); // afslutter sessionen
+\end{lstlisting}
+
+
 
 Masteren er den enhed som bestemmer Standard Clock Line, og slaverne er den enhed som lystrer til masteren. Hastigheden på forbindelsen kan være 100KHz, 400KHz eller 3400KHz. Masteren er den eneste som kan starte en forbindelse mellem enhederne, og det gør den ved at starte en sekvens på bussen, som ændrer SDA fra høj til lav. Start sekvensen indikerer i en bit, om masteren vil modtage data fra slaven, eller om den vil sende til slaven. Denne bit, også kaldet LSB eller Least Significant Bit placeres efter syv andre bits, som er slavens adresse. Herefter udsendes endnu en bit, som slaven skal besvare ved at trække SDA lav. Denne bit kaldes ACK som står for acknowledgement, som betyder anerkendelse. Herefter sendes der data via. SDA synkront med clock linen, som afsluttes med endnnu en ACK bit. Til slut skiftes SDA til høj igen, mens SCL beholds høj.  
 \section{Styring}
