@@ -482,8 +482,12 @@ Logikken blev ændret pga. en fejl.
 Nogle ledninger i fladkablet blev byttet om.
 \subsection{Motorcontroller v5.2}
 \boarddate{24. april 2012}
-
-\fxwarning{Board brænder af}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{pictures/fried.jpg}
+  \caption[]{En HEXFET på Motorcontroller v5.2 der er brændt af}
+  \label{fig:fried}
+\end{figure}
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/MotorcontrollerSch5-2.pdf}
@@ -492,7 +496,7 @@ Nogle ledninger i fladkablet blev byttet om.
 \end{figure}
 \fxwarning{ref til fig:mosch5.2}
 \subsubsection{Det var der galt} 
-Boardet v5.2 sidder i Swagway produktet og fungerer. Den nuværende version er en erstatning af et magen til, da dette brændte af under en længerevarende, ellers succesfuld, prøvekørsel.
+Boardet v5.2 sidder i Swagwayen og fungerer. Den nuværende version er en erstatning af et magen til, da dette brændte af under en længerevarende, ellers succesfuld, prøvekørsel. Se figur \ref{fig:fried}. \fxnote{her kan skrived mere}
 
 Motorene danner strøm når de går i frigang, og hvis man derfor kører hurtigt fremad, og ændrer vinklen til et modsatgående fortegn, sendes strømmen tilbage igennem boardet. Der blev derfor tilføjet beskyttelses dioder for at tage strømmen.
 \subsubsection{Det blev der rettet}
