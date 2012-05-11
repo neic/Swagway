@@ -111,7 +111,7 @@ Vi vil gerne takke Steffen Linnerup Christiansen for hjælp med mekanikken, samt
 \chapter{Indledning}\label{chap:ind}
 Transport enheder bliver mere og mere avancerede, og der skabes ofte nye enheder. Specielt mobilitet og anvendelighed har været i højsædet i mange nye produkter. Det handler om hurtigt at kunne komme fra punkt a til punkt b, uden at det kræver større besvær. Derudover er løsninger som er intuitive at bruge også fremskreden, og et produkt som opfylder alle disse punkter er Segwayen. Den er hurtig, kræver næsten ingen erfaring at køre på og er lille. Man kan hurtigt suse fra en afdeling til anden. 
 
-Formålet med projektet er at bygge en motoriseret selvbalancrende tohjulet transportenhed. Det er en klon af en Segway som er et kommercielt produkt, der benyttes af en lille skare af befolkningen nutildags. Kendetegnet ved Segwayen er, at de to hjul sidder på samme aksel, hvor elektronik og motorene sørger for at, selv med en fører, holde enheden i balance.
+Formålet med projektet er at bygge en motoriseret selvbalancrende tohjulet transportenhed. Det er en klon af en Segway som er et kommercielt produkt. Kendetegnet ved Segwayen er, at de to hjul sidder på samme aksel, hvor elektronik og motorene sørger for at, selv med en fører, holde enheden i balance.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.4\textwidth]{pictures/swagway.jpg}
@@ -122,7 +122,7 @@ Når en fører læner sig frem eller tilbage, kompenserer Segwayen ved køre i s
 
 Projektoplæget lyder:
 \begin{quote}
-  Formålet er at bygge en balance robot på to hjul, en Segway klon. Minimums målet er at få robotten til at balancere. Derefter få den til at køre og kunne styre den hvis tid og evner rækker til det.
+  Formålet er at bygge en balance robot på to hjul,v z en Segway klon. Minimums målet er at få robotten til at balancere. Derefter få den til at køre og kunne styre den hvis tid og evner rækker til det.
 \end{quote}
 
 Hovedeudfordringen er at holde enheden lodret. For at gøre dette skal man kende enhedens vinkel i forhold til lodret og omsætte denne vinkel til et signal til motorene. Når vinklen stiger driver motorene hjulene som så flytter enheden og brugerens tygdepunk ind over akslen igen.
@@ -133,44 +133,44 @@ Det kan se som tre isolerede problemstillinger som passer ind i I-C-O-modellen:
 \item[Output] Drive to motore baseret på signalet.
 \end{itemize}
 
-Projektet er udarbejdet ud fra mikrokontrolleren Arduino Uno, i programmet arduino. Mikrokontrolleren bliver programmeret via. programmet Arduino, som nærmest er i sproget C++ med et Arduino bibliotek. Da vi har modtaget undervisning i denne platform, har dette været det oplagte redskab at benytte til løsningen af vores projekt.
+Projektet er udarbejdet ud fra mikrokontrolleren Arduino Uno, i programmet arduino. Mikrokontrolleren bliver programmeret via. programmet Arduino, som nærmest er i sproget C++ med et Arduino bibliotek. Da vi har modtaget undervisning i denne platform, har dette været det oplagte redskab at benytte til løsningen.
 
 \chapter{Input}
 \section{Sensor}
-Efter nogen research af andre køretøjer og mindre robotter med der fungerer på sammen måde, var det klart at gyroskoper og accelerometere kunne måle vinklen så hurtigt og præcist som det var krævet.
+Efter nogen research af andre køretøjer og mindre robotter der fungerer på sammen måde, var det klart at gyroskoper og accelerometere kunne måle vinklen så hurtigt og præcist som det var krævet.
 \subsection{Sensor hardware}
 Gyroskoper og accelerometere har indtaget forbrugerens produkter, og kortlægger allerede nu deres bevægelser. De faldende priser og faldene energiforbrug har gjort, at gyroskoper og accelerometere er langt mere tilgængelige for alle. Mobiltelefoner, spilkonsoller og kameraer kan nu måle hvordan du bevæger dig, og flere og flere enheder importerer også disse bevægelses sensorer, for at adskille sig fra de andre.
 
 Disse bevægelses sensorer er avancerede MEMS (mikroelektromekaniske systemer) teknologier, som inkoorpererer gyroskoper, accelerometere og kompas sensorer. % Bevægelses behandling foretages oftest med en kombination af to sensorer, for at få optimal præcision.
-I dette projekt har vi arbejdet med gyroskoper og accelerometere, som vi også kender fra vores smartphones. Swagwayen skal, lige som en smartphone kan måle om den står eller ligger ned, måle i hvilken vinkel den står i. \fxnote{Check om vi har forklaret at der er brug for begge komponenter}  
+I dette projekt har vi arbejdet med gyroskoper og accelerometere, som vi også kender fra vores smartphones. Swagwayen skal, lige som en smartphone kan måle om den står eller ligger ned, måle i hvilken vinkel den står i.   
 
 \subsubsection{Gyroskop}
-Et gyroskop måler vinkelhastigheder, hvor hurtigt noget drejer om en akse. Hvis denne vinkelhastighed integreres over tid finder man vinklen som gyroskopet har flyttet sig. Problemet med at integrer gyroskopdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt. Moderne gyroskoper er et mikroelektromekanisk system, også kaldet MEMS. Det betyder, at det både er en mekanisk og elektrisk funktion i et system. /fxnote{hvordan fungerer MEMS i et gyroskop}
+Et gyroskop måler vinkelhastigheder, hvor hurtigt noget drejer om en akse. Hvis denne vinkelhastighed integreres over tid finder man vinklen som gyroskopet har flyttet sig. Problemet med at integrere gyroskopdata er, at pga. måleusikkerheder vil det målte nulpunkt drive væk fra det fysiske nulpunkt. Moderne gyroskoper er en MEMS. Det betyder, at det både er en mekanisk og elektrisk funktion i et system. /fxnote{hvordan fungerer MEMS i et gyroskop}
 
 \subsubsection{Accelerometer}
-Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tyngdekræft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnet vinkel forkert.
+Et accelerometer kan måle accelerationer. Man kan med hjælp fra tangens og data fra to akser udregne den vinklen accelerometeret står i forhold til jordens tyngdekraft. Problemet med dette er at accelerometer måler alle accelerationer, ikke kun jordens tyngdekræft. Når Swagwayen fx accelerer, bremser eller køre over en sten bliver den udregnede vinkel forkert, da denne også frembringer en spike i accelerationsmålingen.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/accbasic.pdf}
   \caption{Et accelerometers interne MEMS-struktur}
   \label{fig:memsacc}
 \end{figure}
-Et accelerometer måler en bevægelse, som enten er forårsaget af tyngdekraften eller en bevægelse. Som set på figur \ref{fig:memsacc} måles accelerationen i et moderne MEMS accelerometer ved en ændring i kapacitansen, $c$, som skyldes en ændring i massens, $m$, position. Kapasitansen fører til en ændring i spændingen, som herefter digitaliseres via ADC og kan benyttes af en mikrokontroller som Arduinoen. Dette gøres for de tre akser x, y og z, og accelerationen kan nu måles i alle retninger.
+Et accelerometer måler en bevægelse, som enten er forårsaget af tyngdekraften eller en bevægelse. Som set på figur \ref{fig:memsacc} måles accelerationen i et moderne MEMS accelerometer ved en ændring i kapacitansen, $c$, som skyldes en ændring i massen, $m$, position. Kapasitansen fører til en ændring i spændingen, som herefter digitaliseres via ADC og kan benyttes af en mikrokontroller som Arduinoen. Dette gøres for de tre akser x, y og z, og accelerationen kan nu måles i alle retninger.
 
 \subsubsection{IMU}
 For at løse problemet med at gyroskopet driver og problemet med at accelerometret ikke er nøjagtig når det bliver påvirket af andre accelerationer end tygdekraften kan man bruge begge sensorer sammen. Man bruger begge sensoreres data og samler dem i et filter. Se mere herom i sektion \ref{sec:filter}.
 
-De fleste moderne accelerometere og gyroskoper kommer i små SMD pakker som er vanskelig håndlodde. Heldigvis er det forholdsvis let at få disse sensorer monteret på et breakoutboard. Efter at have kigget på andre Segway kloner og balancerobotter faldt valget på en IMU fra Sparkfun. Se figur \ref{fig:imu}. En inertial measurement unit, IMU, er en enhed som kombinere flere sensorer.
+De fleste moderne accelerometere og gyroskoper kommer i små SMD pakker som er vanskelig håndlodde. Heldigvis er det forholdsvis let at få disse sensorer monteret på et breakoutboard. Efter at have kigget på andre Segway kloner og balancerobotter faldt valget på en IMU fra Sparkfun. Se figur \ref{fig:imu}. En inertial measurement unit, IMU, er en enhed som kombinerer flere sensorer.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.3\textwidth]{pictures/imu.jpg}
   \caption[6DOF IMU breakoutboard fra Sparkfun]{6DOF IMU breakoutboard fra Sparkfun. (CC BY-NC-SA 3.0, Sparkfun)}
   \label{fig:imu}
 \end{figure}
-IMUen fra Sparkfun et ADXL345 accelerometer og et ITG-3200 gyroskop. Accelerometret og gyroskopet er begge tre-akset. \fxnote{tre-akset?} Det giver IMUen seks frihedsgrader (DOF). Swagwayen skal dog kun bruge tre frihedsgrader; to akser fra accelerometret og en fra gyroskopet, men IMUen med seks frihedsgrader var det mindste med digital interface.
+IMUen fra Sparkfun et ADXL345 accelerometer og et ITG-3200 gyroskop. Accelerometret og gyroskopet er begge tre-akset. Det giver IMUen seks frihedsgrader (DOF). Swagwayen skal dog kun bruge tre frihedsgrader; to akser fra accelerometret og en fra gyroskopet, men IMUen med seks frihedsgrader var det mindste med digital interface.
 
 \subsection{I²C}
-Kommunikation med IMUen sker digital over en I²C-bus. På bussen er der en master\footnote{Det er mulig at lave et multi-master opstilling hvis alle masterne understøtter det.} og en eller flere slaves. I Swagwayen er Arduinoen master og accelerometeret og gyroskopet er begge slaves. I²C bussen består af to fysiske forbindelser, en serial data linje (SDA) og en clock (SCL). Alle enheder på bussen forbinder til disse to forbindelser. Linjerne er open-drain med eksterne pull-up modstande. Det vil sige at i hver enhed sidder der MOSFETer der trækker spændingen på linjen mod GND efter behov. De eksterne pull-op modstande trækker linjerne op igen. Se figur \ref{fig:i2cbasic}.
+Kommunikation med IMUen sker digital over en I²C-bus. På bussen er der en master\footnote{Det er mulig at lave et multi-master opstilling hvis alle masterne understøtter det.} og en eller flere slaves. I Swagwayen er Arduinoen master og accelerometeret og gyroskopet er begge slaves. I²C bussen består af to fysiske forbindelser, en serial data linje (SDA) og en serial clock linje (SCL). Alle enheder på bussen forbinder til disse to forbindelser. Linjerne er open-drain med eksterne pull-op modstande. Det vil sige at i hver enhed sidder der MOSFETer der trækker spændingen på linjen mod GND efter behov. De eksterne pull-op modstande trækker linjerne op igen. Se figur \ref{fig:i2cbasic}.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/I2Cbasic.pdf}
@@ -180,9 +180,9 @@ Kommunikation med IMUen sker digital over en I²C-bus. På bussen er der en mast
 
 På Arduinoen er I²C SDA på A4 og SCL på pin A5 med indbygget pull-up modstande på \SI{20}{k\ohm}--\SI{50}{k\ohm}. \cite[s. 317]{atmega} De er aktiveret som standard når man bruger Wire biblioteket.\footnote{For reference se linje 75 i \texttt{utility/twi.c} i Wire biblioteket.}
 
-Arduinoens spænding er \SI{5}{V} og IMUens er \SI{3,3}{V}. IMUen bliver forsynet med \SI{3,3}{V} fra Arduinoen, men SDA og SCL er koblet direkte til Arduinoens pins som har \SI{5}{V} som reference. Den korekte løsning ville være at lave en level-shifter imellem en \SI{5}{V}- og en \SI{3,3}{V}-del af I²C-bussen, men når pull-up modstandene er så høje som de er det stadig forsvarligt at kører IMUen direkte med \SI{5}{V} som $V_{IO}$-reference. Der er flere eksempler på det samme blandt andre på Internettet der bruger samme chips.
+Arduinoens spænding er \SI{5}{V} og IMUens er \SI{3,3}{V}. IMUen bliver forsynet med \SI{3,3}{V} fra Arduinoen, men SDA og SCL er koblet direkte til Arduinoens pins som har \SI{5}{V} som reference. Den korrekte løsning ville være at lave en level-shifter imellem en \SI{5}{V}- og en \SI{3,3}{V}-del af I²C-bussen, men når pull-up modstandene er så høje som de er det stadig forsvarligt at kører IMUen direkte med \SI{5}{V} som $V_{IO}$-reference. Der er flere eksempler på det samme blandt andre på Internettet der bruger samme chips.
 
-Den lætteste måde at kommunikere over I²C fra en Arduino er at bruge Wire-bibliotektet som kommer sammen Arduino-softwaren: \lstinline{#include <Wire.h>} For at få Arduinoen til at tilslutte sig bussen som master kaldes \lstinline{Wire.begin();} uden parametere. Slaverne på I²C-bussen har alle en adresse som fremgår af deres respektive datablade.
+Den letteste måde at kommunikere over I²C fra en Arduino er at bruge Wire-bibliotektet som kommer sammen Arduino-softwaren: \lstinline{#include <Wire.h>} For at få Arduinoen til at tilslutte sig bussen som master kaldes \lstinline{Wire.begin();} uden parametre. Slaverne på I²C-bussen har alle en adresse som fremgår af deres respektive datablade.
 
 ADXL345 og ITG-3200 indeholder begge flere register med forskellige funktioner. Nogle registre indeholder opsætningen for chippen, andre indeholder det data som chippen måler. Hvis man, fra Arduinoen, vil skrive til et af registrene køre man følgene kode:
 \begin{lstlisting}
@@ -213,13 +213,13 @@ Disse to funktioner bliver senere refereret til som hhv. \lstinline{writemem()} 
 \fxwarning{skriv om hvad registerne kan}
 
 \subsection{IMU biblioteker}
-I begyndelsen af projektet var alt kommunikationen med ADXL345 og ITG-3200 programmeret i \texttt{swagway.ino}. Det virkede og Arduinoen modtog data fra IMUen, men koden var svær at vedligeholde og gik tit i stykker. Der var desuden en fejl igennem lægere tid der resulterede i at den vinkel der blev udregnet fra gyroskopet, \lstinline{gyroAngle}, var ca. dobbelt så stor som den burde være.\issue{20} Efter mange ufuldendte forsøg på at rette fejlen blev alt gammel kode der var releateret til I²C slettet. Der blev istedet brugt et bibliotek passende til gyroskopet hvor alle funktioner var implementeret. Biblioteket hedder itg3200.
+I begyndelsen af projektet var alt kommunikationen med ADXL345 og ITG-3200 programmeret i \texttt{swagway.ino}. Det virkede og Arduinoen modtog data fra IMUen, men koden var svær at vedligeholde og gik tit i stykker. Der var desuden en fejl igennem lægere tid der resulterede i at den vinkel der blev udregnet fra gyroskopet, \lstinline{gyroAngle}, var ca. dobbelt så stor som den burde være.\issue{20} Efter mange ufuldendte forsøg på at rette fejlen blev alt gammel kode der var releateret til I²C slettet. Der blev istedet brugt et bibliotek passende til gyroskopet hvor alle funktioner var implementeret. Biblioteket hedder ITG-3200.
 
 Det var ikke til at finde et ligende bibliotek til accelerometret, så med inspiration fra itg3200-bibliotekt blev der skrevet et. Biblioteket består af to filer. En headerfil, \texttt{ADXL345.h}, og selve funktionaliteten, \texttt{ADXL345.cpp}.
 
 Headerfilen indeholder først definitioner på konstanter som enhedsadressen og registere:
 \adxlh{23}{35}
-Værdierne og navnene er hentet fra \cite[s. 23]{adxl345} At have definitioner på alle konstanter gør koden lættere læselig, så man ikke skal søge referencer i databladet.
+Værdierne og navnene er hentet fra \cite[s. 23]{adxl345} At have definitioner på alle konstanter gør koden lettere læselig, så man ikke skal søge referencer i databladet.
 
 Efterfølgene er der defineret en klasse med alle funktioner relateret til accelerometeret:
 \adxlh{37}{49}
@@ -239,17 +239,17 @@ I \texttt{ADXL345.cpp} er funktionalitet skrevet. Som eksempel er her tre af de 
 \subsubsection{setFullRes()}
 
 \adxlc{56}{60}
-\lstinline{setFullRes()} skal kun ændre \emph{en} bit i registret \lstinline{DATA_FORMAT}. For at bebeholde de andre bits læser den først det som står i registret og gemmer det i en buffer. \lstinline{1 << 3} betyder en bit shiftet tre pladser til venstre: \texttt{0000\,1000}.  \lstinline{~(1 << 3)} er Bitwise NOT værdien af dette: \texttt{1111\,0111}. Det bliver AND med bufferen, \lstinline{(_buff[0] & ~(1 << 3))}. Det er lig med alle de bit som er sat i bufferen pånær den fjerde sidste. Altså: den sætter den fjerde sidste bit til 0 og bibeholder alle andre. \lstinline{(_fullRes << 3)} er værdien der skal sættes shiftet tre pladser til venstre: \texttt{0000\,x000}. Disse to værdi bliver til slut OR med hindanden og den fjerde sidste bit er nu ændret til værdien af \lstinline{_fullRes} uden at nogle andre bits bliver ændret. Denne værdi bliver nu skrevet tilbage i samme buffer.
+\lstinline{setFullRes()} skal kun ændre \emph{en} bit i registret \lstinline{DATA_FORMAT}. For at bibeholde de andre bits læser den først det som står i registret og gemmer det i en buffer. \lstinline{1 << 3} betyder en bit shiftet tre pladser til venstre: \texttt{0000\,1000}.  \lstinline{~(1 << 3)} er Bitwise NOT værdien af dette: \texttt{1111\,0111}. Det bliver AND med bufferen, \lstinline{(_buff[0] & ~(1 << 3))}. Det er lig med alle de bit som er sat i bufferen på nær den fjerde sidste. Altså: den sætter den fjerde sidste bit til 0 og bibeholder alle andre. \lstinline{(_fullRes << 3)} er værdien der skal sætte shiftet tre pladser til venstre: \texttt{0000\,x000}. Disse to værdier bliver til slut OR med hinanden og den fjerde sidste bit er nu ændret til værdien af \lstinline{_fullRes} uden at nogle andre bits bliver ændret. Denne værdi bliver nu skrevet tilbage i samme buffer.
 
 To andre eksempler på funktionaliteten af \texttt{ADXL345.cpp}. Disse funktioner har med modtagelse af data at gøre.
 
 \subsubsection{isRawDataReady()}
 \adxlc{75}{79}
-Accelerometeret har et register med interrupt flag, \lstinline{INT_SOURCE}. \lstinline{isRawDataReady()} læser dette register og gemmer det i en buffer. Bufferen bliver shiftet syv pladser til højre og  \lstinline{isRawDataReady()} retunere en bool værdi alt efter om interrupt flaget er sat.
+Accelerometeret har et register med interrupt flag, \lstinline{INT_SOURCE}. \lstinline{isRawDataReady()} læser dette register og gemmer det i en buffer. Bufferen bliver shiftet syv pladser til højre og  \lstinline{isRawDataReady()} returnerer en bool værdi, alt efter, om interrupt flaget er sat.
 
 \subsubsection{readAccRaw()}
 \adxlc{99}{105}
-Dataende i accelerometeret fylder seks registre af 8 bit. Hver akse fylder to registre hvoraf det første er den mindst betydene. \lstinline{readAccRav()} læser \lstinline{DATAX0} og seks registre frem. Dataene bliver lagt i et buffer-array. Den mest betydene af de to bytes som høre sammen bliver shiftet 8 pladser til venstre og derefter AND med den mindst betydene. De to bytes bliver sat sammen direkte efter hindanden. Værdierne bliver retuneret til tre integer-pointers.
+Dataen i accelerometeret fylder seks registre af 8 bit. Hver akse fylder to registre hvoraf det første er den mindst betydene. \lstinline{readAccRav()} læser \lstinline{DATAX0} og seks registre frem. Dataen bliver lagt i et buffer-array. Den mest betydene af de to bytes som hører sammen bliver shiftet 8 pladser til venstre og derefter AND med den mindst betydene. De to bytes bliver sat sammen direkte efter hindanden. Værdierne bliver retuneret til tre integer-pointers.
 
 \section{Styring}
 Styringen af Swagwayen skulle være en længerevarende og holdbar løsning. Det ønskes ikke, at enheden efter forholdsvis kort tid skulle udskiftes eller repareres. Vi overvejede fem forskellige løsninger: En lineær potentiometer, et drejepotentiometer, gaffelsensor, strain-gate og stepper motor.
@@ -276,7 +276,8 @@ Det sidste løsningsforslag: Stepper motor. Planen med denne var at foretage den
 
 Det sværeste ved denne løsning er, at implementere den. 
 
-Hvis tiden havde rækket til det, havde vi derfor valgt denne som den umiddelbare løsning.
+
+Hvis tiden havde rækket til det, havde vi derfor valgt denne som den umiddelbare løsning, da den ikke påvirkes af udefrakomne krafter, og det eneste umiddelbare problem er implementeringen.
 \chapter{Control}
 \section{Hoved \lstinline{loop()}}
 \fxerror{Skriv om main loop}
@@ -317,8 +318,8 @@ Den eksponentielle funktion er den som sidder i det nuværende produkt. Vi kan m
 For at holde Swagwayen i balance, ønsker vi, ligesom Segwayen, at motorene skal kunne køre i begge retninger med en variabel hastighed.
 \section{H-broens virkemåde}
 \label{sec:H-broen}
-H-broen bruges til kontrol af motore. 
-En H-bro er fire kontakter sat op som et H, med en motor i midten. Begge kontakter på en side må ikke være trykkede nede samtidigt, så kører strømmen uden om motoren. Derudover må man ikke tænde for de øverste motore samtidigt, for så kortslutter den. Hvis man derimod tænder for en af de øverste, og så den modsatte nederste kontakt, bevæger motoren sig i den retning strømmen løber. Man tænder altså derfor H-broen i par af to modsatte: Hvis den øverste til højre er tændt, tændes den nederste til venstre også, og hvis den øverste venstre tændes, tændes den nederste til højre også. Se figur \ref{fig:hbro}.
+H-broen bruges til kontrol af motore. Se figur \ref{fig:hbro}
+En H-bro er fire kontakter sat op som et H, med en motor i midten. A og B kontakterne på en side må ikke være trykkede nede samtidigt, så kører strømmen uden om motoren. Derudover må man ikke tænde for C og D for så kortslutter den. Hvis man derimod tænder for enten A og D, eller C og B, bevæger motoren sig i den retning strømmen løber. Man tænder altså derfor H-broen i par af to modsatte: A og D samtidigt, og C og B samtidigt.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{pictures/hbrigde.pdf}
@@ -328,14 +329,12 @@ En H-bro er fire kontakter sat op som et H, med en motor i midten. Begge kontakt
 
 H-broen på Swagwayen er lidt mere kompleks. Hele logikken kan findes på tabel \ref{tab:sandhed}. 
 \section{PWM}
-Pulsbreddemodulation (Pulse-Width-Modulation): Er en metode til at kontrollere spændingen i elektriske
-apparater. Det er en metode til at levere spænding igennem en række impulser i stedet for der konstant er strøm igennem systemet. Ved at øge eller formindske bredden af impulsen kan man kontrollere en motor.
+Pulsbreddemodulation (Pulse-Width-Modulationer en metode til at kontrollere mængden af strøm i elektriske
+apparater. 
 
-Man kan altså sige, at PWM er et on/off system hvor man styrer ved hurtigt, at slukke og tænde for
-spændingen. Tiden der går imellem at den er on/off er så kort, at en LED som sådan ikke mærker det. Så
-den vil ikke blinke, men derimod lyse mindre hvis man øger bredden imellem impulserne.
+PWM leverer strøm ved at sende en impuls, med variabel tid mellem 0 og 255. Jo mere tallet nærmer sig 255, jo længere tid er det elektriske apparat som er tilsluttet tændt. Se figur \ref{fig:pwm}
 
-Måden vi styre dette på i en Arduino er via \lstinline{analogWrite(pin,\dots);}. Her har vi mulighed for at give en værdi fra 0--255. Dette betyder at \lstinline{analogWrite(pin,255);} er 100\% og \lstinline{analogWrite(pin,127);} er 50\%. Dette kan også ses på figur \ref{fig:pwm}.\fxwarning{Hele afsnittet skal omskrives}
+Måden vi styre dette på i en Arduino er via \lstinline{analogWrite(pin,\dots);}. Her har vi mulighed for at give en værdi fra 0--255. Dette betyder at \lstinline{analogWrite(pin,255);} er 100\% og \lstinline{analogWrite(pin,127);} er 50\%.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{pictures/pwm.pdf}
@@ -344,7 +343,8 @@ Måden vi styre dette på i en Arduino er via \lstinline{analogWrite(pin,\dots);
 \end{figure}
 
 \section{Overvejelser}
-Der er to muligheder under fremstilling af en H-bro. Enten kan der benyttes en simpel H-bro chip, eller man kan fremstille en selv. Chippen er den nemme løsning, som gør alting super let at arbejde med. Dog kan chippen ikke håndtere store strømme, og det var derfor urealistisk at piggy-back dem.
+Der er to muligheder under fremstilling af en H-bro. Enten kan der benyttes en simpel H-bro chip, eller man kan fremstille en selv. 
+Chippen er den nemme løsning, som gør alting super let at arbejde med. Dog kan chippen ikke håndtere store strømme, og det var derfor urealistisk at piggy-back dem.
 
 Vi fremstillede derfor selv en H-bro, da den kan klare de store mængder af strøm vi arbejder med, selvom at det er langt mere komplekst og det forøger kraftigt mængden af ting der kan gå galt.
 
