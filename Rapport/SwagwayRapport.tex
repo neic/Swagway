@@ -315,10 +315,18 @@ I stedet for PID introducerede vi en eksponentiel funktion. Den eksponentielle f
 Den eksponentielle funktion er den som sidder i det nuværende produkt. Vi kan med denne funktion køre på Swagwayen uden at falde, og den kan holde sin position uden at stå og "rykke" hårdt fra side til side.
 \chapter{Output}
 For at holde Swagwayen i balance, ønsker vi, ligesom Segwayen, at motorene skal kunne køre i begge retninger med en variabel hastighed.
-\section{H-broens virkemåde} \fxnote{insert H bridge pic}
+\section{H-broens virkemåde}
 \label{sec:H-broen}
 H-broen bruges til kontrol af motore. 
-En H-bro er fire kontakter sat op som et H, med en motor i midten. Begge kontakter på en side må ikke være trykkede nede samtidigt, så kører strømmen uden om motoren. Derudover må man ikke tænde for de øverste motore samtidigt, for så kortslutter den. Hvis man derimod tænder for en af de øverste, og så den modsatte nederste kontakt, bevæger motoren sig i den retning strømmen løber. Man tænder altså derfor H-broen i par af to modsatte: Hvis den øverste til højre er tændt, tændes den nederste til venstre også, og hvis den øverste venstre tændes, tændes den nederste til højre også. Hele logikken kan findes på tabel \ref{fig:sandhed}. 
+En H-bro er fire kontakter sat op som et H, med en motor i midten. Begge kontakter på en side må ikke være trykkede nede samtidigt, så kører strømmen uden om motoren. Derudover må man ikke tænde for de øverste motore samtidigt, for så kortslutter den. Hvis man derimod tænder for en af de øverste, og så den modsatte nederste kontakt, bevæger motoren sig i den retning strømmen løber. Man tænder altså derfor H-broen i par af to modsatte: Hvis den øverste til højre er tændt, tændes den nederste til venstre også, og hvis den øverste venstre tændes, tændes den nederste til højre også. Se figur \ref{fig:hbro}.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{pictures/hbrigde.pdf}
+  \caption{Diagram over simpel H-bro}
+  \label{fig:hbro}
+\end{figure}
+
+H-broen på Swagwayen er lidt mere kompleks. Hele logikken kan findes på tabel \ref{tab:sandhed}. 
 \section{PWM}
 Pulsbreddemodulation (Pulse-Width-Modulation): Er en metode til at kontrollere spændingen i elektriske
 apparater. Det er en metode til at levere spænding igennem en række impulser i stedet for der konstant er strøm igennem systemet. Ved at øge eller formindske bredden af impulsen kan man kontrollere en motor.
