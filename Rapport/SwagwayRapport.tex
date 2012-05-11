@@ -19,7 +19,7 @@
 \newcommand{\datevar}{\today} 
 \newcommand{\subjectvar}{Teknikfag~A:~El}
 \newcommand{\classvar}{EUC~Nord: HTX~Frederikshavn, f11htx3.B}
-\newcommand{\teachervar}{Alan~Gilarska}
+\newcommand{\teachervar}{Allan~Gilarska}
 
 \makepagestyle{articlehead}
 \makeevenhead{articlehead}{}{\titlevar}{}
@@ -51,6 +51,12 @@
     {ø}{{\o}}1
     {å}{{\aa}}1
 }
+
+\tikzstyle{block} = [draw, fill=blue!20, rectangle, 
+    minimum height=1.5em, minimum width=5em]
+\tikzstyle{sum} = [draw, fill=blue!20, circle, node distance=1cm]
+\tikzstyle{input} = [coordinate]
+\tikzstyle{output} = [coordinate]
 
 \newcommand{\swino}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/swagway.ino}}
 \newcommand{\adxlh}[2]{\lstinputlisting[firstnumber=#1,firstline=#1,lastline=#2]{../Software/swagway/ADXL345.h}}
@@ -309,6 +315,48 @@ Differentialet af hvor hurtig fejlen ændrer sig, ganges med $K_D$. Hvis der ske
 Disse tre dele gør op for PID, som sørger for, at fejlen justeres lige meget hvilken måde den ændres.
 
 Vi startede med at implementere PID til at regulere den, men erfarede hurtigt at det ikke virkede.\fxwarning{insert old code} For at PID virker, er det vigtigt at den fejl man beregner, stammer fra kilden. Efter som vi ikke havde encodere på motorene kunne vi ikke bestemme hvordan motorene reagerede. Så i stedet for at beregne forskellen mellem den ønskede handling og den udførte, beregnede vi forskellen mellem den ønskede handling og den handling PWM signalet sendte. Da tiden var ved at løbe ud, bestemte vi os for at lade PID og encoderne ligge, og gå videre til en ny løsning.
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[auto, node distance=2cm,>=latex']
+    \node [block, minimum width=7em] (gyro){Gyroskop};
+    \node [block, below of=gyro, node distance=1cm,minimum width=7em] (acc) {Accelerometer};
+    \node [block, right of=gyro, node distance=3cm] (kal) {Kalman};
+    \node [sum, right of=kal, node distance=1.5cm] (sum1) {};
+    \node [block, right of=sum1, node distance=2cm] (i) {$I$};
+    \node [block, above of=i, node distance=1cm] (p) {$P$};
+    \node [block, below of=i, node distance=1cm] (d) {$D$};
+    \node [sum, right of=i, node distance=1.5cm] (sum2) {};
+    \node [block, right of=sum2, node distance=2cm] (motor) {Motor};
+
+    \draw [->] (gyro) -- (kal);
+    \draw [->] (acc) -| (kal);
+    \draw [->] (kal) -- (sum1);
+    \node [right of=sum1, node distance=0.5cm] (sum11){};
+    \draw [->] (sum11) |- (p);
+    \draw [->] (sum1) -- (i);
+    \draw [->] (sum11) |- (d);
+
+    \draw [->] (p) -| (sum2);
+    \draw [->] (i) -- (sum2);
+    \draw [->] (d) -| (sum2);
+
+    \draw [->] (sum2) -- (motor);
+
+    \node [right of=motor, node distance=1.5cm] (end) {};
+    \draw [dashed, thick, blue] (motor) -- (end);
+    \node [below of=sum1, node distance=2cm] (sum12) {};
+    \draw [dashed, thick, blue] (end) |- (sum12);
+    \draw [dashed, thick, blue, ->] (sum12) -- (sum1);
+
+    \node [above of=sum1, node distance=2cm] (sum13) {};
+    \node [right of=sum2, node distance=0.5cm] (sum21){};
+    \draw [dashed, thick, red] (sum21) |- (sum13);
+    \draw [dashed, thick, red, ->] (sum13) -- (sum1);
+  \end{tikzpicture}
+  % \caption[]{}
+  \label{fig:pid}
+\end{figure}
 \subsection{Eksponentiel}
 I stedet for PID introducerede vi en eksponentiel funktion. Den eksponentielle funktion får PWM signalet til at stige som en normal eksponentiel funktion stiger. Variablerne som funktionen er opstillet efter er fundet ud fra trial and error princippet. Nedenfor ses implementationen af reguleringen:
 \swino{54}{58}
